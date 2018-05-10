@@ -1,8 +1,8 @@
-0 silly input [ 'test' ]
+0 silly input [ 'test-build' ]
 1 silly flags { _: [ 'run' ],
 1 silly flags   'reject-cycles': false,
 1 silly flags   rejectCycles: false,
-1 silly flags   script: 'test',
+1 silly flags   script: 'test-build',
 1 silly flags   args: [] }
 2 verbose rootPath /home/zephinzer/govtech/node-boilerplate
 3 info version 2.11.0
@@ -11,52 +11,26 @@
 6 silly initialize attempt
 7 silly initialize success
 8 silly execute attempt
-9 silly runScriptInDir test [] node-boilerplate-middleware
+9 silly runScriptInDir test-build [] node-boilerplate-middleware
 10 silly getExecOpts { cwd: '/home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware' }
-11 error test Errored while running script in 'node-boilerplate-middleware'
+11 error test-build Errored while running script in '@mcf/server-boilerplate-middleware'
 12 error execute callback with error
-13 error Error: Command failed: npm run test
-13 error /home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware/src/index.test.js:1
-13 error (function (exports, require, module, __filename, __dirname) { import BoilerplateServer from './';
-13 error                                                               ^^^^^^
-13 error
-13 error SyntaxError: Unexpected token import
-13 error     at createScript (vm.js:80:10)
-13 error     at Object.runInThisContext (vm.js:139:10)
-13 error     at Module._compile (module.js:616:28)
-13 error     at loader (/home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware/node_modules/babel-register/lib/node.js:144:5)
-13 error     at Object.require.extensions.(anonymous function) [as .js] (/home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware/node_modules/babel-register/lib/node.js:154:7)
-13 error     at Module.load (module.js:565:32)
-13 error     at tryModuleLoad (module.js:505:12)
-13 error     at Function.Module._load (module.js:497:3)
-13 error     at Module.require (module.js:596:17)
-13 error     at require (internal/module.js:11:18)
-13 error     at /home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware/node_modules/mocha/lib/mocha.js:253:27
-13 error     at Array.forEach (<anonymous>)
-13 error     at Mocha.loadFiles (/home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware/node_modules/mocha/lib/mocha.js:250:14)
-13 error     at Mocha.run (/home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware/node_modules/mocha/lib/mocha.js:577:10)
-13 error     at Object.<anonymous> (/home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware/node_modules/mocha/bin/_mocha:591:18)
-13 error     at Module._compile (module.js:652:30)
-13 error     at Object.Module._extensions..js (module.js:663:10)
-13 error     at Module.load (module.js:565:32)
-13 error     at tryModuleLoad (module.js:505:12)
-13 error     at Function.Module._load (module.js:497:3)
-13 error     at Function.Module.runMain (module.js:693:10)
-13 error     at startup (bootstrap_node.js:188:16)
-13 error     at bootstrap_node.js:609:3
+13 error Error: Command failed: npm run test-build
+13 error Warning: Could not find any test files matching pattern: dist/**/*.test.js
+13 error No test files found
 13 error npm ERR! code ELIFECYCLE
 13 error npm ERR! errno 1
-13 error npm ERR! node-boilerplate-middleware@1.0.0 test: `mocha --require babel-register "src/**/*.test.js"`
+13 error npm ERR! @mcf/server-boilerplate-middleware@0.0.2 test-build: `npx mocha --require babel-register "dist/**/*.test.js" `
 13 error npm ERR! Exit status 1
 13 error npm ERR!
-13 error npm ERR! Failed at the node-boilerplate-middleware@1.0.0 test script.
+13 error npm ERR! Failed at the @mcf/server-boilerplate-middleware@0.0.2 test-build script.
 13 error npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 13 error
 13 error npm ERR! A complete log of this run can be found in:
-13 error npm ERR!     /home/zephinzer/.npm/_logs/2018-05-10T03_07_55_600Z-debug.log
+13 error npm ERR!     /home/zephinzer/.npm/_logs/2018-05-10T09_30_48_894Z-debug.log
 13 error
-13 error > node-boilerplate-middleware@1.0.0 test /home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware
-13 error > mocha --require babel-register "src/**/*.test.js"
+13 error > @mcf/server-boilerplate-middleware@0.0.2 test-build /home/zephinzer/govtech/node-boilerplate/packages/node-boilerplate-middleware
+13 error > npx mocha --require babel-register "dist/**/*.test.js"
 13 error
 13 error
 13 error     at Promise.all.then.arr (/home/zephinzer/.nvm/versions/node/v8.10.0/lib/node_modules/lerna/node_modules/execa/index.js:236:11)
