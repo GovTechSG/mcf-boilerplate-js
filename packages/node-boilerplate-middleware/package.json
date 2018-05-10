@@ -1,0 +1,38 @@
+{
+  "name": "@mcf/server-boilerplate-middleware",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",
+    "test": "npx mocha --require babel-register \"**/*.test.js\" "
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "ignore": [
+      "node_modules"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.1.1",
+    "sinon": "^5.0.7",
+    "sinon-chai": "^3.0.0",
+    "supertest": "^3.0.0"
+  }
+}
