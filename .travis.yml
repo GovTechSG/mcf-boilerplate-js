@@ -11,7 +11,7 @@ stages:
   - test
   - publish
 before_install:
-  - npm i -g npx
+  - npm i -g npx babel-cli
 jobs:
   include:
     - stage: verify
