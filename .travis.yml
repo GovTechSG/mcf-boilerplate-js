@@ -8,12 +8,18 @@ services:
   - docker
 stages:
   - verify
+  - test
   - publish
+install:
+  - npm i -g npx
 jobs:
   include:
     - stage: verify
       script:
         - lerna run build
+    - stage: test
+      script:
         - lerna run test
     - stage: publish
-      script: ./test 2
+      script:
+        - lerna run publish
