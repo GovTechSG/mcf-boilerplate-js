@@ -6,25 +6,11 @@ node_js:
   - "8"
 services:
   - docker
-stages:
-  - build
-  - test
-  - publish
 before_install:
   - npm i -g npx
-jobs:
-  include:
-    - stage: test
-      script:
-        - lerna bootstrap
-        - lerna run test
-    - stage: build
-      script:
-        - lerna bootstrap
-        - lerna run build
-        - lerna run 
-    - stage: publish
-      script:
-        - printf -- "https://registry.npmjs.org//:_authToken=${CIVAR_NPM_TOKEN}" > ./packages/node-boilerplate-middleware/.npmrc
-        - lerna run build
-        - lerna run publish
+script:
+  - lerna bootstrap
+  - lerna run build
+  - lerna run test
+  - printf -- "https://registry.npmjs.org//:_authToken=${CIVAR_NPM_TOKEN}" > ./packages/node-boilerplate-middleware/.npmrc
+  - lerna run publish
