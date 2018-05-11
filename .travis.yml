@@ -11,4 +11,10 @@ script:
   - lerna run build
   - lerna run test
   - printf -- "https://registry.npmjs.org//:_authToken=${CIVAR_NPM_TOKEN}" > ./packages/node-boilerplate-middleware/.npmrc
-  - lerna publish
+  - if [ "${TRAVIS_BRANCH}" = "master" ]; then
+      git checkout ${TRAVIS_BRANCH};
+      git reset --hard ${TRAVIS_COMMIT};
+      lerna bootstrap;
+      lerna run build;
+      lerna publish;
+    fi;
