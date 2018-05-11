@@ -10,7 +10,7 @@ stages:
   - verify
   - test
   - publish
-install:
+before_install:
   - npm i -g npx
 jobs:
   include:
