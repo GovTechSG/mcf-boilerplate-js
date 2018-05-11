@@ -16,5 +16,5 @@ script:
       git reset --hard ${TRAVIS_COMMIT};
       lerna bootstrap;
       lerna run build;
-      lerna publish;
+      lerna publish --yes --cd-version patch;
     fi;
