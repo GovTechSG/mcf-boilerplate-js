@@ -11,15 +11,17 @@ stages:
   - test
   - publish
 before_install:
-  - npm i -g npx babel-cli
+  - npm i -g npx
 jobs:
   include:
     - stage: verify
       script:
+        - npm install
         - lerna run build
     - stage: test
       script:
         - lerna run test
     - stage: publish
       script:
+        - printf -- "https://registry.npmjs.org//:_authToken=${CIVAR_NPM_TOKEN}" > ./packages/node-boilerplate-middleware/.npmrc
         - lerna run publish

@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",
-    "test": "npx mocha --require babel-register \"src/*.test.js\" ",
-    "test-build": "npx mocha --require babel-register \"dist/**/*.test.js\" "
+    "test": "npx mocha --require babel-register \"src/*.test.js\" "
   },
   "publishConfig": {
     "access": "public"
