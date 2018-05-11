@@ -7,21 +7,24 @@ node_js:
 services:
   - docker
 stages:
-  - verify
+  - build
   - test
   - publish
 before_install:
   - npm i -g npx
 jobs:
   include:
-    - stage: verify
-      script:
-        - npm install
-        - lerna run build
     - stage: test
       script:
+        - lerna bootstrap
         - lerna run test
+    - stage: build
+      script:
+        - lerna bootstrap
+        - lerna run build
+        - lerna run 
     - stage: publish
       script:
         - printf -- "https://registry.npmjs.org//:_authToken=${CIVAR_NPM_TOKEN}" > ./packages/node-boilerplate-middleware/.npmrc
+        - lerna run build
         - lerna run publish
