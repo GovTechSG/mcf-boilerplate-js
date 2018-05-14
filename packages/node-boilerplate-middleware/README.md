@@ -64,5 +64,9 @@ npm run build;
 ```
 
 ## Change Log
-### 0.0.2
+### 0.x
+#### 0.0.5
+- fixed behaviour to allow import via `require('@mcf/server-boilerplate-middleware')` without a `.default` property
+
+#### 0.0.2
 - initial commit with an express compatible server
