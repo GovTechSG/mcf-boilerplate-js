@@ -16,5 +16,6 @@ script:
       git reset --hard ${TRAVIS_COMMIT};
       lerna bootstrap;
       lerna run build;
+      git remote set-url origin ${CIVAR_GH_REPOSITORY_URL};
       lerna publish --registry=https://registry.npmjs.org/ --yes --cd-version patch;
     fi;
