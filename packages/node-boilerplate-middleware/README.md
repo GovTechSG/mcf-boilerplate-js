@@ -35,6 +35,34 @@ server.[...expressMethods];
 - [ ] endpoint: `/metrics`
 - [ ] endpoint protection for `/metrics`
 
+
+## Development
+
+### Installing Dependencies
+Run the following from the root of the repository to initialise the dependencies since Lerna manages the dependencies for us across the multiple packages:
+
+```sh
+lerna bootstrap;
+```
+
+### Running Tests
+To run the tests during development, use:
+
+```sh
+npm run test-watch;
+```
+
+To run the tests on the built package, use:
+
+```sh
+npm run test;
+```
+
+### Building
+```sh
+npm run build;
+```
+
 ## Change Log
 ### 0.0.2
 - initial commit with an express compatible server

@@ -1,6 +1,8 @@
 import express from 'express';
 
-export default function BoilerplateServer() {
+module.exports = createServer;
+
+export default function createServer() {
   const server = express();
 
   return server;

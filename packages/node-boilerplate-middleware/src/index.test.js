@@ -1,13 +1,13 @@
-import BoilerplateServer from './';
+import createServer from './';
 import supertest from 'supertest';
 import {expect} from 'chai';
 
-describe('BoilerplateServer()', () => {
+describe('createServer()', () => {
   const TEST_STRING = '__test_string';
   const TEST_HTTP_CODE = 418;
 
   it('returns an Express compatible server', () => {
-    const boilerplateServer = BoilerplateServer();
+    const boilerplateServer = createServer();
     boilerplateServer.get('/get', (req, res) => res.json(`${TEST_STRING} /get`));
     boilerplateServer.post('/post', (req, res) => res.json(`${TEST_STRING} /post`));
     boilerplateServer.delete('/delete', (req, res) => res.json(`${TEST_STRING} /delete`));
@@ -41,5 +41,9 @@ describe('BoilerplateServer()', () => {
       }),
       supertest(boilerplateServer).head('/head').expect(418),
     ]);
+  });
+
+  it('can be imported using require', () => {
+    expect(BoilerplateServer).to.eql(require('./index'));
   });
 });
