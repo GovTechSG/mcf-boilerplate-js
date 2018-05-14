@@ -44,6 +44,6 @@ describe('createServer()', () => {
   });
 
   it('can be imported using require', () => {
-    expect(BoilerplateServer).to.eql(require('./index'));
+    expect(createServer).to.eql(require('./index'));
   });
 });
