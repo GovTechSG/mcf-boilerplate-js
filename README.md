@@ -1,7 +1,7 @@
 # MyCareersFuture Boilerplates for Node Projects
 
 ## Contents
-- [`node-boilerplate-middleware`](./packages/node-boilerplate-middleware)
+- [`@mcf/server-boilerplate-middleware`](./packages/server-boilerplate-middleware)
 
 ## Contributing
 ### Contributors
