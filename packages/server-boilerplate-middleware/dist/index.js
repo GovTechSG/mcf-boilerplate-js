@@ -9,12 +9,17 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
+var _cookieParser = require('cookie-parser');
+
+var _cookieParser2 = _interopRequireDefault(_cookieParser);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = createServer;
 
 function createServer() {
   var server = (0, _express2.default)();
+  server.use((0, _cookieParser2.default)());
 
   return server;
 }

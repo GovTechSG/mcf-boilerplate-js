@@ -46,4 +46,27 @@ describe('createServer()', () => {
   it('can be imported using require', () => {
     expect(createServer).to.eql(require('./index'));
   });
+
+  it('has cookie parsing abilities', () => {
+    const cookieName1 = '_testAppToken';
+    const cookieName2 = '_testAppToken2';
+    const cookieValue1 = '1234567890';
+    const cookieValue2 = '0987654321';
+    const cookies = [
+      `${cookieName1}=${cookieValue1}`,
+      `${cookieName2}=${cookieValue2}`,
+    ];
+    const boilerplateServer = createServer();
+    boilerplateServer.use((req, res) => {
+      res.status(200).json(req.cookies);
+    });
+    return supertest(boilerplateServer)
+      .get('/')
+      .set('Cookie', cookies)
+      .expect(200)
+      .then((res) => {
+        expect(res.body[cookieName1]).to.eql(cookieValue1);
+        expect(res.body[cookieName2]).to.eql(cookieValue2);
+      });
+  });
 });
