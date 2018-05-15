@@ -64,9 +64,13 @@ npm run build;
 ```
 
 ## Change Log
-### 0.x
-#### 0.0.5
+### 0.1.x
+#### 0.1.0
+- added cookie parsing superpowers
+
+### 0.0.x
+#### 0.0.4
 - fixed behaviour to allow import via `require('@mcf/server-boilerplate-middleware')` without a `.default` property
 
 #### 0.0.2
-- initial commit with an express compatible server
+- initial commit with an Express compatible server
