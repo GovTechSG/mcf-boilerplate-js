@@ -27,6 +27,6 @@ script:
         else
           LERNA_CD_VERSION='patch';
         fi;
-        lerna publish --registry=https://registry.npmjs.org/ --yes --cd-version "${LERNA_CD_VERSION}";
+        lerna publish --yes --cd-version "${LERNA_CD_VERSION}";
       fi;
     fi;
