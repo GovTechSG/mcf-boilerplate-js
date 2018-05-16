@@ -19,14 +19,14 @@ script:
       lerna run build;
       git remote set-url origin ${CIVAR_GH_REPOSITORY_URL};
       printf -- "//registry.npmjs.org/:_authToken=${CIVAR_NPM_TOKEN}" > ./packages/node-boilerplate-middleware/.npmrc;
-      LERNA_CD_VERSION='patch';
       if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
-        COMMIT_MESSAGE="$(cat ./.commit_message)";
-        if [ -z "${COMMIT_MESSAGE##*"[major release]"*}" ]; then
+        if [ -z "${TRAVIS_COMMIT_MESSAGE##*"[major release]"*}" ]; then
           LERNA_CD_VERSION='major';
-        elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then
+        elif [ -z "${TRAVIS_COMMIT_MESSAGE##*"[minor release]"*}" ]; then
           LERNA_CD_VERSION='minor';
+        else
+          LERNA_CD_VERSION='patch';
         fi;
-        lerna publish --registry=https://registry.npmjs.org/ --yes --cd-version "${LERNA_CD_VERSION}";
+        lerna publish --yes --cd-version "${LERNA_CD_VERSION}";
       fi;
     fi;
