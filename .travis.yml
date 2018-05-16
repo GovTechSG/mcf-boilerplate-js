@@ -5,7 +5,8 @@ node_js:
 services:
   - docker
 before_install:
-  - npm i -g npx
+  - nvm use 6 && npm i -g npx
+  - nvm use 8 && npm i -g npx
 script:
   - lerna bootstrap
   - lerna run build
