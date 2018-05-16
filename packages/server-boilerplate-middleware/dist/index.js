@@ -17,6 +17,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 module.exports = createServer;
 
+/**
+ * Returns a server that is:
+ *  - compatible with Express.js interfaces
+ *  - able to parse cookies
+ *
+ * @return {express.Application}
+ */
 function createServer() {
   var server = (0, _express2.default)();
   server.use((0, _cookieParser2.default)());
