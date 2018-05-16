@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",
+    "lint": "npx eslint -c ../../.eslintrc.json .",
     "test-watch": "npx mocha --watch --require babel-register \"src/*.test.js\" ",
     "test": "npx mocha --require babel-register \"dist/*.test.js\" ",
     "pretest": "cd ./src && find ./ -name '*.test.js' | cpio -pdm ../dist",
@@ -38,6 +39,8 @@
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-google": "^0.9.1",
     "mocha": "^5.1.1",
     "sinon": "^5.0.7",
     "sinon-chai": "^3.0.0",
