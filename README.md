@@ -1,7 +1,7 @@
 # MyCareersFuture Boilerplates for Node Projects
 
 ## Contents
-- [`@mcf/server-boilerplate-middleware`](./packages/server-boilerplate-middleware)
+- [`@mcf/server-boilerplate-middleware`](./packages/server-boilerplate-middleware) [![Build Status](https://travis-ci.org/GovTechSG/mcf-boilerplate-js.svg?branch=master)](https://travis-ci.org/GovTechSG/mcf-boilerplate-js)
 
 ## Contributing
 ### Contributors
