@@ -18,7 +18,7 @@ script:
       lerna bootstrap;
       lerna run build;
       git remote set-url origin ${CIVAR_GH_REPOSITORY_URL};
-      printf -- "//registry.npmjs.org/:_authToken=${CIVAR_NPM_TOKEN}" > ./packages/node-boilerplate-middleware/.npmrc;
+      export NPM_TOKEN="${CIVAR_NPM_TOKEN}";
       if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
         if [ -z "${TRAVIS_COMMIT_MESSAGE##*"[major release]"*}" ]; then
           LERNA_CD_VERSION='major';
@@ -27,6 +27,6 @@ script:
         else
           LERNA_CD_VERSION='patch';
         fi;
-        lerna publish --yes --cd-version "${LERNA_CD_VERSION}";
+        lerna publish --registry=https://registry.npmjs.org/ --yes --cd-version "${LERNA_CD_VERSION}";
       fi;
     fi;
