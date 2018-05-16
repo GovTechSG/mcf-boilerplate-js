@@ -70,17 +70,17 @@ describe('createServer()', () => {
     const cookieName2 = '_testAppToken2';
     const cookieValue1 = '1234567890';
     const cookieValue2 = '0987654321';
-    const cookies = [
+    const cookieHeaderValue = [
       `${cookieName1}=${cookieValue1}`,
       `${cookieName2}=${cookieValue2}`,
-    ];
+    ].reduce((prev, curr) => `${prev};${curr}`, '');
     const boilerplateServer = createServer();
     boilerplateServer.use((req, res) => {
       res.status(200).json(req.cookies);
     });
     return supertest(boilerplateServer)
       .get('/')
-      .set('Cookie', cookies)
+      .set('Cookie', cookieHeaderValue)
       .expect(200)
       .then((res) => {
         expect(res.body[cookieName1]).to.eql(cookieValue1);

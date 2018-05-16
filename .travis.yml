@@ -1,7 +1,7 @@
 sudo: required
 language: node_js
 node_js:
-  - "6"
+  - "8"
 services:
   - docker
 before_install:
@@ -9,7 +9,8 @@ before_install:
 script:
   - lerna bootstrap
   - lerna run build
-  - lerna run test
+  - nvm use 6 && lerna run test
+  - nvm use 8 && lerna run test
   - if [ "${TRAVIS_BRANCH}" = "master" ]; then
       git checkout ${TRAVIS_BRANCH};
       git reset --hard ${TRAVIS_COMMIT};
