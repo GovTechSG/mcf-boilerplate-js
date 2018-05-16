@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
 module.exports = createServer;
@@ -13,6 +14,7 @@ module.exports = createServer;
 export default function createServer() {
   const server = express();
   server.use(cookieParser());
+  server.use(bodyParser.json({extended: true}));
 
   return server;
 }

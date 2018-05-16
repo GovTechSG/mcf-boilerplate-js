@@ -87,4 +87,40 @@ describe('createServer()', () => {
         expect(res.body[cookieName2]).to.eql(cookieValue2);
       });
   });
+
+  it('has body parsing abilities', () => {
+    const testData = {
+      hello: 'world!!!',
+      testing: {
+        numberIntegrity: 1,
+        booleanIntegrity: true,
+        objectIntegrity: {
+          a: 1,
+          b: '1',
+        },
+        stringIntegrity: '_',
+        nullIntegrity: null,
+      },
+    };
+    const boilerplateServer = createServer();
+    boilerplateServer.use((req, res) => {
+      try {
+        expect(req.body).to.not.be.undefined;
+        res.status(200).json(req.body);
+      } catch (ex) {
+        console.error(ex.message);
+        res.status(500).json({error: ex.message});
+      }
+    });
+    return supertest(boilerplateServer)
+      .post('/')
+      .send(testData)
+      .type('application/json')
+      .expect(200)
+      .then((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body.error).to.be.undefined;
+        expect(res.body).to.eql(testData);
+      });
+  });
 });

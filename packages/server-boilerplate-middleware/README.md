@@ -23,10 +23,10 @@ server.[...expressMethods];
 
 ## Scope
 - [x] express compatible server
+- [x] cookie handling
+- [x] body data handling
 - [ ] basic http header security
 - [ ] cross-origin-resource-sharing support
-- [ ] cookie handling
-- [ ] body data handling
 - [ ] centralised logging
 - [ ] application metrics
 - [ ] distributed tracing
