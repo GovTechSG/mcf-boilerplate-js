@@ -1,6 +1,10 @@
-import createServer from './';
-import supertest from 'supertest';
+import fs from 'fs';
+import path from 'path';
+
 import {expect} from 'chai';
+import supertest from 'supertest';
+
+import createServer from './';
 
 describe('createServer()', () => {
   const TEST_STRING = '__test_string';
@@ -88,39 +92,92 @@ describe('createServer()', () => {
       });
   });
 
-  it('has body parsing abilities', () => {
-    const testData = {
-      hello: 'world!!!',
-      testing: {
-        numberIntegrity: 1,
-        booleanIntegrity: true,
-        objectIntegrity: {
-          a: 1,
-          b: '1',
+  describe('body parsing abilities', () => {
+    it('has them', () => {
+      const testData = {
+        hello: 'world!!!',
+        testing: {
+          numberIntegrity: 1,
+          booleanIntegrity: true,
+          objectIntegrity: {
+            a: 1,
+            b: '1',
+          },
+          stringIntegrity: '_',
+          nullIntegrity: null,
         },
-        stringIntegrity: '_',
-        nullIntegrity: null,
-      },
-    };
-    const boilerplateServer = createServer();
-    boilerplateServer.use((req, res) => {
-      try {
-        expect(req.body).to.not.be.undefined;
-        res.status(200).json(req.body);
-      } catch (ex) {
-        console.error(ex.message);
-        res.status(500).json({error: ex.message});
-      }
-    });
-    return supertest(boilerplateServer)
-      .post('/')
-      .send(testData)
-      .type('application/json')
-      .expect(200)
-      .then((res) => {
-        expect(res.body).to.be.an('object');
-        expect(res.body.error).to.be.undefined;
-        expect(res.body).to.eql(testData);
+      };
+      const boilerplateServer = createServer();
+      boilerplateServer.use((req, res) => {
+        try {
+          expect(req.body).to.not.be.undefined;
+          res.status(200).json(req.body);
+        } catch (ex) {
+          console.error(ex.message);
+          res.status(500).json({error: ex.message});
+        }
       });
+      return supertest(boilerplateServer)
+        .post('/')
+        .send(testData)
+        .type('application/json')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.error).to.be.undefined;
+          expect(res.body).to.eql(testData);
+        });
+    });
+
+    it('can be disabled', () => {
+      const boilerplateServer = createServer({
+        disableBodyParser: true,
+      });
+      boilerplateServer.post('/', (req, res) => {
+        expect(req.body).to.be.undefined;
+        res.json('ok');
+      });
+      return supertest(boilerplateServer)
+        .post('/')
+        .send({test: 'data'})
+        .type('application/json')
+        .expect(200);
+    });
+
+    it('can handle a 3mb file with base64 encoding', () => {
+      const boilerplateServer = createServer();
+      boilerplateServer.post('/', (req, res) => {
+        res.json('ok');
+      });
+      const testData =
+        fs.readFileSync(
+          path.join(__dirname, '../test/resources/3mb.file')
+        );
+      return supertest(boilerplateServer)
+        .post('/')
+        .send({data: testData.toString('base64')})
+        .expect(200);
+    });
+
+    it('should not handle a 5mb file with base64 encoding', () => {
+      const boilerplateServer = createServer();
+      boilerplateServer.use((err, req, res, next) => {
+        if (err.message === 'request entity too large') {
+          res.status(413).json('ok');
+        } else {
+          res.status(500).json('not large enough');
+        }
+      });
+      const testData =
+        fs.readFileSync(
+          path.join(__dirname, '../test/resources/5mb.file')
+        );
+      return supertest(boilerplateServer)
+        .post('/')
+        .send({
+          data: testData.toString('base64'),
+        })
+        .expect(413);
+    });
   });
 });
