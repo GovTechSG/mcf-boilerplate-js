@@ -10,19 +10,19 @@ module.exports = createServer;
  *  - able to parse cookies
  *
  * @param {Object} [options={}]
- * @param {Boolean} [options.disableSerializer=false]
+ * @param {Boolean} [options.enableSerializer=true]
  *
  * @return {express.Application}
  */
 export default function createServer({
-  disableSerializer = false,
-  disableCookieParser = false,
+  enableSerializer = true,
+  enableCookieParser = true,
 } = {}) {
   const server = express();
-  if (!disableCookieParser) {
+  if (enableCookieParser) {
     server.use(cookieParser());
   }
-  if (!disableSerializer) {
+  if (enableSerializer) {
     server.use(serializer());
   }
 
