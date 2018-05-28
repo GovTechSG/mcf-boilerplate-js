@@ -10,63 +10,122 @@ describe('createServer()', () => {
   const TEST_STRING = '__test_string';
   const TEST_HTTP_CODE = 418;
 
-  it('returns an Express compatible server', () => {
-    const boilerplateServer = createServer();
-    expect(boilerplateServer.listen).to.be.a('function');
+  it('exports a function', () => {
+    expect(createServer).to.be.a('function');
+  });
 
-    boilerplateServer
-      .get('/get', (req, res) => res.json(`${TEST_STRING} /get`));
-    boilerplateServer
-      .post('/post', (req, res) => res.json(`${TEST_STRING} /post`));
-    boilerplateServer
-      .delete('/delete', (req, res) => res.json(`${TEST_STRING} /delete`));
-    boilerplateServer
-      .put('/put', (req, res) => res.json(`${TEST_STRING} /put`));
-    boilerplateServer
-      .patch('/patch', (req, res) => res.json(`${TEST_STRING} /patch`));
-    boilerplateServer
-      .options('/options', (req, res) => res.json(`${TEST_STRING} /options`));
-    boilerplateServer
-      .head('/head', (req, res) => res.status(TEST_HTTP_CODE).end());
-    boilerplateServer
-      .use((req, res) => res.json(TEST_STRING));
+  it('can also be imported using require', () => {
+    expect(createServer).to.eql(require('./index'));
+  });
 
-    return Promise.all([
-      supertest(boilerplateServer)
-        .get('/').expect(200).then((res) => {
-          expect(res.text).to.eql(JSON.stringify(TEST_STRING));
-        }),
-      supertest(boilerplateServer)
-        .get('/get').expect(200).then((res) => {
-          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /get`));
-        }),
-      supertest(boilerplateServer)
-        .post('/post').expect(200).then((res) => {
-          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /post`));
-        }),
-      supertest(boilerplateServer)
-        .put('/put').expect(200).then((res) => {
-          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /put`));
-        }),
-      supertest(boilerplateServer)
-        .delete('/delete').expect(200).then((res) => {
-          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /delete`));
-        }),
-      supertest(boilerplateServer)
-        .patch('/patch').expect(200).then((res) => {
-          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /patch`));
-        }),
-      supertest(boilerplateServer)
-        .options('/options').expect(200).then((res) => {
-          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /options`));
-        }),
-      supertest(boilerplateServer)
-        .head('/head').expect(418),
-      ]);
+  describe('returns an Express compatible server', () => {
+    let boilerplateServer;
+
+    beforeEach(() => {
+      boilerplateServer = createServer();
     });
 
-  it('can be imported using require', () => {
-    expect(createServer).to.eql(require('./index'));
+    it('has a .listen() method', () => {
+      expect(boilerplateServer.listen).to.be.a('function');
+    });
+
+    it('is compatible with GET requests', () => {
+      boilerplateServer.get('/get', (req, res) =>
+        res.json(`${TEST_STRING} /get`)
+      );
+
+      return supertest(boilerplateServer)
+        .get('/get')
+        .expect(200)
+        .then((res) => {
+          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /get`));
+        });
+    });
+
+    it('is compatible with POST requests', () => {
+      boilerplateServer.post('/post', (req, res) =>
+        res.json(`${TEST_STRING} /post`)
+      );
+
+      return supertest(boilerplateServer)
+        .post('/post')
+        .expect(200)
+        .then((res) => {
+          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /post`));
+        });
+    });
+
+    it('is compatible with DELETE requests', () => {
+      boilerplateServer.delete('/delete', (req, res) =>
+        res.json(`${TEST_STRING} /delete`)
+      );
+
+      return supertest(boilerplateServer)
+        .delete('/delete')
+        .expect(200)
+        .then((res) => {
+          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /delete`));
+        });
+    });
+
+    it('is compatible with PUT requests', () => {
+      boilerplateServer.put('/put', (req, res) =>
+        res.json(`${TEST_STRING} /put`)
+      );
+
+      return supertest(boilerplateServer)
+        .put('/put')
+        .expect(200)
+        .then((res) => {
+          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /put`));
+        });
+    });
+
+    it('is compatible with PATCH requests', () => {
+      boilerplateServer.patch('/patch', (req, res) =>
+        res.json(`${TEST_STRING} /patch`)
+      );
+
+      return supertest(boilerplateServer)
+        .patch('/patch')
+        .expect(200)
+        .then((res) => {
+          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /patch`));
+        });
+    });
+
+    it('is compatible with OPTIONS requests', () => {
+      boilerplateServer.options('/options', (req, res) =>
+        res.json(`${TEST_STRING} /options`)
+      );
+
+      return supertest(boilerplateServer)
+        .options('/options')
+        .expect(200)
+        .then((res) => {
+          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /options`));
+        });
+    });
+
+    it('is compatible with HEAD requests', () => {
+      boilerplateServer.head('/head', (req, res) =>
+        res.status(TEST_HTTP_CODE).end()
+      );
+
+      return supertest(boilerplateServer)
+        .head('/head')
+        .expect(418);
+    });
+
+    it('works with generalised middleware', () => {
+      boilerplateServer.use((req, res) => res.json(TEST_STRING));
+      return supertest(boilerplateServer)
+        .get('/')
+        .expect(200)
+        .then((res) => {
+          expect(res.text).to.eql(JSON.stringify(TEST_STRING));
+        });
+    });
   });
 
   it('has cookie parsing abilities', () => {
@@ -94,29 +153,9 @@ describe('createServer()', () => {
 
   describe('body parsing abilities', () => {
     it('has them', () => {
-      const testData = {
-        hello: 'world!!!',
-        testing: {
-          numberIntegrity: 1,
-          booleanIntegrity: true,
-          objectIntegrity: {
-            a: 1,
-            b: '1',
-          },
-          stringIntegrity: '_',
-          nullIntegrity: null,
-        },
-      };
+      const testData = require('../test/resources/test.json');
       const boilerplateServer = createServer();
-      boilerplateServer.use((req, res) => {
-        try {
-          expect(req.body).to.not.be.undefined;
-          res.status(200).json(req.body);
-        } catch (ex) {
-          console.error(ex.message);
-          res.status(500).json({error: ex.message});
-        }
-      });
+      boilerplateServer.use((req, res) => res.status(200).json(req.body));
       return supertest(boilerplateServer)
         .post('/')
         .send(testData)
@@ -130,54 +169,53 @@ describe('createServer()', () => {
     });
 
     it('can be disabled', () => {
-      const boilerplateServer = createServer({
-        disableBodyParser: true,
-      });
-      boilerplateServer.post('/', (req, res) => {
-        expect(req.body).to.be.undefined;
-        res.json('ok');
-      });
+      const testData = require('../test/resources/test.json');
+      const boilerplateServer = createServer({disableSerializer: true});
+      boilerplateServer.post('/', (req, res) => res.json(req.body));
       return supertest(boilerplateServer)
         .post('/')
-        .send({test: 'data'})
+        .send(testData)
         .type('application/json')
-        .expect(200);
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.empty;
+        });
     });
 
-    it('can handle a 3mb file with base64 encoding', () => {
-      const boilerplateServer = createServer();
-      boilerplateServer.post('/', (req, res) => {
-        res.json('ok');
-      });
-      const testData =
+    describe('large sizes', () => {
+      let boilerplateServer;
+      const getFileWithSize = (size) =>
         fs.readFileSync(
-          path.join(__dirname, '../test/resources/3mb.file')
+          path.join(__dirname, `../test/resources/${size}.file`)
         );
-      return supertest(boilerplateServer)
-        .post('/')
-        .send({data: testData.toString('base64')})
-        .expect(200);
-    });
 
-    it('should not handle a 5mb file with base64 encoding', () => {
-      const boilerplateServer = createServer();
-      boilerplateServer.use((err, req, res, next) => {
-        if (err.message === 'request entity too large') {
-          res.status(413).json('ok');
-        } else {
-          res.status(500).json('not large enough');
-        }
+      beforeEach(() => {
+        boilerplateServer = createServer();
+        boilerplateServer.use((err, req, res, next) => {
+          if (err.type === 'entity.too.large') {
+            res.status(413).json('ok');
+          } else {
+            res.status(500).json(err.message);
+          }
+        });
       });
-      const testData =
-        fs.readFileSync(
-          path.join(__dirname, '../test/resources/5mb.file')
-        );
-      return supertest(boilerplateServer)
-        .post('/')
-        .send({
-          data: testData.toString('base64'),
-        })
-        .expect(413);
+
+      it('can handle a 3mb file with base64 encoding', () => {
+        const testData = {data: getFileWithSize('3mb').toString('base64')};
+        boilerplateServer.post('/', (req, res) => res.json('ok'));
+        return supertest(boilerplateServer)
+          .post('/')
+          .send(testData)
+          .expect(200);
+      });
+
+      it('should not handle a 5mb file with base64 encoding', () => {
+        const testData = {data: getFileWithSize('5mb').toString('base64')};
+        return supertest(boilerplateServer)
+          .post('/')
+          .send(testData)
+          .expect(413);
+      });
     });
   });
 });

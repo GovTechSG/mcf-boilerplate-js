@@ -1,8 +1,6 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-
-const BODY_SIZE_LIMIT = '4200kb';
+import serializer from './serializer';
 
 module.exports = createServer;
 
@@ -12,20 +10,20 @@ module.exports = createServer;
  *  - able to parse cookies
  *
  * @param {Object} [options={}]
- * @param {Boolean} [options.disableBodyParser=false]
+ * @param {Boolean} [options.disableSerializer=false]
  *
  * @return {express.Application}
  */
 export default function createServer({
-  disableBodyParser = false,
+  disableSerializer = false,
+  disableCookieParser = false,
 } = {}) {
   const server = express();
-  server.use(cookieParser());
-  if (!disableBodyParser) {
-    server.use(bodyParser.json({
-      extended: true,
-      limit: BODY_SIZE_LIMIT,
-    }));
+  if (!disableCookieParser) {
+    server.use(cookieParser());
+  }
+  if (!disableSerializer) {
+    server.use(serializer());
   }
 
   return server;

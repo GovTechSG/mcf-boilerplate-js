@@ -1,0 +1,17 @@
+{
+  "hello": "world!!!",
+  "testing": {
+    "numberIntegrity": 1,
+    "bigNumberIntegrity": 1234567890,
+    "floatIntegrity": 1.12345678,
+    "booleanIntegrity": true,
+    "objectIntegrity": {
+      "a": 1,
+      "b": "1",
+      "c": {},
+      "d": null
+    },
+    "stringIntegrity": "_",
+    "nullIntegrity": null
+  }
+}
