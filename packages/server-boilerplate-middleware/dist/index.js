@@ -9,17 +9,15 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = require('body-parser');
-
-var _bodyParser2 = _interopRequireDefault(_bodyParser);
-
 var _cookieParser = require('cookie-parser');
 
 var _cookieParser2 = _interopRequireDefault(_cookieParser);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _serializer = require('./serializer');
 
-var BODY_SIZE_LIMIT = '4200kb';
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = createServer;
 
@@ -29,22 +27,23 @@ module.exports = createServer;
  *  - able to parse cookies
  *
  * @param {Object} [options={}]
- * @param {Boolean} [options.disableBodyParser=false]
+ * @param {Boolean} [options.disableSerializer=false]
  *
  * @return {express.Application}
  */
 function createServer() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref$disableBodyParse = _ref.disableBodyParser,
-      disableBodyParser = _ref$disableBodyParse === undefined ? false : _ref$disableBodyParse;
+      _ref$disableSerialize = _ref.disableSerializer,
+      disableSerializer = _ref$disableSerialize === undefined ? false : _ref$disableSerialize,
+      _ref$disableCookiePar = _ref.disableCookieParser,
+      disableCookieParser = _ref$disableCookiePar === undefined ? false : _ref$disableCookiePar;
 
   var server = (0, _express2.default)();
-  server.use((0, _cookieParser2.default)());
-  if (!disableBodyParser) {
-    server.use(_bodyParser2.default.json({
-      extended: true,
-      limit: BODY_SIZE_LIMIT
-    }));
+  if (!disableCookieParser) {
+    server.use((0, _cookieParser2.default)());
+  }
+  if (!disableSerializer) {
+    server.use((0, _serializer2.default)());
   }
 
   return server;
