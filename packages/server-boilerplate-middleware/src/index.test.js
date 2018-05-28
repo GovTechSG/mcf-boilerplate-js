@@ -152,7 +152,7 @@ describe('createServer()', () => {
   });
 
   describe('body parsing abilities', () => {
-    it('has them', () => {
+    it('includes json parsing', () => {
       const testData = require('../test/resources/test.json');
       const boilerplateServer = createServer();
       boilerplateServer.use((req, res) => res.status(200).json(req.body));
@@ -165,6 +165,42 @@ describe('createServer()', () => {
           expect(res.body).to.be.an('object');
           expect(res.body.error).to.be.undefined;
           expect(res.body).to.eql(testData);
+        });
+    });
+
+    it('includes urlencoded parsing', () => {
+      const testData = require('../test/resources/test.json');
+      const boilerplateServer = createServer();
+      boilerplateServer.use((req, res) => res.status(200).json(req.body));
+      return supertest(boilerplateServer)
+        .post('/')
+        .send(testData)
+        .type('application/x-www-form-urlencoded')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.error).to.be.undefined;
+          expect(res.body.testing.bigNumberIntegrity).to.eql(
+            `${testData.testing.bigNumberIntegrity}`
+          );
+          expect(res.body.testing.booleanIntegrity).to.eql(
+            `${testData.testing.booleanIntegrity}`
+          );
+          expect(res.body.testing.floatIntegrity).to.eql(
+            `${testData.testing.floatIntegrity}`
+          );
+          expect(res.body.testing.nullIntegrity).to.be.empty;
+          expect(res.body.testing.numberIntegrity).to.eql(
+            `${testData.testing.numberIntegrity}`
+          );
+          expect(res.body.testing.objectIntegrity.a).to.eql(
+            `${testData.testing.objectIntegrity.a}`
+          );
+          expect(res.body.testing.objectIntegrity.b).to.eql(
+            `${testData.testing.objectIntegrity.b}`
+          );
+          expect(res.body.testing.objectIntegrity.c).to.be.undefined;
+          expect(res.body.testing.objectIntegrity.d).to.be.empty;
         });
     });
 
@@ -185,9 +221,7 @@ describe('createServer()', () => {
     describe('large sizes', () => {
       let boilerplateServer;
       const getFileWithSize = (size) =>
-        fs.readFileSync(
-          path.join(__dirname, `../test/resources/${size}.file`)
-        );
+        fs.readFileSync(path.join(__dirname, `../test/resources/${size}.file`));
 
       beforeEach(() => {
         boilerplateServer = createServer();

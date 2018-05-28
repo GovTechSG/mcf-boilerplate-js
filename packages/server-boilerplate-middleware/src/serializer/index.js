@@ -11,8 +11,14 @@ module.exports = serializer;
  * @return {Function}
  */
 export default function serializer() {
-  return bodyParser.json({
-    extended: true,
-    limit: BODY_SIZE_LIMIT,
-  });
+  return [
+    bodyParser.json({
+      extended: true,
+      limit: BODY_SIZE_LIMIT,
+    }),
+    bodyParser.urlencoded({
+      extended: true,
+      limit: BODY_SIZE_LIMIT,
+    }),
+  ];
 }
