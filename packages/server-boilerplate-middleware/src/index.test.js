@@ -128,27 +128,51 @@ describe('createServer()', () => {
     });
   });
 
-  it('has cookie parsing abilities', () => {
+  describe('cookie parsing abilities', () => {
     const cookieName1 = '_testAppToken';
     const cookieName2 = '_testAppToken2';
     const cookieValue1 = '1234567890';
     const cookieValue2 = '0987654321';
-    const cookieHeaderValue = [
-      `${cookieName1}=${cookieValue1}`,
-      `${cookieName2}=${cookieValue2}`,
-    ].reduce((prev, curr) => `${prev};${curr}`, '');
-    const boilerplateServer = createServer();
-    boilerplateServer.use((req, res) => {
-      res.status(200).json(req.cookies);
-    });
-    return supertest(boilerplateServer)
-      .get('/')
-      .set('Cookie', cookieHeaderValue)
-      .expect(200)
-      .then((res) => {
-        expect(res.body[cookieName1]).to.eql(cookieValue1);
-        expect(res.body[cookieName2]).to.eql(cookieValue2);
+
+    it('has them', () => {
+      const cookieHeaderValue = [
+        `${cookieName1}=${cookieValue1}`,
+        `${cookieName2}=${cookieValue2}`,
+      ].reduce((prev, curr) => `${prev};${curr}`, '');
+      const boilerplateServer = createServer();
+      boilerplateServer.use((req, res) => {
+        res.status(200).json(req.cookies);
       });
+      return supertest(boilerplateServer)
+        .get('/')
+        .set('Cookie', cookieHeaderValue)
+        .expect(200)
+        .then((res) => {
+          expect(res.body[cookieName1]).to.eql(cookieValue1);
+          expect(res.body[cookieName2]).to.eql(cookieValue2);
+        });
+    });
+
+    it('can be disabled', () => {
+      const cookieHeaderValue = [
+        `${cookieName1}=${cookieValue1}`,
+        `${cookieName2}=${cookieValue2}`,
+      ].reduce((prev, curr) => `${prev};${curr}`, '');
+      const boilerplateServer = createServer({
+        enableCookieParser: false,
+      });
+      boilerplateServer.use((req, res) => {
+        res.status(200).json(req.cookies);
+      });
+      return supertest(boilerplateServer)
+        .get('/')
+        .set('Cookie', cookieHeaderValue)
+        .expect(200)
+        .then((res) => {
+          expect(res.body[cookieName1]).to.be.undefined;
+          expect(res.body[cookieName2]).to.be.undefined;
+        });
+    });
   });
 
   describe('body parsing abilities', () => {
@@ -206,7 +230,7 @@ describe('createServer()', () => {
 
     it('can be disabled', () => {
       const testData = require('../test/resources/test.json');
-      const boilerplateServer = createServer({disableSerializer: true});
+      const boilerplateServer = createServer({enableSerializer: false});
       boilerplateServer.post('/', (req, res) => res.json(req.body));
       return supertest(boilerplateServer)
         .post('/')
