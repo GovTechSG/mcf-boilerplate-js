@@ -1,6 +1,6 @@
 {
   "name": "@mcf/server-boilerplate-middleware",
-  "version": "0.1.57",
+  "version": "0.1.58",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
