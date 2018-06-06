@@ -149,6 +149,9 @@ npm run build;
 ```
 
 ## Change Log 
+### 0.2.x
+#### 0.2.0
+- fixed ci pipeline problems, no changes to functionality, we can now expect stably numbered patch releases
 ### 0.1.x
 #### 0.1.0
 - added content security policy configuration for:
