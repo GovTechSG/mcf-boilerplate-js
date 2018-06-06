@@ -7,6 +7,7 @@ services:
 before_install:
   - nvm use 6 && npm i -g npx
   - nvm use 8 && npm i -g npx
+if: tag IS blank AND branch = "master"
 script:
   - lerna bootstrap
   - lerna run build
