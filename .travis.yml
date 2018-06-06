@@ -13,7 +13,7 @@ script:
   - lerna run build
   - nvm use 6 && lerna run test
   - nvm use 8 && lerna run test
-  - if [ "${TRAVIS_BRANCH}" = "master" ] && [ $"{TRAVIS_COMMIT_MESSAGE}" != "Publish" ]; then
+  - if [ "${TRAVIS_BRANCH}" = "master" ] && [ "${TRAVIS_COMMIT_MESSAGE}" != "Publish" ]; then
       git checkout ${TRAVIS_BRANCH};
       git reset --hard ${TRAVIS_COMMIT};
       lerna bootstrap;
