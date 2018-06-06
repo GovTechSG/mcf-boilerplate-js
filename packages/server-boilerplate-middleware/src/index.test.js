@@ -128,6 +128,45 @@ describe('createServer()', () => {
     });
   });
 
+  describe('secure http header', () => {
+    const httpHeadersSecurity = {
+      cspChildSrc: ['\'self\''],
+      cspDefaultSrc: ['http://mydomain.com', '\'self\''],
+      cspFontSrc: ['\'none\''],
+      cspImgSrc: ['data: \'self\''],
+      cspScriptSrc: ['\'self\''],
+      cspStyleSrc: ['\'self\''],
+      cspReportUri: '/my-csp-report-uri',
+    };
+
+    const expectedContentSecurityPolicy =
+      'child-src \'self\'; default-src http://mydomain.com \'self\'; font-src \'none\'; img-src data: \'self\'; script-src \'self\'; style-src \'self\'; report-uri /my-csp-report-uri';
+
+    before(() => {
+      require('./security').httpHeaders.instance = null;
+    });
+
+    it('implements them correctly', () => {
+      const boilerplateServer = createServer({
+        httpHeadersSecurity,
+      });
+      boilerplateServer.use((req, res) => {
+        res.status(200).json(req.cookies);
+      });
+      return supertest(boilerplateServer)
+        .get('/')
+        .expect(200)
+        .then((res) => {
+          expect(res.headers['content-security-policy'])
+            .to.deep.equal(expectedContentSecurityPolicy);
+          expect(res.headers['x-content-security-policy'])
+            .to.deep.equal(expectedContentSecurityPolicy);
+          expect(res.headers['x-webkit-csp'])
+            .to.deep.equal(expectedContentSecurityPolicy);
+        });
+    });
+  });
+
   describe('cookie parsing abilities', () => {
     const cookieName1 = '_testAppToken';
     const cookieName2 = '_testAppToken2';

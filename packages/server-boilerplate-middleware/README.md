@@ -21,11 +21,94 @@ server.[...expressMethods];
 // ...
 ```
 
+### Options
+Options are passed into the constructor function:
+
+```js
+const serverBoilerplate = require('@mcf/server-boilerplate-middleware');
+const server = serverBoilerplate({
+  ...options,
+});
+```
+
+#### `enableSerializer`
+**Type**: `Boolean`
+
+**Example**
+```js
+serverBoilerplate({
+  enableSerializer: true,
+});
+```
+
+> Defaults to `true`
+
+#### `enableCookieParser`
+**Type**: `Boolean`
+
+**Example**
+```js
+serverBoilerplate({
+  enableCookieParser: true,
+});
+```
+
+> Defaults to `true`
+
+#### `enableHttpHeaderSecurity`
+**Type**: `Boolean`
+
+**Example**
+```js
+serverBoilerplate({
+  enableHttpHeaderSecurity: true,
+});
+```
+
+> Defaults to `true`
+
+#### `httpHeadersSecurity`
+**Type**: `Object`
+
+**Keys**
+- `cspChildSrc` : `Array<String>`
+- `cspDefaultSrc` : `Array<String>`
+- `cspFontSrc` : `Array<String>`
+- `cspImgSrc` : `Array<String>`
+- `cspScriptSrc` : `Array<String>`
+- `cspStyleSrc` : `Array<String>`
+- `cspReportUri` : `String`
+
+**Example**
+```js
+serverBoilerplate({
+  httpHeadersSecurity: {
+    cspChildSrc: ['\'self\''],
+    cspDefaultSrc: ['http://mydomain.com', '\'self\''],
+    cspFontSrc: ['\'none\''],
+    cspImgSrc: ['data: \'self\''],
+    cspScriptSrc: ['\'self\''],
+    cspStyleSrc: ['\'self\''],
+    cspReportUri: '/my-csp-report-uri',
+  },
+});
+```
+
+The above configuration produces the following CSP:
+
+```
+"child-src 'self'; default-src http://mydomain.com 'self'; font-src 'none'; img-src data: 'self'; script-src 'self'; style-src 'self'; report-uri /my-csp-report-uri"
+```
+
+> Defaults to `{}`
+
 ## Scope
 - [x] express compatible server
 - [x] cookie handling
-- [x] body data handling
-- [ ] basic http header security
+- [x] json body data handling ("application/json")
+- [x] form body data handling ("application/x-www-form-urlencoded")
+- [x] basic http header security
+- [x] content security policy
 - [ ] cross-origin-resource-sharing support
 - [ ] centralised logging
 - [ ] application metrics
@@ -65,9 +148,27 @@ npm run test;
 npm run build;
 ```
 
-## Change Log
+## Change Log 
 ### 0.1.x
 #### 0.1.0
+- added content security policy configuration for:
+  - 'default-src'
+  - 'child-src'
+  - 'font-src'
+  - 'img-src'
+  - 'script-src'
+  - 'style-src'
+  - 'report-uri'
+- added basic http security headers
+  - hides 'x-powered-by'
+  - adds 'x-xss-protection: 1; mode=block'
+  - adds 'x-content-type-options : nosniff'
+  - adds 'x-dns-prefetch-control : off'
+  - adds 'x-download-options : noopen'
+  - adds 'x-frame-options : SAMEORIGIN'
+  - adds 'strict-transport-security : max-age=15552000; includeSubDomains'
+- added body data parsing suport for `Content-Type: application/json`
+- added body data parsing suport for `Content-Type: application/x-www-form-urlencoded`
 - added cookie parsing superpowers
 
 ### 0.0.x
