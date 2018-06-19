@@ -156,6 +156,7 @@ describe('security', () => {
         provisionRootEndpoint(server);
         return triggerRootEndpoint(server).then((res) => {
           assertCspContains(res, 'child-src \'none\'');
+          assertCspContains(res, 'connect-src \'none\'');
           assertCspContains(res, 'default-src \'none\'');
           assertCspContains(res, 'font-src \'none\'');
           assertCspContains(res, 'img-src \'none\'');
@@ -169,6 +170,13 @@ describe('security', () => {
         provisionRootEndpoint(server, {cspChildSrc: ['\'self\'']});
         return triggerRootEndpoint(server).then((res) => {
           assertCspContains(res, 'child-src \'self\'');
+        });
+      });
+
+      it('can set "connect-src"', () => {
+        provisionRootEndpoint(server, {cspConnectSrc: ['\'self\'']});
+        return triggerRootEndpoint(server).then((res) => {
+          assertCspContains(res, 'connect-src \'self\'');
         });
       });
 

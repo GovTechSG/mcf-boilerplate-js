@@ -8,6 +8,7 @@ const DEFAULT_CSP_REPORT_URI = '/csp-report';
  *
  * @param {Object} options
  * @param {Array<String>|String} options.cspChildSrc
+ * @param {Array<String>|String} options.cspConnectSrc
  * @param {Array<String>|String} options.cspDefaultSrc
  * @param {Array<String>|String} options.cspFontSrc
  * @param {Array<String>|String} options.cspImgSrc
@@ -18,6 +19,7 @@ const DEFAULT_CSP_REPORT_URI = '/csp-report';
  */
 function securityMiddleware({
   cspChildSrc = DEFAULT_CSP_SRC_VALUE,
+  cspConnectSrc = DEFAULT_CSP_SRC_VALUE,
   cspDefaultSrc = DEFAULT_CSP_SRC_VALUE,
   cspFontSrc = DEFAULT_CSP_SRC_VALUE,
   cspImgSrc = DEFAULT_CSP_SRC_VALUE,
@@ -29,6 +31,7 @@ function securityMiddleware({
     const helmet = require('helmet');
     const cspDirectives = {
       childSrc: cspChildSrc,
+      connectSrc: cspConnectSrc,
       defaultSrc: cspDefaultSrc,
       fontSrc: cspFontSrc,
       imgSrc: cspImgSrc,

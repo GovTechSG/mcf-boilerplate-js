@@ -72,6 +72,7 @@ serverBoilerplate({
 
 **Keys**
 - `cspChildSrc` : `Array<String>`
+- `cspConnectSrc` : `Array<String>`
 - `cspDefaultSrc` : `Array<String>`
 - `cspFontSrc` : `Array<String>`
 - `cspImgSrc` : `Array<String>`
@@ -84,6 +85,7 @@ serverBoilerplate({
 serverBoilerplate({
   httpHeadersSecurity: {
     cspChildSrc: ['\'self\''],
+    cspConnectSrc: ['\'self\''],
     cspDefaultSrc: ['http://mydomain.com', '\'self\''],
     cspFontSrc: ['\'none\''],
     cspImgSrc: ['data: \'self\''],
@@ -150,6 +152,8 @@ npm run build;
 
 ## Change Log 
 ### 0.2.x
+#### 0.2.1
+- added `connect-src` to CSP configuration
 #### 0.2.0
 - fixed ci pipeline problems, no changes to functionality, we can now expect stably numbered patch releases
 ### 0.1.x

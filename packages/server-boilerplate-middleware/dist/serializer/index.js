@@ -22,8 +22,11 @@ module.exports = serializer;
  * @return {Function}
  */
 function serializer() {
-  return _bodyParser2.default.json({
+  return [_bodyParser2.default.json({
     extended: true,
     limit: BODY_SIZE_LIMIT
-  });
+  }), _bodyParser2.default.urlencoded({
+    extended: true,
+    limit: BODY_SIZE_LIMIT
+  })];
 }

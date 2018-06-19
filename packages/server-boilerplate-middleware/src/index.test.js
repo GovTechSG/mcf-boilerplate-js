@@ -131,6 +131,7 @@ describe('createServer()', () => {
   describe('secure http header', () => {
     const httpHeadersSecurity = {
       cspChildSrc: ['\'self\''],
+      cspConnectSrc: ['\'self\''],
       cspDefaultSrc: ['http://mydomain.com', '\'self\''],
       cspFontSrc: ['\'none\''],
       cspImgSrc: ['data: \'self\''],
@@ -140,7 +141,7 @@ describe('createServer()', () => {
     };
 
     const expectedContentSecurityPolicy =
-      'child-src \'self\'; default-src http://mydomain.com \'self\'; font-src \'none\'; img-src data: \'self\'; script-src \'self\'; style-src \'self\'; report-uri /my-csp-report-uri';
+      'child-src \'self\'; connect-src \'self\'; default-src http://mydomain.com \'self\'; font-src \'none\'; img-src data: \'self\'; script-src \'self\'; style-src \'self\'; report-uri /my-csp-report-uri';
 
     before(() => {
       require('./security').httpHeaders.instance = null;
