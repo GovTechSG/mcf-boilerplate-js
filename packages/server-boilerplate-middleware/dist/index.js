@@ -21,6 +21,10 @@ var _security = require('./security');
 
 var _security2 = _interopRequireDefault(_security);
 
+var _compression = require('./compression');
+
+var _compression2 = _interopRequireDefault(_compression);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = createServer;
@@ -49,8 +53,12 @@ function createServer() {
       enableHttpHeadersSecurity = _ref$enableHttpHeader === undefined ? true : _ref$enableHttpHeader,
       _ref$enableContentSec = _ref.enableContentSecurityPolicy,
       enableContentSecurityPolicy = _ref$enableContentSec === undefined ? true : _ref$enableContentSec,
+      _ref$enableCompressio = _ref.enableCompression,
+      enableCompression = _ref$enableCompressio === undefined ? true : _ref$enableCompressio,
       _ref$contentSecurityP = _ref.contentSecurityPolicy,
-      contentSecurityPolicy = _ref$contentSecurityP === undefined ? {} : _ref$contentSecurityP;
+      contentSecurityPolicy = _ref$contentSecurityP === undefined ? {} : _ref$contentSecurityP,
+      _ref$compressionOptio = _ref.compressionOptions,
+      compressionOptions = _ref$compressionOptio === undefined ? {} : _ref$compressionOptio;
 
   var server = (0, _express2.default)();
   if (enableCookieParser) {
@@ -63,8 +71,10 @@ function createServer() {
     server.use(_security2.default.httpHeaders());
   }
   if (enableContentSecurityPolicy) {
-    var x = _security2.default.contentSecurityPolicy(contentSecurityPolicy);
-    server.use(x);
+    server.use(_security2.default.contentSecurityPolicy(contentSecurityPolicy));
+  }
+  if (enableCompression) {
+    server.use((0, _compression2.default)(compressionOptions));
   }
 
   return server;

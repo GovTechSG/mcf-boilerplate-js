@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import serializer from './serializer';
 import security from './security';
+import compression from './compression';
 
 module.exports = createServer;
 
@@ -24,7 +25,9 @@ export default function createServer({
   enableCookieParser = true,
   enableHttpHeadersSecurity = true,
   enableContentSecurityPolicy = true,
+  enableCompression = true,
   contentSecurityPolicy = {},
+  compressionOptions = {},
 } = {}) {
   const server = express();
   if (enableCookieParser) {
@@ -37,8 +40,10 @@ export default function createServer({
     server.use(security.httpHeaders());
   }
   if (enableContentSecurityPolicy) {
-    const x = security.contentSecurityPolicy(contentSecurityPolicy);
-    server.use(x);
+    server.use(security.contentSecurityPolicy(contentSecurityPolicy));
+  }
+  if (enableCompression) {
+    server.use(compression(compressionOptions));
   }
 
   return server;

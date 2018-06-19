@@ -79,18 +79,53 @@ serverBoilerplate({
 
 > Defaults to `true`
 
-#### `contentSecurityPolicy`
+#### `enableCompression`
+**Type**: `Boolean`
+
+**Example**
+```js
+serverBoilerplate({
+  enableCompression: true,
+});
+```
+
+> Defaults to `true`
+
+#### `compressionOptions`
 **Type**: `Object`
 
 **Keys**
-- `childSrc` : `Array<String>`
-- `connectSrc` : `Array<String>`
-- `defaultSrc` : `Array<String>`
-- `fontSrc` : `Array<String>`
-- `imgSrc` : `Array<String>`
-- `scriptSrc` : `Array<String>`
-- `styleSrc` : `Array<String>`
-- `reportUri` : `String`
+- `chunkSize` : `Number` *(size in bytes of chunk)*
+- `level` : `Number` *(0-9 - see https://www.npmjs.com/package/compression for more information)*
+- `threshold` : `Number` *(minimum size in bytes before compression kicks in)*
+
+**Example**
+```js
+serverBoilerplate({
+  compressionOptions: {
+    chunkSize: 1024 * 16, // 16kb
+    level: 9, // best compression
+    threshold: 1024 * 100, // only responses of size 100kb and above will be compressed
+  },
+});
+```
+
+> Defaults to `{}`
+
+#### `contentSecurityPolicy`
+> This option is only relevant if the `enableContentSecurityPolicy` flag is not set to `false`.
+
+**Type**: `Object`
+
+**Keys**
+- `childSrc` : `Array<String>` *(populates the child-src value of the CSP header)*
+- `connectSrc` : `Array<String>` *(populates the connect-src value of the CSP header)*
+- `defaultSrc` : `Array<String>` *(populates the default-src value of the CSP header)*
+- `fontSrc` : `Array<String>` *(populates the font-src value of the CSP header)*
+- `imgSrc` : `Array<String>` *(populates the img-src value of the CSP header)*
+- `scriptSrc` : `Array<String>` *(populates the script-src value of the CSP header)*
+- `styleSrc` : `Array<String>` *(populates the style-src value of the CSP header)*
+- `reportUri` : `String` *(populates the report-uri value of the CSP header)*
 
 **Example**
 ```js
@@ -162,7 +197,9 @@ npm run test;
 npm run build;
 ```
 
-## Change Log 
+## Change Log
+### 0.3.1
+- added gzip compression module
 ### 0.3.0
 - refactored security module into two submodules: http headers and csp
 - also changed API for content security policy (CSP)
