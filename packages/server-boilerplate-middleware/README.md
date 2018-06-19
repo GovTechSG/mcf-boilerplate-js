@@ -67,31 +67,43 @@ serverBoilerplate({
 
 > Defaults to `true`
 
-#### `httpHeadersSecurity`
-**Type**: `Object`
-
-**Keys**
-- `cspChildSrc` : `Array<String>`
-- `cspConnectSrc` : `Array<String>`
-- `cspDefaultSrc` : `Array<String>`
-- `cspFontSrc` : `Array<String>`
-- `cspImgSrc` : `Array<String>`
-- `cspScriptSrc` : `Array<String>`
-- `cspStyleSrc` : `Array<String>`
-- `cspReportUri` : `String`
+#### `enableContentSecurityPolicy`
+**Type**: `Boolean`
 
 **Example**
 ```js
 serverBoilerplate({
-  httpHeadersSecurity: {
-    cspChildSrc: ['\'self\''],
-    cspConnectSrc: ['\'self\''],
-    cspDefaultSrc: ['http://mydomain.com', '\'self\''],
-    cspFontSrc: ['\'none\''],
-    cspImgSrc: ['data: \'self\''],
-    cspScriptSrc: ['\'self\''],
-    cspStyleSrc: ['\'self\''],
-    cspReportUri: '/my-csp-report-uri',
+  enableContentSecurityPolicy: true,
+});
+```
+
+> Defaults to `true`
+
+#### `contentSecurityPolicy`
+**Type**: `Object`
+
+**Keys**
+- `childSrc` : `Array<String>`
+- `connectSrc` : `Array<String>`
+- `defaultSrc` : `Array<String>`
+- `fontSrc` : `Array<String>`
+- `imgSrc` : `Array<String>`
+- `scriptSrc` : `Array<String>`
+- `styleSrc` : `Array<String>`
+- `reportUri` : `String`
+
+**Example**
+```js
+serverBoilerplate({
+  contentSecurityPolicy: {
+    childSrc: ['\'self\''],
+    connectSrc: ['\'self\''],
+    defaultSrc: ['http://mydomain.com', '\'self\''],
+    fontSrc: ['\'none\''],
+    imgSrc: ['data: \'self\''],
+    scriptSrc: ['\'self\''],
+    styleSrc: ['\'self\''],
+    reportUri: '/my-csp-report-uri',
   },
 });
 ```
@@ -99,7 +111,7 @@ serverBoilerplate({
 The above configuration produces the following CSP:
 
 ```
-"child-src 'self'; default-src http://mydomain.com 'self'; font-src 'none'; img-src data: 'self'; script-src 'self'; style-src 'self'; report-uri /my-csp-report-uri"
+"child-src 'self'; connect-src 'self'; default-src http://mydomain.com 'self'; font-src 'none'; img-src data: 'self'; script-src 'self'; style-src 'self'; report-uri /my-csp-report-uri"
 ```
 
 > Defaults to `{}`
@@ -151,6 +163,10 @@ npm run build;
 ```
 
 ## Change Log 
+### 0.3.0
+- refactored security module into two submodules: http headers and csp
+- also changed API for content security policy (CSP)
+- added new flag, `enableContentSecurityPolicy`, for server initialisation
 ### 0.2.x
 #### 0.2.1
 - added `connect-src` to CSP configuration

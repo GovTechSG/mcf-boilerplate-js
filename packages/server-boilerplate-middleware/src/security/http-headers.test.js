@@ -110,116 +110,19 @@ describe('security', () => {
     });
 
     describe('content-security-policy', () => {
-      it('implements "content-security-policy"', () => {
-        expect(headers.protected).to.include.key('content-security-policy');
+      it('does not implement "content-security-policy"', () => {
+        expect(headers.protected)
+          .to.not.include.key('content-security-policy');
       });
 
-      it('implements "x-content-security-policy"', () => {
-        expect(headers.protected).to.include.key('x-content-security-policy');
+      it('does not implement "x-content-security-policy"', () => {
+        expect(headers.protected)
+          .to.not.include.key('x-content-security-policy');
       });
 
-      it('implements "x-webkit-csp"', () => {
-        expect(headers.protected).to.include.key('x-webkit-csp');
-      });
-    });
-  });
-
-  describe('configurable security headers', () => {
-    describe('content security policy', () => {
-      let server;
-
-      const assertCspContains = (res, cspString) => {
-        expect(res.headers['content-security-policy']).to.contain(cspString);
-        expect(res.headers['x-content-security-policy']).to.contain(cspString);
-        expect(res.headers['x-webkit-csp']).to.contain(cspString);
-      };
-
-      const provisionRootEndpoint = (server, securityOptions) => {
-        server.use(security(securityOptions));
-        server.get('/', (req, res) => res.json('ok'));
-      };
-
-      const triggerRootEndpoint = (server) =>
-        supertest(server).get('/').expect(200);
-
-      beforeEach(() => {
-        // resets the security module since its a singleton
-        security.instance = null;
-        server = express();
-      });
-
-      after(() => {
-        security.instance = null;
-      });
-
-      it('defaults to none', () => {
-        provisionRootEndpoint(server);
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'child-src \'none\'');
-          assertCspContains(res, 'connect-src \'none\'');
-          assertCspContains(res, 'default-src \'none\'');
-          assertCspContains(res, 'font-src \'none\'');
-          assertCspContains(res, 'img-src \'none\'');
-          assertCspContains(res, 'script-src \'none\'');
-          assertCspContains(res, 'style-src \'none\'');
-          assertCspContains(res, 'report-uri /csp-report');
-        });
-      });
-
-      it('can set "child-src"', () => {
-        provisionRootEndpoint(server, {cspChildSrc: ['\'self\'']});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'child-src \'self\'');
-        });
-      });
-
-      it('can set "connect-src"', () => {
-        provisionRootEndpoint(server, {cspConnectSrc: ['\'self\'']});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'connect-src \'self\'');
-        });
-      });
-
-      it('can set "default-src"', () => {
-        provisionRootEndpoint(server, {cspDefaultSrc: ['\'self\'']});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'default-src \'self\'');
-        });
-      });
-
-      it('can set "font-src"', () => {
-        provisionRootEndpoint(server, {cspFontSrc: ['\'self\'']});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'font-src \'self\'');
-        });
-      });
-
-      it('can set "img-src"', () => {
-        provisionRootEndpoint(server, {cspImgSrc: ['\'self\'']});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'img-src \'self\'');
-        });
-      });
-
-      it('can set "script-src"', () => {
-        provisionRootEndpoint(server, {cspScriptSrc: ['\'self\'']});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'script-src \'self\'');
-        });
-      });
-
-      it('can set "style-src"', () => {
-        provisionRootEndpoint(server, {cspStyleSrc: ['\'self\'']});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, 'style-src \'self\'');
-        });
-      });
-
-      it('can set "report-uri"', () => {
-        provisionRootEndpoint(server, {cspReportUri: '/__test/__report_uri'});
-        return triggerRootEndpoint(server).then((res) => {
-          assertCspContains(res, '/__test/__report_uri');
-        });
+      it('does not implement "x-webkit-csp"', () => {
+        expect(headers.protected)
+          .to.not.include.key('x-webkit-csp');
       });
     });
   });

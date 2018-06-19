@@ -13,8 +13,9 @@ module.exports = createServer;
  * @param {Object} [options={}]
  * @param {Boolean} [options.enableSerializer=true]
  * @param {Boolean} [options.enableCookieParser=true]
+ * @param {Boolean} [options.enableContentSecurityPolicy=true]
  * @param {Boolean} [options.enableHttpHeadersSecurity=true]
- * @param {Object} [httpHeadersSecurity={}]
+ * @param {Object} [contentSecurityPolicy={}]
  *
  * @return {express.Application}
  */
@@ -22,7 +23,8 @@ export default function createServer({
   enableSerializer = true,
   enableCookieParser = true,
   enableHttpHeadersSecurity = true,
-  httpHeadersSecurity = {},
+  enableContentSecurityPolicy = true,
+  contentSecurityPolicy = {},
 } = {}) {
   const server = express();
   if (enableCookieParser) {
@@ -32,7 +34,11 @@ export default function createServer({
     server.use(serializer());
   }
   if (enableHttpHeadersSecurity) {
-    server.use(security.httpHeaders(httpHeadersSecurity));
+    server.use(security.httpHeaders());
+  }
+  if (enableContentSecurityPolicy) {
+    const x = security.contentSecurityPolicy(contentSecurityPolicy);
+    server.use(x);
   }
 
   return server;

@@ -129,28 +129,26 @@ describe('createServer()', () => {
   });
 
   describe('secure http header', () => {
-    const httpHeadersSecurity = {
-      cspChildSrc: ['\'self\''],
-      cspConnectSrc: ['\'self\''],
-      cspDefaultSrc: ['http://mydomain.com', '\'self\''],
-      cspFontSrc: ['\'none\''],
-      cspImgSrc: ['data: \'self\''],
-      cspScriptSrc: ['\'self\''],
-      cspStyleSrc: ['\'self\''],
-      cspReportUri: '/my-csp-report-uri',
+    const contentSecurityPolicy = {
+      childSrc: ['\'self\''],
+      connectSrc: ['\'self\''],
+      defaultSrc: ['http://mydomain.com', '\'self\''],
+      fontSrc: ['\'none\''],
+      imgSrc: ['data: \'self\''],
+      scriptSrc: ['\'self\''],
+      styleSrc: ['\'self\''],
+      reportUri: '/my-csp-report-uri',
     };
 
     const expectedContentSecurityPolicy =
       'child-src \'self\'; connect-src \'self\'; default-src http://mydomain.com \'self\'; font-src \'none\'; img-src data: \'self\'; script-src \'self\'; style-src \'self\'; report-uri /my-csp-report-uri';
 
     before(() => {
-      require('./security').httpHeaders.instance = null;
+      require('./security').contentSecurityPolicy.instance = null;
     });
 
     it('implements them correctly', () => {
-      const boilerplateServer = createServer({
-        httpHeadersSecurity,
-      });
+      const boilerplateServer = createServer({contentSecurityPolicy});
       boilerplateServer.use((req, res) => {
         res.status(200).json(req.cookies);
       });

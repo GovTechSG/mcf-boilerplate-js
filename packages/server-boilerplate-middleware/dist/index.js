@@ -33,8 +33,9 @@ module.exports = createServer;
  * @param {Object} [options={}]
  * @param {Boolean} [options.enableSerializer=true]
  * @param {Boolean} [options.enableCookieParser=true]
+ * @param {Boolean} [options.enableContentSecurityPolicy=true]
  * @param {Boolean} [options.enableHttpHeadersSecurity=true]
- * @param {Object} [httpHeadersSecurity={}]
+ * @param {Object} [contentSecurityPolicy={}]
  *
  * @return {express.Application}
  */
@@ -46,8 +47,10 @@ function createServer() {
       enableCookieParser = _ref$enableCookiePars === undefined ? true : _ref$enableCookiePars,
       _ref$enableHttpHeader = _ref.enableHttpHeadersSecurity,
       enableHttpHeadersSecurity = _ref$enableHttpHeader === undefined ? true : _ref$enableHttpHeader,
-      _ref$httpHeadersSecur = _ref.httpHeadersSecurity,
-      httpHeadersSecurity = _ref$httpHeadersSecur === undefined ? {} : _ref$httpHeadersSecur;
+      _ref$enableContentSec = _ref.enableContentSecurityPolicy,
+      enableContentSecurityPolicy = _ref$enableContentSec === undefined ? true : _ref$enableContentSec,
+      _ref$contentSecurityP = _ref.contentSecurityPolicy,
+      contentSecurityPolicy = _ref$contentSecurityP === undefined ? {} : _ref$contentSecurityP;
 
   var server = (0, _express2.default)();
   if (enableCookieParser) {
@@ -57,7 +60,11 @@ function createServer() {
     server.use((0, _serializer2.default)());
   }
   if (enableHttpHeadersSecurity) {
-    server.use(_security2.default.httpHeaders(httpHeadersSecurity));
+    server.use(_security2.default.httpHeaders());
+  }
+  if (enableContentSecurityPolicy) {
+    var x = _security2.default.contentSecurityPolicy(contentSecurityPolicy);
+    server.use(x);
   }
 
   return server;
