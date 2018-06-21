@@ -12,20 +12,33 @@ module.exports = createServer;
  *  - able to parse cookies
  *
  * @param {Object} [options={}]
- * @param {Boolean} [options.enableSerializer=true]
- * @param {Boolean} [options.enableCookieParser=true]
+ * @param {Boolean} [options.enableCompression=true]
  * @param {Boolean} [options.enableContentSecurityPolicy=true]
+ * @param {Boolean} [options.enableCookieParser=true]
  * @param {Boolean} [options.enableHttpHeadersSecurity=true]
+ * @param {Boolean} [options.enableSerializer=true]
  * @param {Object} [contentSecurityPolicy={}]
+ * @param {Array<String>} contentSecurityPolicy.childSrc
+ * @param {Array<String>} contentSecurityPolicy.connectSrc
+ * @param {Array<String>} contentSecurityPolicy.defaultSrc
+ * @param {Array<String>} contentSecurityPolicy.fontSrc
+ * @param {Array<String>} contentSecurityPolicy.imgSrc
+ * @param {Array<String>} contentSecurityPolicy.scriptSrc
+ * @param {Array<String>} contentSecurityPolicy.styleSrc
+ * @param {String} contentSecurityPolicy.reportUri
+ * @param {Object} [compressionOptions={}]
+ * @param {Number} compressionOptions.chunkSize
+ * @param {Number} compressionOptions.level
+ * @param {Number} compressionOptions.threshold
  *
  * @return {express.Application}
  */
 export default function createServer({
-  enableSerializer = true,
+  enableCompression = true,
+  enableContentSecurityPolicy = true,
   enableCookieParser = true,
   enableHttpHeadersSecurity = true,
-  enableContentSecurityPolicy = true,
-  enableCompression = true,
+  enableSerializer = true,
   contentSecurityPolicy = {},
   compressionOptions = {},
 } = {}) {
