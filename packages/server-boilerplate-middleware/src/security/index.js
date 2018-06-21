@@ -1,4 +1,5 @@
 module.exports = {
-  contentSecurityPolicy: require('./csp'),
   httpHeaders: require('./http-headers'),
+  contentSecurityPolicy: require('./csp'),
+  crossOriginResourceSharing: require('./cors'),
 };

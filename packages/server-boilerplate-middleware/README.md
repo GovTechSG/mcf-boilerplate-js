@@ -91,6 +91,18 @@ serverBoilerplate({
 
 > Defaults to `true`
 
+#### `enableCORS`
+**Type**: `Boolean`
+
+**Example**
+```js
+serverBoilerplate({
+  enableCORS: true,
+});
+```
+
+> Defaults to `true`
+
 #### `compressionOptions`
 **Type**: `Object`
 
@@ -151,6 +163,29 @@ The above configuration produces the following CSP:
 
 > Defaults to `{}`
 
+#### `crossOriginResourceSharing`
+> This configuration is only relevant if the `enableCORS` parameter was not set to `false`
+
+**Keys**
+- `allowedHeaders` : `Array<String>` *(provides the Access-Control-Allow-Headers header value)*
+- `allowedMethods` : `Array<String>` *(provides the Access-Control-Allow-Methods header value)*
+- `allowedOrigins` : `Array<String>` *(provides the Access-Control-Allow-Origins header value)*
+- `credentials` : `Boolean` *(provides the Access-Control-Allow-Credentials header value)*
+- `preflightContinue` : `Boolean` *(decides whether to pass the request on or respond with 204)*
+
+**Example**
+```js
+serverBoilerplate({
+  crossOriginResourceSharing: {
+    allowedHeaders: ['X-Authorization'],
+    allowedMethods: ['GET', 'POST'],
+    allowedOrigins: ['http://localhost:3000', 'http://localhost:8080'],
+  },
+});
+```
+
+> Defaults to `{}`
+
 ## Scope
 - [x] express compatible server
 - [x] cookie handling
@@ -158,7 +193,7 @@ The above configuration produces the following CSP:
 - [x] form body data handling ("application/x-www-form-urlencoded")
 - [x] basic http header security
 - [x] content security policy
-- [ ] cross-origin-resource-sharing support
+- [x] cross-origin-resource-sharing support
 - [ ] centralised logging
 - [ ] application metrics
 - [ ] distributed tracing
@@ -197,10 +232,13 @@ npm run test;
 npm run build;
 ```
 
-## Change Log
-### 0.3.1
+## ChangeLog
+### 0.4.0
+- added CORS support (see `enableCORS` and `crossOriginResourceSharing`)
+### 0.3.x
+#### 0.3.1
 - added gzip compression module
-### 0.3.0
+#### 0.3.0
 - refactored security module into two submodules: http headers and csp
 - also changed API for content security policy (CSP)
 - added new flag, `enableContentSecurityPolicy`, for server initialisation

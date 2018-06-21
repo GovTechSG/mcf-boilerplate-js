@@ -35,30 +35,49 @@ module.exports = createServer;
  *  - able to parse cookies
  *
  * @param {Object} [options={}]
- * @param {Boolean} [options.enableSerializer=true]
- * @param {Boolean} [options.enableCookieParser=true]
+ * @param {Boolean} [options.enableCORS=true]
+ * @param {Boolean} [options.enableCompression=true]
  * @param {Boolean} [options.enableContentSecurityPolicy=true]
+ * @param {Boolean} [options.enableCookieParser=true]
  * @param {Boolean} [options.enableHttpHeadersSecurity=true]
+ * @param {Boolean} [options.enableSerializer=true]
  * @param {Object} [contentSecurityPolicy={}]
+ * @param {Array<String>} contentSecurityPolicy.childSrc
+ * @param {Array<String>} contentSecurityPolicy.connectSrc
+ * @param {Array<String>} contentSecurityPolicy.defaultSrc
+ * @param {Array<String>} contentSecurityPolicy.fontSrc
+ * @param {Array<String>} contentSecurityPolicy.imgSrc
+ * @param {Array<String>} contentSecurityPolicy.scriptSrc
+ * @param {Array<String>} contentSecurityPolicy.styleSrc
+ * @param {String} contentSecurityPolicy.reportUri
+ * @param {Object} [compressionOptions={}]
+ * @param {Number} compressionOptions.chunkSize
+ * @param {Number} compressionOptions.level
+ * @param {Number} compressionOptions.threshold
+ * @param {Object} [crossOriginResourceSharing={}]
  *
  * @return {express.Application}
  */
 function createServer() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref$enableSerializer = _ref.enableSerializer,
-      enableSerializer = _ref$enableSerializer === undefined ? true : _ref$enableSerializer,
+      _ref$enableCORS = _ref.enableCORS,
+      enableCORS = _ref$enableCORS === undefined ? true : _ref$enableCORS,
+      _ref$enableCompressio = _ref.enableCompression,
+      enableCompression = _ref$enableCompressio === undefined ? true : _ref$enableCompressio,
+      _ref$enableContentSec = _ref.enableContentSecurityPolicy,
+      enableContentSecurityPolicy = _ref$enableContentSec === undefined ? true : _ref$enableContentSec,
       _ref$enableCookiePars = _ref.enableCookieParser,
       enableCookieParser = _ref$enableCookiePars === undefined ? true : _ref$enableCookiePars,
       _ref$enableHttpHeader = _ref.enableHttpHeadersSecurity,
       enableHttpHeadersSecurity = _ref$enableHttpHeader === undefined ? true : _ref$enableHttpHeader,
-      _ref$enableContentSec = _ref.enableContentSecurityPolicy,
-      enableContentSecurityPolicy = _ref$enableContentSec === undefined ? true : _ref$enableContentSec,
-      _ref$enableCompressio = _ref.enableCompression,
-      enableCompression = _ref$enableCompressio === undefined ? true : _ref$enableCompressio,
+      _ref$enableSerializer = _ref.enableSerializer,
+      enableSerializer = _ref$enableSerializer === undefined ? true : _ref$enableSerializer,
       _ref$contentSecurityP = _ref.contentSecurityPolicy,
       contentSecurityPolicy = _ref$contentSecurityP === undefined ? {} : _ref$contentSecurityP,
       _ref$compressionOptio = _ref.compressionOptions,
-      compressionOptions = _ref$compressionOptio === undefined ? {} : _ref$compressionOptio;
+      compressionOptions = _ref$compressionOptio === undefined ? {} : _ref$compressionOptio,
+      _ref$crossOriginResou = _ref.crossOriginResourceSharing,
+      crossOriginResourceSharing = _ref$crossOriginResou === undefined ? {} : _ref$crossOriginResou;
 
   var server = (0, _express2.default)();
   if (enableCookieParser) {
@@ -75,6 +94,9 @@ function createServer() {
   }
   if (enableCompression) {
     server.use((0, _compression2.default)(compressionOptions));
+  }
+  if (enableCORS) {
+    server.use(_security2.default.crossOriginResourceSharing(crossOriginResourceSharing));
   }
 
   return server;

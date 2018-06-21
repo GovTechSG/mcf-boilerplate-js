@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+  httpHeaders: require('./http-headers'),
   contentSecurityPolicy: require('./csp'),
-  httpHeaders: require('./http-headers')
+  crossOriginResourceSharing: require('./cors')
 };

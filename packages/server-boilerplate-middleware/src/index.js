@@ -12,6 +12,7 @@ module.exports = createServer;
  *  - able to parse cookies
  *
  * @param {Object} [options={}]
+ * @param {Boolean} [options.enableCORS=true]
  * @param {Boolean} [options.enableCompression=true]
  * @param {Boolean} [options.enableContentSecurityPolicy=true]
  * @param {Boolean} [options.enableCookieParser=true]
@@ -30,10 +31,12 @@ module.exports = createServer;
  * @param {Number} compressionOptions.chunkSize
  * @param {Number} compressionOptions.level
  * @param {Number} compressionOptions.threshold
+ * @param {Object} [crossOriginResourceSharing={}]
  *
  * @return {express.Application}
  */
 export default function createServer({
+  enableCORS = true,
   enableCompression = true,
   enableContentSecurityPolicy = true,
   enableCookieParser = true,
@@ -41,6 +44,7 @@ export default function createServer({
   enableSerializer = true,
   contentSecurityPolicy = {},
   compressionOptions = {},
+  crossOriginResourceSharing = {},
 } = {}) {
   const server = express();
   if (enableCookieParser) {
@@ -57,6 +61,9 @@ export default function createServer({
   }
   if (enableCompression) {
     server.use(compression(compressionOptions));
+  }
+  if (enableCORS) {
+    server.use(security.crossOriginResourceSharing(crossOriginResourceSharing));
   }
 
   return server;
