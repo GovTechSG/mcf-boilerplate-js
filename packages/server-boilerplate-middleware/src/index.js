@@ -3,6 +3,9 @@ import cookieParser from 'cookie-parser';
 import serializer from './serializer';
 import security from './security';
 import compression from './compression';
+import observability from './observability';
+
+const DEFAULT_METRICS_ENDPOINT = '/metrics';
 
 module.exports = createServer;
 
@@ -17,6 +20,7 @@ module.exports = createServer;
  * @param {Boolean} [options.enableContentSecurityPolicy=true]
  * @param {Boolean} [options.enableCookieParser=true]
  * @param {Boolean} [options.enableHttpHeadersSecurity=true]
+ * @param {Boolean} [options.enableMetricsCollection=true]
  * @param {Boolean} [options.enableSerializer=true]
  * @param {Object} [contentSecurityPolicy={}]
  * @param {Array<String>} contentSecurityPolicy.childSrc
@@ -32,6 +36,16 @@ module.exports = createServer;
  * @param {Number} compressionOptions.level
  * @param {Number} compressionOptions.threshold
  * @param {Object} [crossOriginResourceSharing={}]
+ * @param {Array<String>} crossOriginResourceSharing.allowedHeaders
+ * @param {Array<String>} crossOriginResourceSharing.allowedMethods
+ * @param {Array<String>} crossOriginResourceSharing.allowedOrigins
+ * @param {Boolean} crossOriginResourceSharing.credentials
+ * @param {Boolean} crossOriginResourceSharing.preflightContinue
+ * @param {Object} [metricsCollection={}]
+ * @param {String} metricsCollection.livenessCheckEndpoint
+ * @param {String} metricsCollection.metricsEndpoint
+ * @param {Number} metricsCollection.probeIntervalInMilliseconds=
+ * @param {String} metricsCollection.readinessCheckEndpoint
  *
  * @return {express.Application}
  */
@@ -41,10 +55,12 @@ export default function createServer({
   enableContentSecurityPolicy = true,
   enableCookieParser = true,
   enableHttpHeadersSecurity = true,
+  enableMetricsCollection = true,
   enableSerializer = true,
   contentSecurityPolicy = {},
   compressionOptions = {},
   crossOriginResourceSharing = {},
+  metricsCollection = {},
 } = {}) {
   const server = express();
   if (enableCookieParser) {
@@ -64,6 +80,17 @@ export default function createServer({
   }
   if (enableCORS) {
     server.use(security.crossOriginResourceSharing(crossOriginResourceSharing));
+  }
+  if (enableMetricsCollection) {
+    const metricsEndpoint =
+      metricsCollection.metricsEndpoint ?
+        metricsCollection.metricsEndpoint
+        : observability.metrics.constant.defaultMetricsEndpoint;
+    server.use(observability.metrics(metricsCollection));
+    server.use(
+      metricsEndpoint,
+      observability.metrics.getMetricsEndpointHandler()
+    );
   }
 
   return server;

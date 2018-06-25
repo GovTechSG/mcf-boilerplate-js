@@ -55,6 +55,18 @@ serverBoilerplate({
 
 > Defaults to `true`
 
+#### `enableMetricsCollection`
+**Type: `Boolean`
+
+**Example**
+```js
+serverBoilerplate({
+  enableMetricsCollection: false,
+});
+```
+
+> Defaults to `true`
+
 #### `enableHttpHeaderSecurity`
 **Type**: `Boolean`
 
@@ -122,7 +134,14 @@ serverBoilerplate({
 });
 ```
 
-> Defaults to `{}`
+> Defaults to:
+> ```js
+> {
+>   chunkSize: 16 * 1024, // 16kb
+>   level: 9,
+>   threshold: 300 * 1024, // 300kb
+> }
+> ```
 
 #### `contentSecurityPolicy`
 > This option is only relevant if the `enableContentSecurityPolicy` flag is not set to `false`.
@@ -184,7 +203,35 @@ serverBoilerplate({
 });
 ```
 
-> Defaults to `{}`
+> Defaults to:
+> ```js
+> {
+>   allowedHeaders: [],
+>   allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+>   allowedOrigins: [],
+>   credentials: true,
+>   preflightContinue: true,
+> }
+> ```
+
+#### `metricsCollection`
+> This configuration is only relevant if the `enableMetricsCollection` parameter was not set to `false`
+
+**Keys**
+- `livenessCheckEndpoint` : `String` *(defines the liveness check endpoint for ignoring in metrics)*
+- `metricsEndpoint` : `String` *(defines the metrics endpoint for ignoring in metrics)*
+- `probeIntervalInMilliseconds` : `Number` *(defines interval between metrics scrape)*
+- `readinessCheckEndpoint` : `String` *(defines the readiness check endpoint for ignoring in metrics)*
+
+> Defaults to:
+> ```js
+> {
+>   livenessCheckEndpoint: '/healthz',
+>   metricsEndpoint: '/metrics',
+>   probeIntervalInMilliseconds: 3000,
+>   readinessCheckEndpoint: '/readyz',
+> }
+> ```
 
 ## Scope
 - [x] express compatible server
@@ -194,14 +241,14 @@ serverBoilerplate({
 - [x] basic http header security
 - [x] content security policy
 - [x] cross-origin-resource-sharing support
+- [x] application metrics
 - [ ] centralised logging
-- [ ] application metrics
 - [ ] distributed tracing
 - [ ] endpoint: `/healthz`
 - [ ] endpoint protection for `/healthz`
 - [ ] endpoint: `/readyz`
 - [ ] endpoint protection for `/readyz`
-- [ ] endpoint: `/metrics`
+- [x] endpoint: `/metrics`
 - [ ] endpoint protection for `/metrics`
 
 
@@ -233,6 +280,8 @@ npm run build;
 ```
 
 ## ChangeLog
+### 0.5.0
+- added Prometheus metrics (see `enableMetricsCollection` and `metricsCollection` properties)
 ### 0.4.0
 - added CORS support (see `enableCORS` and `crossOriginResourceSharing`)
 ### 0.3.x
