@@ -72,6 +72,9 @@ module.exports = createServer;
  * @param {String} metricsCollection.metricsEndpoint
  * @param {Number} metricsCollection.probeIntervalInMilliseconds=
  * @param {String} metricsCollection.readinessCheckEndpoint
+ * @param {String} metricsCollection.pushgatewayJobName
+ * @param {String} metricsCollection.pushgatewayTimeout
+ * @param {String} metricsCollection.pushgatewayUrl
  *
  * @return {express.Application}
  */

@@ -16,6 +16,7 @@ describe('observability/metrics', () => {
   it('has the correct keys', () => {
     expect(metricsMiddleware).to.have.keys([
       'constant',
+      'clearPushgatewayTimeout',
       'getMetricsEndpointHandler',
       'instance',
       'options',
@@ -79,6 +80,48 @@ describe('observability/metrics', () => {
               expect(res.text).to.contain(expectedMetricLabel);
             });
           });
+      });
+    });
+
+    describe('pushgateway support', () => {
+      const pushgatewayJobName = '_test_job';
+      const pushgatewayMetricsEndpoint = '/metrics/job/:jobName';
+      const mockPushgatewayInterface = '0.0.0.0';
+      let mockPushgatewayServer;
+
+      beforeEach(() => {
+        mockPushgatewayServer = express();
+      });
+
+      it('works', (done) => {
+        mockPushgatewayServer.put(
+          pushgatewayMetricsEndpoint,
+          (req, res) => {
+            expect(req.params.jobName).to.eql(pushgatewayJobName);
+            let data = '';
+            req.on('data', (chunk) => data += chunk.toString());
+            req.on('end', () => {
+              res.send('ok');
+              expect(data).to.contain('up 1');
+              metricsMiddleware.clearPushgatewayTimeout();
+              mockInstance.close();
+              done();
+            });
+          }
+        );
+        const mockInstance = mockPushgatewayServer.listen(
+          null, // this assigns a random open port
+          mockPushgatewayInterface
+        );
+        mockInstance.on('listening', () => {
+          const {port} = mockInstance.address(); // retrieve random port
+          metricsMiddleware({
+            pushgatewayUrl: `http://${mockPushgatewayInterface}:${port}/`,
+            pushgatewayJobName: pushgatewayJobName,
+            probeIntervalInMilliseconds: 500,
+              // ^ any lower than 500 risks race condition to done()
+          });
+        });
       });
     });
   });

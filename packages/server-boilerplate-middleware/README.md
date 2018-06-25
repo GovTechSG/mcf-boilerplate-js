@@ -222,6 +222,9 @@ serverBoilerplate({
 - `metricsEndpoint` : `String` *(defines the metrics endpoint for ignoring in metrics)*
 - `probeIntervalInMilliseconds` : `Number` *(defines interval between metrics scrape)*
 - `readinessCheckEndpoint` : `String` *(defines the readiness check endpoint for ignoring in metrics)*
+- `pushgatewayUrl` : `String` *(defines the pushgateway URL - when this is not `null`, the pushgateway is considered activated)*
+- `pushgatewayJobName` : `String` *(defines the job name of the job being pushed to the pushgateway - use this to define the application instance when running in a cluster)*
+- `pushgatewayTimeout` : `Number` *(defines the timeout of the pushgateway if enabled)*
 
 > Defaults to:
 > ```js
@@ -230,6 +233,9 @@ serverBoilerplate({
 >   metricsEndpoint: '/metrics',
 >   probeIntervalInMilliseconds: 3000,
 >   readinessCheckEndpoint: '/readyz',
+>   pushgatewayUrl: null,
+>   pushgatewayJobName: process.env.USER || 'unknown',
+>   pushgatewayTimeout: 10000,
 > }
 > ```
 
@@ -280,7 +286,11 @@ npm run build;
 ```
 
 ## ChangeLog
-### 0.5.0
+### 0.5.x
+#### 0.5.1
+- added features to accommodate a push gateway model (see `pushgatewayUrl`, `pushgatewayTimeout` and `pushgatewayJobName` for more info)
+  - if `pushgatewayUrl` is defined in the `metricsCollection` options property, the push gateway metrics flow model is activated, metrics will be pushed every `:probeIntervalInMilliseconds` milliseconds`
+#### 0.5.0
 - added Prometheus metrics (see `enableMetricsCollection` and `metricsCollection` properties)
 ### 0.4.0
 - added CORS support (see `enableCORS` and `crossOriginResourceSharing`)
