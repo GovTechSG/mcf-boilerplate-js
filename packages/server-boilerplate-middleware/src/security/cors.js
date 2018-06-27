@@ -4,7 +4,7 @@ const DEFAULT_ALLOWED_HEADERS = [];
 const DEFAULT_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
 const DEFAULT_ALLOWED_ORIGINS = [];
 const DEFAULT_CREDENTIALS = true;
-const DEFAULT_PREFLIGHT_CONTINUE = true;
+const DEFAULT_PREFLIGHT_CONTINUE = false;
 
 let instance = null;
 
