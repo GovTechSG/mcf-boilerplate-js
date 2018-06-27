@@ -94,19 +94,6 @@ describe('createServer()', () => {
         });
     });
 
-    it('is compatible with OPTIONS requests', () => {
-      boilerplateServer.options('/options', (req, res) =>
-        res.json(`${TEST_STRING} /options`)
-      );
-
-      return supertest(boilerplateServer)
-        .options('/options')
-        .expect(200)
-        .then((res) => {
-          expect(res.text).to.eql(JSON.stringify(`${TEST_STRING} /options`));
-        });
-    });
-
     it('is compatible with HEAD requests', () => {
       boilerplateServer.head('/head', (req, res) =>
         res.status(TEST_HTTP_CODE).end()

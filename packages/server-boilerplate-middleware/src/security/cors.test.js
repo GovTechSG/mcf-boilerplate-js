@@ -70,12 +70,12 @@ describe('security/cors', () => {
         supertest(server)
           .options('/')
           .set('Origin', allowedOrigins[0])
-          .expect(200)
+          .expect(204)
           .then((res) => res.headers),
         supertest(server)
           .options('/')
           .set('Origin', invalidOrigin)
-          .expect(200)
+          .expect(204)
           .then((res) => res.headers),
       ]).then((results) => {
         results.forEach((res) => {
@@ -89,12 +89,12 @@ describe('security/cors', () => {
 
     it('correctly returns allow credentials header', () =>
       Promise.all([
-        supertest(server).options('/').expect(200).then((res) => res.headers),
         supertest(server).get('/').expect(200).then((res) => res.headers),
         supertest(server).post('/').expect(200).then((res) => res.headers),
         supertest(server).put('/').expect(200).then((res) => res.headers),
         supertest(server).delete('/').expect(200).then((res) => res.headers),
         supertest(server).head('/').expect(200).then((res) => res.headers),
+        supertest(server).options('/').expect(204).then((res) => res.headers),
       ]).then((results) => {
         results.forEach((res) => {
           expect(res).to.contain.key('access-control-allow-credentials');
