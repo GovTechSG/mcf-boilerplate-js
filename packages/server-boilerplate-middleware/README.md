@@ -210,7 +210,7 @@ serverBoilerplate({
 >   allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 >   allowedOrigins: [],
 >   credentials: true,
->   preflightContinue: true,
+>   preflightContinue: false,
 > }
 > ```
 
@@ -287,6 +287,8 @@ npm run build;
 
 ## ChangeLog
 ### 0.5.x
+#### 0.5.3
+- changed the `preflightContinue` option to be `false` by default
 #### 0.5.1
 - added features to accommodate a push gateway model (see `pushgatewayUrl`, `pushgatewayTimeout` and `pushgatewayJobName` for more info)
   - if `pushgatewayUrl` is defined in the `metricsCollection` options property, the push gateway metrics flow model is activated, metrics will be pushed every `:probeIntervalInMilliseconds` milliseconds`
