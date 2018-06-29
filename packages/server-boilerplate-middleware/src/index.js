@@ -5,8 +5,6 @@ import security from './security';
 import compression from './compression';
 import observability from './observability';
 
-const DEFAULT_METRICS_ENDPOINT = '/metrics';
-
 module.exports = createServer;
 
 /**
