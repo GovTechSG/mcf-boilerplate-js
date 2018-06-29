@@ -11,6 +11,10 @@
     "pretest": "cd ./src && find ./ -name '*.test.js' | cpio -pdm ../dist",
     "posttest": "find ./dist -name '*.test.js' | xargs -I@ rm -rf @"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
   "babel": {
     "presets": [
       "env"
