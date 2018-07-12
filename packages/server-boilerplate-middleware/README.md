@@ -3,6 +3,26 @@
 # Boilerplate Middleware
 Boilerplate middleware for Node projects in MyCareersFuture.
 
+## Scope
+- [x] express compatible server
+- [x] cookie handling
+- [x] json body data handling ("application/json")
+- [x] form body data handling ("application/x-www-form-urlencoded")
+- [x] basic http header security
+- [x] content security policy
+- [x] cross-origin-resource-sharing support
+- [x] application metrics
+- [x] server request logging
+- [ ] application logging
+- [ ] centralised logging
+- [ ] distributed tracing
+- [ ] endpoint: `/healthz`
+- [ ] endpoint protection for `/healthz`
+- [ ] endpoint: `/readyz`
+- [ ] endpoint protection for `/readyz`
+- [x] endpoint: `/metrics`
+- [ ] endpoint protection for `/metrics`
+
 ## Installation
 Install it via `npm` or `yarn`:
 
@@ -38,6 +58,18 @@ const server = serverBoilerplate({
 ```js
 serverBoilerplate({
   enableSerializer: true,
+});
+```
+
+> Defaults to `true`
+
+#### `enableServerLogging`
+**Type**: `Boolean`
+
+**Example**
+```js
+serverBoilerplate({
+  enableServerLogging: true,
 });
 ```
 
@@ -239,24 +271,21 @@ serverBoilerplate({
 > }
 > ```
 
-## Scope
-- [x] express compatible server
-- [x] cookie handling
-- [x] json body data handling ("application/json")
-- [x] form body data handling ("application/x-www-form-urlencoded")
-- [x] basic http header security
-- [x] content security policy
-- [x] cross-origin-resource-sharing support
-- [x] application metrics
-- [ ] centralised logging
-- [ ] distributed tracing
-- [ ] endpoint: `/healthz`
-- [ ] endpoint protection for `/healthz`
-- [ ] endpoint: `/readyz`
-- [ ] endpoint protection for `/readyz`
-- [x] endpoint: `/metrics`
-- [ ] endpoint protection for `/metrics`
+#### `serverLogging`
+> This configuration is only relevant if the `enableServerLogging` parameter was not set to `false`
 
+| Key | Type | Notes | Defaults To |
+| --- | --- | --- | --- |
+| logLevel | String | Determines the `level` property in the logs | `"access"` |
+| hostnameType | String | If set to `"os"`, the `os.hostname()` will be used. For all other values, `process.env[hostnameType]` is used. | `"os"`
+
+> Defaults to:
+> ```js
+> {
+>   logLevel: 'access',
+>   hostnameType: 'os',
+> }
+> ```
 
 ## Development
 
@@ -280,12 +309,21 @@ To run the tests on the built package, use:
 npm run test;
 ```
 
+To run a test server using the boilerplate server, use:
+
+```sh
+npm start
+```
+
 ### Building
 ```sh
 npm run build;
 ```
 
 ## ChangeLog
+### 0.6.x
+#### 0.6.0
+- added Morgan server request logging
 ### 0.5.x
 #### 0.5.3
 - changed the `preflightContinue` option to be `false` by default

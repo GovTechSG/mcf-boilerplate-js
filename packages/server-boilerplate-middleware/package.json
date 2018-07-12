@@ -9,7 +9,9 @@
     "test-watch": "npx mocha --watch --require babel-register \"src/*.test.js\" \"src/**/*.test.js\" ",
     "test": "npx mocha --require babel-register \"dist/*.test.js\" \"dist/**/*.test.js\"",
     "pretest": "cd ./src && find ./ -name '*.test.js' | cpio -pdm ../dist",
-    "posttest": "find ./dist -name '*.test.js' | xargs -I@ rm -rf @"
+    "posttest": "find ./dist -name '*.test.js' | xargs -I@ rm -rf @",
+    "prestart": "npm run build",
+    "start": "node ./test/server.js"
   },
   "publishConfig": {
     "access": "public"
@@ -38,6 +40,7 @@
     "express": "^4.16.3",
     "express-prom-bundle": "^3.3.0",
     "helmet": "^3.12.1",
+    "morgan": "^1.9.0",
     "prom-client": "^11.0.0"
   },
   "devDependencies": {

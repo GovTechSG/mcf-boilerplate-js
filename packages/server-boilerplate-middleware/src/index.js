@@ -4,13 +4,12 @@ import serializer from './serializer';
 import security from './security';
 import compression from './compression';
 import observability from './observability';
+import logging from './logging';
 
 module.exports = createServer;
 
 /**
- * Returns a server that is:
- *  - compatible with Express.js interfaces
- *  - able to parse cookies
+ * Returns an Express compatible server
  *
  * @param {Object} [options={}]
  * @param {Boolean} [options.enableCORS=true]
@@ -47,6 +46,9 @@ module.exports = createServer;
  * @param {String} metricsCollection.pushgatewayJobName
  * @param {String} metricsCollection.pushgatewayTimeout
  * @param {String} metricsCollection.pushgatewayUrl
+ * @param {Object} [serverLogging={}]
+ * @param {String} [serverLogging.logLevel]
+ * @param {String} [serverLogging.hostnameType]
  *
  * @return {express.Application}
  */
@@ -58,10 +60,12 @@ export default function createServer({
   enableHttpHeadersSecurity = true,
   enableMetricsCollection = true,
   enableSerializer = true,
+  enableServerLogging = true,
   contentSecurityPolicy = {},
   compressionOptions = {},
   crossOriginResourceSharing = {},
   metricsCollection = {},
+  serverLogging = {},
 } = {}) {
   const server = express();
   if (enableCookieParser) {
@@ -92,6 +96,9 @@ export default function createServer({
       metricsEndpoint,
       observability.metrics.getMetricsEndpointHandler()
     );
+  }
+  if (enableServerLogging) {
+    server.use(logging.server(serverLogging));
   }
 
   return server;
