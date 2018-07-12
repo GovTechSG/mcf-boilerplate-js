@@ -7,9 +7,9 @@ Boilerplate middleware for Node projects in MyCareersFuture.
 Install it via `npm` or `yarn`:
 
 ```sh
-npm i @mcf/server-boilerplate-middleware;
+npm i @mcf/server-boilerplate-middleware
 # or
-yarn add @mcf/server-boilerplate-middleware;
+yarn add @mcf/server-boilerplate-middleware
 ```
 
 ## Usage
