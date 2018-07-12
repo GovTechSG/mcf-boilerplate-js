@@ -3,6 +3,18 @@
 # Utility - provisionProcess
 Provisions the process for a graceful termination.
 
+## Installation
+
+```sh
+npm i @mcf/provision-process;
+```
+
+OR
+
+```sh
+yarn add @mcf/provision-process;
+```
+
 ## Usage
 ### Without middleware
 `provision-process` can be used to listen for `SIGINT` and `SIGTERM` operating system signals.
