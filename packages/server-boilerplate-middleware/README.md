@@ -52,119 +52,53 @@ const server = serverBoilerplate({
 ```
 
 #### `enableSerializer`
-**Type**: `Boolean`
-
-**Example**
-```js
-serverBoilerplate({
-  enableSerializer: true,
-});
-```
-
-> Defaults to `true`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableSerializer: true})` |
 
 #### `enableServerLogging`
-**Type**: `Boolean`
-
-**Example**
-```js
-serverBoilerplate({
-  enableServerLogging: true,
-});
-```
-
-> Defaults to `true`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableServerLogging: true})` |
 
 #### `enableCookieParser`
-**Type**: `Boolean`
-
-**Example**
-```js
-serverBoilerplate({
-  enableCookieParser: true,
-});
-```
-
-> Defaults to `true`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableCookieParser: true})` |
 
 #### `enableMetricsCollection`
-**Type: `Boolean`
-
-**Example**
-```js
-serverBoilerplate({
-  enableMetricsCollection: false,
-});
-```
-
-> Defaults to `true`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableMetricsCollection: true})` |
 
 #### `enableHttpHeaderSecurity`
-**Type**: `Boolean`
-
-**Example**
-```js
-serverBoilerplate({
-  enableHttpHeaderSecurity: true,
-});
-```
-
-> Defaults to `true`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableHttpHeaderSecurity: true})` |
 
 #### `enableContentSecurityPolicy`
-**Type**: `Boolean`
-
-**Example**
-```js
-serverBoilerplate({
-  enableContentSecurityPolicy: true,
-});
-```
-
-> Defaults to `true`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableContentSecurityPolicy: true})` |
 
 #### `enableCompression`
-**Type**: `Boolean`
-
-**Example**
-```js
-serverBoilerplate({
-  enableCompression: true,
-});
-```
-
-> Defaults to `true`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableCompression: true})` |
 
 #### `enableCORS`
-**Type**: `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableCORS: true})` |
 
-**Example**
-```js
-serverBoilerplate({
-  enableCORS: true,
-});
-```
+#### `compressionOptions` : Object
+> This configuration is only relevant if the `enableCompression` parameter was not set to `false`
 
-> Defaults to `true`
-
-#### `compressionOptions`
-**Type**: `Object`
-
-**Keys**
-- `chunkSize` : `Number` *(size in bytes of chunk)*
-- `level` : `Number` *(0-9 - see https://www.npmjs.com/package/compression for more information)*
-- `threshold` : `Number` *(minimum size in bytes before compression kicks in)*
-
-**Example**
-```js
-serverBoilerplate({
-  compressionOptions: {
-    chunkSize: 1024 * 16, // 16kb
-    level: 9, // best compression
-    threshold: 1024 * 100, // only responses of size 100kb and above will be compressed
-  },
-});
-```
+| Key | Type | Notes | Defaults To |
+| --- | --- | --- | --- |
+| `chunkSize` | `Number` | size in bytes of chunk | `16384` |
+| `level` | `Number` | 0-9 - see https://www.npmjs.com/package/compression for more information | `9` |
+| `threshold` | `Number` | minimum size in bytes before compression kicks in | `102400` |
 
 > Defaults to:
 > ```js
@@ -175,69 +109,57 @@ serverBoilerplate({
 > }
 > ```
 
-#### `contentSecurityPolicy`
+#### `contentSecurityPolicy` : Object
 > This option is only relevant if the `enableContentSecurityPolicy` flag is not set to `false`.
 
 **Type**: `Object`
 
-**Keys**
-- `childSrc` : `Array<String>` *(populates the child-src value of the CSP header)*
-- `connectSrc` : `Array<String>` *(populates the connect-src value of the CSP header)*
-- `defaultSrc` : `Array<String>` *(populates the default-src value of the CSP header)*
-- `fontSrc` : `Array<String>` *(populates the font-src value of the CSP header)*
-- `imgSrc` : `Array<String>` *(populates the img-src value of the CSP header)*
-- `scriptSrc` : `Array<String>` *(populates the script-src value of the CSP header)*
-- `styleSrc` : `Array<String>` *(populates the style-src value of the CSP header)*
-- `reportUri` : `String` *(populates the report-uri value of the CSP header)*
-
-**Example**
-```js
-serverBoilerplate({
-  contentSecurityPolicy: {
-    childSrc: ['\'self\''],
-    connectSrc: ['\'self\''],
-    defaultSrc: ['http://mydomain.com', '\'self\''],
-    fontSrc: ['\'none\''],
-    imgSrc: ['data: \'self\''],
-    scriptSrc: ['\'self\''],
-    styleSrc: ['\'self\''],
-    reportUri: '/my-csp-report-uri',
-  },
-});
-```
-
-The above configuration produces the following CSP:
-
-```
-"child-src 'self'; connect-src 'self'; default-src http://mydomain.com 'self'; font-src 'none'; img-src data: 'self'; script-src 'self'; style-src 'self'; report-uri /my-csp-report-uri"
-```
-
-> Defaults to `{}`
-
-#### `crossOriginResourceSharing`
-> This configuration is only relevant if the `enableCORS` parameter was not set to `false`
-
-**Keys**
-- `allowedHeaders` : `Array<String>` *(provides the Access-Control-Allow-Headers header value)*
-- `allowedMethods` : `Array<String>` *(provides the Access-Control-Allow-Methods header value)*
-- `allowedOrigins` : `Array<String>` *(provides the Access-Control-Allow-Origins header value)*
-- `credentials` : `Boolean` *(provides the Access-Control-Allow-Credentials header value)*
-- `preflightContinue` : `Boolean` *(decides whether to pass the request on or respond with 204)*
-
-**Example**
-```js
-serverBoilerplate({
-  crossOriginResourceSharing: {
-    allowedHeaders: ['X-Authorization'],
-    allowedMethods: ['GET', 'POST'],
-    allowedOrigins: ['http://localhost:3000', 'http://localhost:8080'],
-  },
-});
-```
+| Key | Type | Notes | Defaults To |
+| --- | --- | --- | --- |
+| `childSrc` | `Array<String>` | populates the child-src value of the CSP header | `['\'none\'']` |
+| `connectSrc` | `Array<String>` | populates the connect-src value of the CSP header | `['\'none\'']` |
+| `defaultSrc` | `Array<String>` | populates the default-src value of the CSP header | `['\'none\'']` |
+| `fontSrc` | `Array<String>` | populates the font-src value of the CSP header | `['\'none\'']` |
+| `imgSrc` | `Array<String>` | populates the img-src value of the CSP header | `['\'none\'']` |
+| `scriptSrc` | `Array<String>` | populates the script-src value of the CSP header | `['\'none\'']` |
+| `styleSrc` | `Array<String>` | populates the style-src value of the CSP header | `['\'none\'']` |
+| `reportUri` | `String` | populates the report-uri value of the CSP header | `'/csp-report'` |
 
 > Defaults to:
 > ```js
 > {
+>   childSrc: ['\'none\''],
+>   connectSrc: ['\'none\''],
+>   defaultSrc: ['\'none\''],
+>   fontSrc: ['\'none\''],
+>   imgSrc: ['\'none\''],
+>   scriptSrc: ['\'none\''],
+>   styleSrc: ['\'none\''],
+>   reportUri: '/csp-report',
+> }
+> ```
+
+The above configuration produces the following CSP:
+
+```
+"child-src 'none'; connect-src 'none'; default-src 'none'; font-src 'none'; img-src 'none'; script-src 'none'; style-src 'none'; report-uri /csp-report"
+```
+
+#### `crossOriginResourceSharing`
+> This configuration is only relevant if the `enableCORS` parameter was not set to `false`
+
+| Key | Type | Notes | Defaults To |
+| --- | --- | --- | --- |
+| `allowedHeaders` | `Array<String>` | provides the Access-Control-Allow-Headers header value | `[]` |
+| `allowedMethods` | `Array<String>` | provides the Access-Control-Allow-Methods header value | `['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']` |
+| `allowedOrigins` | `Array<String>` | provides the Access-Control-Allow-Origins header value | `[]` |
+| `credentials` | `Boolean` | provides the Access-Control-Allow-Credentials header value | `true` |
+| `preflightContinue` | `Boolean` | decides whether to pass the request on or respond with 204 | `false` |
+
+> Defaults to:
+> ```js
+> {
+>   crossOriginResourceSharing: {
 >   allowedHeaders: [],
 >   allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 >   allowedOrigins: [],
