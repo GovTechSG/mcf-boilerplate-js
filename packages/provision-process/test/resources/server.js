@@ -30,6 +30,7 @@ provisionProcess
     var q = Q.defer();
     testServerInstance.close(function(err) {
       if (err) {
+        console.error('AN ERROR OCCURRED');
         console.error(err);
       } else {
         console.info('_test_output_ server closed');
