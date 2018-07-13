@@ -51,47 +51,47 @@ const server = serverBoilerplate({
 });
 ```
 
-#### `enableSerializer`
+#### `enableSerializer` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableSerializer: true})` |
 
-#### `enableServerLogging`
+#### `enableServerLogging` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableServerLogging: true})` |
 
-#### `enableCookieParser`
+#### `enableCookieParser` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableCookieParser: true})` |
 
-#### `enableMetricsCollection`
+#### `enableMetricsCollection` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableMetricsCollection: true})` |
 
-#### `enableHttpHeaderSecurity`
+#### `enableHttpHeaderSecurity` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableHttpHeaderSecurity: true})` |
 
-#### `enableContentSecurityPolicy`
+#### `enableContentSecurityPolicy` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableContentSecurityPolicy: true})` |
 
-#### `enableCompression`
+#### `enableCompression` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableCompression: true})` |
 
-#### `enableCORS`
+#### `enableCORS` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableCORS: true})` |
 
-#### `compressionOptions` : Object
+#### `compressionOptions` : `Object`
 > This configuration is only relevant if the `enableCompression` parameter was not set to `false`
 
 | Key | Type | Notes | Defaults To |
@@ -109,10 +109,8 @@ const server = serverBoilerplate({
 > }
 > ```
 
-#### `contentSecurityPolicy` : Object
+#### `contentSecurityPolicy` : `Object`
 > This option is only relevant if the `enableContentSecurityPolicy` flag is not set to `false`.
-
-**Type**: `Object`
 
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
@@ -145,7 +143,7 @@ The above configuration produces the following CSP:
 "child-src 'none'; connect-src 'none'; default-src 'none'; font-src 'none'; img-src 'none'; script-src 'none'; style-src 'none'; report-uri /csp-report"
 ```
 
-#### `crossOriginResourceSharing`
+#### `crossOriginResourceSharing` : `Object`
 > This configuration is only relevant if the `enableCORS` parameter was not set to `false`
 
 | Key | Type | Notes | Defaults To |
@@ -168,17 +166,18 @@ The above configuration produces the following CSP:
 > }
 > ```
 
-#### `metricsCollection`
+#### `metricsCollection` : `Object`
 > This configuration is only relevant if the `enableMetricsCollection` parameter was not set to `false`
 
-**Keys**
-- `livenessCheckEndpoint` : `String` *(defines the liveness check endpoint for ignoring in metrics)*
-- `metricsEndpoint` : `String` *(defines the metrics endpoint for ignoring in metrics)*
-- `probeIntervalInMilliseconds` : `Number` *(defines interval between metrics scrape)*
-- `readinessCheckEndpoint` : `String` *(defines the readiness check endpoint for ignoring in metrics)*
-- `pushgatewayUrl` : `String` *(defines the pushgateway URL - when this is not `null`, the pushgateway is considered activated)*
-- `pushgatewayJobName` : `String` *(defines the job name of the job being pushed to the pushgateway - use this to define the application instance when running in a cluster)*
-- `pushgatewayTimeout` : `Number` *(defines the timeout of the pushgateway if enabled)*
+| Key | Type | Notes | Defaults To |
+| --- | --- | --- | --- |
+| `livenessCheckEndpoint` | `String` | defines the liveness check endpoint for ignoring in metrics | `'/healthz'` |
+| `metricsEndpoint` | `String` | defines the metrics endpoint for ignoring in metrics | `'/metrics'` |
+| `probeIntervalInMilliseconds` | `Number` | defines interval between metrics scrape | `3000` |
+| `readinessCheckEndpoint` | `String` | defines the readiness check endpoint for ignoring in metrics | `'/readyz'` |
+| `pushgatewayUrl` | `String` | defines the pushgateway URL - when this is not `null`, the pushgateway is considered activated | `null` |
+| `pushgatewayJobName` | `String` | defines the job name of the job being pushed to the pushgateway - use this to define the application instance when running in a cluster | `process.env.USER || 'unknown'` |
+| `pushgatewayTimeout` | `Number` | defines the timeout of the pushgateway if enabled | `10000` |
 
 > Defaults to:
 > ```js
@@ -193,7 +192,7 @@ The above configuration produces the following CSP:
 > }
 > ```
 
-#### `serverLogging`
+#### `serverLogging` : `Object`
 > This configuration is only relevant if the `enableServerLogging` parameter was not set to `false`
 
 | Key | Type | Notes | Defaults To |
