@@ -1,7 +1,7 @@
 const boilerplate = require('../dist');
 
 const server = boilerplate();
-server.use('/', (req, res) => {
+server.use('*', (req, res) => {
   res.json({
     params: req.params,
     body: req.body,
@@ -9,6 +9,7 @@ server.use('/', (req, res) => {
     timestamp: (new Date()).toISOString(),
   });
 });
-const serverInstance = server.listen(() => {
-  console.info(`Listening on http://localhost:${serverInstance.address().port}`);
+const serverInstance = server.listen();
+serverInstance.on('listening', () => {
+  console.info(`Listening on:\n\nhttp://localhost:${serverInstance.address().port}`);
 });
