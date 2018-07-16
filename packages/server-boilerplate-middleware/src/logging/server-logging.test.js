@@ -12,10 +12,8 @@ describe('logging/server', () => {
   it('has the right properties', () => {
     expect(serverLoggingMiddleware).to.has.keys([
       'getFormatter',
-      'instance',
       'morgan',
       'provisionCustomTokens',
-      'reset',
     ]);
   });
 

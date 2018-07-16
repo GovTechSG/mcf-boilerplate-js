@@ -16,26 +16,15 @@ export default function serverLoggingMiddleware({
   logLevel = DEFAULT_LOG_LEVEL,
   hostnameType = DEFAULT_HOSTNAME_TYPE,
 } = {}) {
-  if (serverLoggingMiddleware.instance === null) {
-    serverLoggingMiddleware.provisionCustomTokens(
-      serverLoggingMiddleware.morgan,
-      {
-        hostnameType,
-      }
-    );
-    serverLoggingMiddleware.instance =
-      serverLoggingMiddleware.morgan(
-        serverLoggingMiddleware.getFormatter({logLevel})
-      );
-  }
-  return serverLoggingMiddleware.instance;
+  serverLoggingMiddleware.provisionCustomTokens(
+    serverLoggingMiddleware.morgan, {hostnameType}
+  );
+  return serverLoggingMiddleware.morgan(
+    serverLoggingMiddleware.getFormatter({logLevel})
+  );
 }
 
 serverLoggingMiddleware.morgan = morgan;
-serverLoggingMiddleware.instance = null;
-serverLoggingMiddleware.reset = () => {
-  serverLoggingMiddleware.instance = null;
-};
 
 /**
  * Provisions the custom tokens we use.
