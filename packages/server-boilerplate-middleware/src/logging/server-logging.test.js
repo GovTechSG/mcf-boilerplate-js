@@ -130,7 +130,7 @@ describe('logging/server', () => {
       }).to.not.throw();
     });
 
-    it('works as expected', () => {
+    it('calls the required tokens as required', () => {
       const fn = serverLoggingMiddleware.getFormatter();
       fn(tokenMock, 'res', 'req');
       expect(tokenMock['method']).to.be.calledOnce;
@@ -148,6 +148,47 @@ describe('logging/server', () => {
       expect(tokenMock['hostname']).to.be.calledOnce;
       expect(tokenMock['date']).to.be.calledOnce;
       expect(tokenMock['user-agent']).to.be.calledOnce;
+    });
+
+    it('returns a correctly shaped object', () => {
+      const fn = serverLoggingMiddleware.getFormatter();
+      expect(JSON.parse(fn({
+        'method': () => true,
+        'url': () => true,
+        'status': () => true,
+        'res': () => true,
+        'response-time': () => true,
+        'opentracing-trace-id': () => true,
+        'opentracing-span-id': () => true,
+        'opentracing-parent-span-id': () => true,
+        'opentracing-sampled': () => true,
+        'http-version': () => true,
+        'referrer': () => true,
+        'remote-addr': () => true,
+        'hostname': () => true,
+        'date': () => true,
+        'user-agent': () => true,
+      }, {
+        'hostname': true,
+      }, '__res'))).to.have.keys([
+        'level',
+        'method',
+        'url',
+        'status',
+        'contentLength',
+        'responseTimeMs',
+        'otTraceId',
+        'otSpanId',
+        'otParentId',
+        'otSampled',
+        'httpVersion',
+        'referrer',
+        'remoteHostname',
+        'remoteAddress',
+        'serverHostname',
+        'time',
+        'userAgent',
+      ]);
     });
   });
 });
