@@ -198,12 +198,14 @@ The above configuration produces the following CSP:
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
 | logLevel | String | Determines the `level` property in the logs | `"access"` |
+| logStream | String | Specifies a stream to use instead of the default `console`. For example, use this to link Morgan up with Winston | `null` |
 | hostnameType | String | If set to `"os"`, the `os.hostname()` will be used. For all other values, `process.env[hostnameType]` is used. | `"os"`
 
 > Defaults to:
 > ```js
 > {
 >   logLevel: 'access',
+>   logStream: null,
 >   hostnameType: 'os',
 > }
 > ```

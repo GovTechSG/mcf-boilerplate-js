@@ -48,6 +48,7 @@ module.exports = createServer;
  * @param {String} metricsCollection.pushgatewayUrl
  * @param {Object} [serverLogging={}]
  * @param {String} [serverLogging.logLevel]
+ * @param {String} [serverLogging.logStream]
  * @param {String} [serverLogging.hostnameType]
  *
  * @return {express.Application}

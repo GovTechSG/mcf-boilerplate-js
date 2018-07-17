@@ -18,6 +18,9 @@ describe('logging/server', () => {
   });
 
   describe('constructor()', () => {
+    const logLevel = '_test_log_level';
+    const hostnameType = '_test_hostname_type';
+
     let original = {};
 
     before(() => {
@@ -44,23 +47,48 @@ describe('logging/server', () => {
       serverLoggingMiddleware.provisionCustomTokens.resetHistory();
     });
 
-    it('works as expected', () => {
-      const logLevel = '_test_log_level';
-      const hostnameType = '_test_hostname_type';
-      serverLoggingMiddleware({
-        logLevel,
-        hostnameType,
-      });
-      expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledOnce;
-      expect(serverLoggingMiddleware.provisionCustomTokens)
-        .to.be.calledWith(
-          serverLoggingMiddleware.morgan,
-          {hostnameType}
+    context(':logStream specified', () => {
+      const logStream = '_test_log_stream';
+
+      it('works as expected', () => {
+        serverLoggingMiddleware({
+          logLevel,
+          logStream,
+          hostnameType,
+        });
+        expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledOnce;
+        expect(serverLoggingMiddleware.provisionCustomTokens)
+          .to.be.calledWith(
+            serverLoggingMiddleware.morgan,
+            {hostnameType}
+          );
+        expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
+        expect(serverLoggingMiddleware.getFormatter)
+          .to.be.calledWith({logLevel});
+        expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
+        expect(serverLoggingMiddleware.morgan).to.be.calledWith(
+          undefined, {stream: logStream}
         );
-      expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
-      expect(serverLoggingMiddleware.getFormatter)
-        .to.be.calledWith({logLevel});
-      expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
+      });
+    });
+
+    context(':logStream not specified', () => {
+      it('works as expected', () => {
+        serverLoggingMiddleware({
+          logLevel,
+          hostnameType,
+        });
+        expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledOnce;
+        expect(serverLoggingMiddleware.provisionCustomTokens)
+          .to.be.calledWith(
+            serverLoggingMiddleware.morgan,
+            {hostnameType}
+          );
+        expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
+        expect(serverLoggingMiddleware.getFormatter)
+          .to.be.calledWith({logLevel});
+        expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
+      });
     });
   });
 

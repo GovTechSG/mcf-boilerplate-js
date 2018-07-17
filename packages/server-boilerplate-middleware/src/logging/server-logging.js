@@ -2,6 +2,7 @@ const os = require('os');
 const morgan = require('morgan');
 
 const DEFAULT_LOG_LEVEL = 'access';
+const DEFAULT_LOG_STREAM = null;
 const DEFAULT_HOSTNAME_TYPE = 'os';
 
 module.exports = serverLoggingMiddleware;
@@ -9,19 +10,26 @@ module.exports = serverLoggingMiddleware;
 /**
  * @param {Object} options
  * @param {String} options.logLevel
+ * @param {String} options.logStream
  * @param {String} options.hostnameType
  * @return {Function}
  */
 export default function serverLoggingMiddleware({
   logLevel = DEFAULT_LOG_LEVEL,
+  logStream = DEFAULT_LOG_STREAM,
   hostnameType = DEFAULT_HOSTNAME_TYPE,
 } = {}) {
   serverLoggingMiddleware.provisionCustomTokens(
     serverLoggingMiddleware.morgan, {hostnameType}
   );
-  return serverLoggingMiddleware.morgan(
-    serverLoggingMiddleware.getFormatter({logLevel})
-  );
+  return (logStream) ?
+    serverLoggingMiddleware.morgan(
+      serverLoggingMiddleware.getFormatter({logLevel}),
+      {stream: logStream}
+    ) :
+    serverLoggingMiddleware.morgan(
+      serverLoggingMiddleware.getFormatter({logLevel})
+    );
 }
 
 serverLoggingMiddleware.morgan = morgan;
