@@ -119,7 +119,7 @@ server.use(morgan('combined', {stream: logger.getStream()}));
 > The `:args` parameter is an object with the following properties:
 
 | Parameter | Description | Defaults To |
-| --- | --- |
+| --- | --- | --- |
 | `logFormatters` | Specify Winston log formatters. This parameter should be an array of functions that work with Winston | `[]` |
 | `logLevels` | A hashmap of log category and value. | `{error:0, warn:1, info:2, access:3, debug:4, silly:5}` |
 | `logLevel` | Definition of the lowest level of logs we should go to. If the `:logLevel` does not exist in `:logLevels`, an error is thrown | `"silly"` |
