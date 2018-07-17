@@ -1,0 +1,6 @@
+examples
+src
+*.test.js
+**/*.test.js
+test/**
+.eslintignore

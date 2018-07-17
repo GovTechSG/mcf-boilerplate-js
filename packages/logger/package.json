@@ -1,0 +1,56 @@
+{
+  "name": "@mcf/logger",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",
+    "demo-print": "npm run build && node ./examples/print.js",
+    "demo-server": "npm run build && node ./examples/zipkin-server.js",
+    "lint": "npx eslint -c ../../.eslintrc.json .",
+    "test-watch": "npx mocha --watch --require babel-register \"src/*.test.js\" \"src/**/*.test.js\" ",
+    "test": "npx mocha --require babel-register \"dist/*.test.js\" \"dist/**/*.test.js\"",
+    "pretest": "cd ./src && find ./ -name '*.test.js' | cpio -pdm ../dist",
+    "posttest": "find ./dist -name '*.test.js' | xargs -I@ rm -rf @",
+    "prestart": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "ignore": [
+      "node_modules"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GovTechSG/mcf-boilerplate-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "@mcf/server-boilerplate-middleware": "^0.6.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "eslint": "^5.1.0",
+    "eslint-config-google": "^0.9.1",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0",
+    "morgan": "^1.9.0",
+    "npx": "^10.2.0",
+    "sinon": "^6.1.3",
+    "sinon-chai": "^3.2.0",
+    "zipkin": "^0.13.0",
+    "zipkin-instrumentation-express": "^0.13.0"
+  }
+}
