@@ -2,8 +2,8 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import logger from './';
 import packageJson from '../package.json';
+import logger from './';
 
 chai.use(sinonChai);
 const {expect} = chai;
@@ -118,7 +118,7 @@ describe('@mcf/logger', () => {
     });
 
     describe('.set()', () => {
-      let original = {};
+      const original = {};
 
       before(() => {
         original.contextInstance = logger.context.instance;
@@ -135,7 +135,7 @@ describe('@mcf/logger', () => {
     });
 
     describe('.reset()', () => {
-      let original = {};
+      const original = {};
 
       before(() => {
         original.contextInstance = logger.context.instance;
@@ -155,7 +155,7 @@ describe('@mcf/logger', () => {
 
   describe('.getStream()', () => {
     const {getStream} = logger;
-    let spy = {};
+    const spy = {};
 
     before(() => {
       spy.__test_log_level = sinon.spy();
@@ -184,7 +184,7 @@ describe('@mcf/logger', () => {
     const logLevel = 'one';
     const openTracingContext = '__test_open_tracing_context';
 
-    let original = {};
+    const original = {};
 
     before(() => {
       original.instance = logger.instance;

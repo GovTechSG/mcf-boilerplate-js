@@ -128,6 +128,7 @@ function configureLogger({
   openTracingContext,
 } = {}) {
   // map only log levels that do not overwrite existing properties
+  // TODO why ??
   logger.config.levels = Object.keys(logLevels).reduce(
     (p, level) => Object.assign(p, {
       [level]: (!logger[level]) ? logLevels[level] : undefined,
