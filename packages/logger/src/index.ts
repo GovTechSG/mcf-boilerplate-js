@@ -16,7 +16,7 @@ const defaultLogLevels = {
   silly: 5, // all other uses
 };
 // tslint:enable object-literal-sort-keys
-const defaultLogLevel: LogLevelType = 'warn';
+const defaultLogLevel: LogLevelType = 'http';
 const defaultLogTransporter: Transport[] = [new winston.transports.Console()];
 
 export function createLogger({

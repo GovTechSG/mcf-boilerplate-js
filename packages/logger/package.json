@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -project ./tsconfig.prod.json",
-    "demo-print": "npm run build && node ./examples/print.js",
-    "demo-server": "npm run build && node ./examples/zipkin-server.js",
+    "demo-print": "ts-node ./examples/print.ts",
+    "demo-server": "ts-node ./examples/zipkin-server.ts",
     "lint": "tslint -p . -t stylish",
     "test-watch": "npm test -- --watch --watch-extensions ts",
     "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",

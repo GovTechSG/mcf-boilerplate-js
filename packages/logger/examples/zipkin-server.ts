@@ -1,30 +1,41 @@
-const zipkin = require('zipkin');
-const zipkinMiddleware = require('zipkin-instrumentation-express');
-const server = require('@mcf/server-boilerplate-middleware')();
-
-const logger = require('../dist');
-
-
-logger.init();
+// @ts-ignore
+import boilerplate from '@mcf/server-boilerplate-middleware';
+import zipkin from 'zipkin';
+import zipkinMiddleware from 'zipkin-instrumentation-express';
+import {createLogger} from '../dist';
+const server = boilerplate();
+const logger = createLogger({
+  logFormatters: [
+    (info) => {
+      return {
+        ...info,
+        // @ts-ignore
+        context: ctxImpl.currentCtx,
+      };
+    },
+  ],
+  logLevel: 'silly',
+});
 
 const ctxImpl = new zipkin.ExplicitContext();
-logger.context.set(ctxImpl);
 
 const tracer = new zipkin.Tracer({
   ctxImpl,
-  recorder: new zipkin.ConsoleRecorder(() => {}),
   localServiceName: 'test-zipkin-server',
+  // @ts-ignore
+  recorder: new zipkin.ConsoleRecorder(() => {}),
 });
 
 server.use(zipkinMiddleware.expressMiddleware({tracer}));
-server.use((req, _res, next) => {
+server.use((req: any, _res: any, next: any) => {
+  // @ts-ignore
   const {spanId, parentId, traceId} = ctxImpl.currentCtx;
   req.headers['X-B3-TraceId'] = traceId;
   req.headers['X-B3-SpanId'] = spanId;
   req.headers['X-B3-ParentSpanId'] = parentId;
   next();
 });
-server.use('*', (req, res) => {
+server.use('*', (req: any, res: any) => {
   logger.info({
     body: req.body,
     headers: req.headers,
