@@ -1,11 +1,12 @@
-// TODO
-import {TransformableInfo, TransformFunction} from 'logform'; // tslint:disable-line no-implicit-dependencies
+// TODO add comment
+import {TransformFunction} from 'logform';
 import winston from 'winston';
-import * as Transport from 'winston-transport'; // tslint:disable-line no-implicit-dependencies
+import * as Transport from 'winston-transport';
 const {combine, timestamp, json} = winston.format;
 
 // tslint:disable object-literal-sort-keys
 // using value order rather than key order makes more sense
+// TODO see if we can use defaults and http
 const defaultLogLevels = {
   error: 0, // use for errors
   warn: 1, // use for deprecations
@@ -16,13 +17,13 @@ const defaultLogLevels = {
 };
 // tslint:enable object-literal-sort-keys
 const defaultLogLevel: LogLevelType = 'warn';
-const defaultLogTransporter:Transport[] = [new winston.transports.Console()];
+const defaultLogTransporter: Transport[] = [new winston.transports.Console()];
 
 export function createLogger({
   logFormatters = [],
   logLevel = defaultLogLevel,
   logTransporters = defaultLogTransporter,
-}: ILoggerOptions) {
+}: ILoggerOptions): IApplicationLogger {
   const logger = winston.createLogger({
     exitOnError: false,
     format: combine(
@@ -34,32 +35,25 @@ export function createLogger({
     levels: defaultLogLevels,
     transports: logTransporters,
   });
-  return {
-    ...logger,
-    // function needed for morgan integration, leave it as it is for the moment but I dont like that
+
+  // for any reason spread operator complain :)
+  // tslint:disable-next-line prefer-object-spread
+  return Object.assign(logger, {
     getStream: (level: LogLevelType) => ({
       // @ts-ignore
       write: (...args: any[]) => this.logger[level](...args),
     }),
-  };
-};
+  });
+}
 
-type LogLevelType = keyof typeof defaultLogLevels;
-interface ILoggerOptions {
+export type LogLevelType = keyof typeof defaultLogLevels;
+export interface ILoggerOptions {
   logFormatters?: TransformFunction[];
   logLevel?: LogLevelType;
   logTransporters?: Transport[];
 }
 
-const l = createLogger({
-  logFormatters: [
-    (info: TransformableInfo) => {
-      return {...info, context: 'yeah'};
-    },
-  ],
-  logLevel: 'http',
-});
-l.silly('silly');
-l.debug('debut');
-l.info('info');
-l.http('ghjkl');
+// function needed for morgan integration, leave it as it is for the moment but I dont like that
+export interface IApplicationLogger extends winston.Logger {
+  getStream: (level: LogLevelType) => {write: any};
+}

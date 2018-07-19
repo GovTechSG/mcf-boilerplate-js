@@ -3,9 +3,13 @@
     "tslint:latest",
     "tslint-eslint-rules",
     "tslint-plugin-prettier",
-    "tslint-config-prettier"
+    "tslint-config-prettier",
+    "tslint-no-unused-expression-chai"
   ],
   "rules": {
-    "no-submodule-imports": false
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false,
+    "no-unused-variable": [true, {"ignore-pattern": "^_"}],
+    "prettier": true
   }
 }

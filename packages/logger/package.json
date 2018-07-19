@@ -4,28 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",
+    "build": "tsc -project ./tsconfig.prod.json",
     "demo-print": "npm run build && node ./examples/print.js",
     "demo-server": "npm run build && node ./examples/zipkin-server.js",
-    "lint": "npx eslint -c ../../.eslintrc.json .",
-    "test-watch": "npx mocha --watch --require babel-register \"src/*.test.js\" \"src/**/*.test.js\" ",
-    "test": "npx mocha --require babel-register \"dist/*.test.js\" \"dist/**/*.test.js\"",
-    "pretest": "cd ./src && find ./ -name '*.test.js' | cpio -pdm ../dist",
-    "posttest": "find ./dist -name '*.test.js' | xargs -I@ rm -rf @",
+    "lint": "tslint -p . -t stylish",
+    "test-watch": "npm test -- --watch --watch-extensions ts",
+    "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
     "prestart": "npm run build"
   },
   "publishConfig": {
     "access": "public"
   },
   "private": false,
-  "babel": {
-    "presets": [
-      "env"
-    ],
-    "ignore": [
-      "node_modules"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/GovTechSG/mcf-boilerplate-js.git"
@@ -38,24 +28,25 @@
   },
   "devDependencies": {
     "@mcf/server-boilerplate-middleware": "^0.6.4",
+    "@types/chai": "4.1.4",
     "@types/logform": "1.2.0",
+    "@types/mocha": "5.2.5",
+    "@types/sinon": "5.0.1",
+    "@types/sinon-chai": "3.2.0",
     "@types/winston": "2.3.9",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "eslint": "^5.1.0",
-    "eslint-config-google": "^0.9.1",
+    "chai": "4.1.2",
     "express": "^4.16.3",
     "mocha": "^5.2.0",
     "morgan": "^1.9.0",
     "npx": "^10.2.0",
     "prettier": "1.13.7",
-    "sinon": "^6.1.3",
-    "sinon-chai": "^3.2.0",
+    "sinon": "6.1.3",
+    "sinon-chai": "3.2.0",
+    "ts-node": "7.0.0",
     "tslint": "5.11.0",
     "tslint-config-prettier": "1.13.0",
     "tslint-eslint-rules": "5.3.1",
+    "tslint-no-unused-expression-chai": "0.1.3",
     "tslint-plugin-prettier": "1.3.0",
     "typescript": "2.9.2",
     "zipkin": "^0.13.0",
