@@ -245,6 +245,8 @@ npm run build;
 
 ## ChangeLog
 ### 0.6.x
+#### 0.6.4
+- added `:logStream` property in `serverLogging` options for providing Morgan with a custom logger to use
 #### 0.6.0
 - added Morgan server request logging
 ### 0.5.x

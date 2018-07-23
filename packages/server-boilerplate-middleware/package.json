@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",
+    "clean": "rm -rf ./dist/*",
     "lint": "npx eslint -c ../../.eslintrc.json .",
     "test-watch": "npx mocha --watch --require babel-register \"src/*.test.js\" \"src/**/*.test.js\" ",
     "test": "npx mocha --require babel-register \"dist/*.test.js\" \"dist/**/*.test.js\"",

@@ -1,6 +1,12 @@
 const boilerplate = require('../dist');
 
-const server = boilerplate();
+const server = boilerplate({
+  serverLogging: {
+    logStream: {
+      write: (...args) => console.info.apply(null, [...args]),
+    },
+  },
+});
 server.use('*', (req, res) => {
   res.json({
     params: req.params,
