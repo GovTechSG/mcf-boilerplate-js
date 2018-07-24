@@ -19,6 +19,12 @@ const defaultLogLevels = {
 const defaultLogLevel: LogLevelType = 'http';
 const defaultLogTransporter: Transport[] = [new winston.transports.Console()];
 
+/**
+ * @param {Object} options
+ * @param {Array<Function>} options.logFormatters
+ * @param {String} options.logLevel
+ * @param {Array<Object>} options.logTransporters
+ */
 export function createLogger({
   logFormatters = [],
   logLevel = defaultLogLevel,

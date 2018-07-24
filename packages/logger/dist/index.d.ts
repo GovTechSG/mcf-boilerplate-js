@@ -9,6 +9,12 @@ declare const defaultLogLevels: {
     debug: number;
     silly: number;
 };
+/**
+ * @param {Object} options
+ * @param {Array<Function>} options.logFormatters
+ * @param {String} options.logLevel
+ * @param {Array<Object>} options.logTransporters
+ */
 export declare function createLogger({ logFormatters, logLevel, logTransporters, }: ILoggerOptions): IApplicationLogger;
 export declare type LogLevelType = keyof typeof defaultLogLevels;
 export interface ILoggerOptions {

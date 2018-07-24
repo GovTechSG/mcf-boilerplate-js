@@ -19,6 +19,12 @@ var defaultLogLevels = {
 // tslint:enable object-literal-sort-keys
 var defaultLogLevel = 'http';
 var defaultLogTransporter = [new winston_1.default.transports.Console()];
+/**
+ * @param {Object} options
+ * @param {Array<Function>} options.logFormatters
+ * @param {String} options.logLevel
+ * @param {Array<Object>} options.logTransporters
+ */
 function createLogger(_a) {
     var _this = this;
     var _b = _a.logFormatters, logFormatters = _b === void 0 ? [] : _b, _c = _a.logLevel, logLevel = _c === void 0 ? defaultLogLevel : _c, _d = _a.logTransporters, logTransporters = _d === void 0 ? defaultLogTransporter : _d;

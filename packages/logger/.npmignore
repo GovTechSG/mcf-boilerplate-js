@@ -1,6 +1,11 @@
-examples
+# development files
 src
 *.test.js
 **/*.test.js
 test/**
 .eslintignore
+# typescript stuff
+tsconfig.*
+tslint.*
+# custom stuff
+examples
