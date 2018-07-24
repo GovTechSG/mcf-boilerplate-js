@@ -17,11 +17,11 @@ describe('@mcf/logger', () => {
     spy = sinon.spy(consoleLogger, 'log');
   });
 
-  describe('logLevel', () => {
+  describe('level', () => {
     it('should ignore logs levels lower than info', () => {
       const logger = createLogger({
-        logLevel: 'silly',
-        logTransporters: [consoleLogger],
+        level: 'silly',
+        transports: [consoleLogger],
       });
 
       log(logger);
@@ -35,8 +35,8 @@ describe('@mcf/logger', () => {
     });
     it('should ignore logs levels lower than debug', () => {
       const logger = createLogger({
-        logLevel: 'debug',
-        logTransporters: [consoleLogger],
+        level: 'debug',
+        transports: [consoleLogger],
       });
 
       log(logger);
@@ -49,8 +49,8 @@ describe('@mcf/logger', () => {
     });
     it('should ignore logs levels lower than http', () => {
       const logger = createLogger({
-        logLevel: 'http',
-        logTransporters: [consoleLogger],
+        level: 'http',
+        transports: [consoleLogger],
       });
 
       log(logger);
@@ -62,8 +62,8 @@ describe('@mcf/logger', () => {
     });
     it('should ignore logs levels lower than info', () => {
       const logger = createLogger({
-        logLevel: 'info',
-        logTransporters: [consoleLogger],
+        level: 'info',
+        transports: [consoleLogger],
       });
 
       log(logger);
@@ -74,8 +74,8 @@ describe('@mcf/logger', () => {
     });
     it('should ignore logs levels lower than warn', () => {
       const logger = createLogger({
-        logLevel: 'warn',
-        logTransporters: [consoleLogger],
+        level: 'warn',
+        transports: [consoleLogger],
       });
 
       log(logger);
@@ -85,8 +85,8 @@ describe('@mcf/logger', () => {
     });
     it('should ignore logs levels lower than error', () => {
       const logger = createLogger({
-        logLevel: 'error',
-        logTransporters: [consoleLogger],
+        level: 'error',
+        transports: [consoleLogger],
       });
 
       log(logger);

@@ -1,7 +1,10 @@
-// TODO add comment
 import {TransformFunction} from 'logform';
 import winston from 'winston';
 import * as Transport from 'winston-transport';
+import {createConsoleTransport, createFluentTransport} from './transports';
+
+export {createLogger, createFluentTransport, createConsoleTransport};
+
 const {combine, timestamp, json} = winston.format;
 
 // tslint:disable object-literal-sort-keys
@@ -17,30 +20,24 @@ const defaultLevels = {
 };
 // tslint:enable object-literal-sort-keys
 const defaultLevel: LogLevelType = 'silly';
-const defaultTransporters: Transport[] = [new winston.transports.Console()];
+const defaultTransporters: Transport[] = [createConsoleTransport()];
+const defaultAdditionalTransports: Transport[] = [];
 
 export type LogLevelType = keyof typeof defaultLevels;
 export interface ILoggerOptions {
   formatters?: TransformFunction[];
   level?: LogLevelType;
-  transporters?: Transport[];
+  transports?: Transport[];
+  additionalTransports?: Transport[];
 }
-
-// function needed for morgan integration, leave it as it is for the moment but I dont like that
 export interface IApplicationLogger extends winston.Logger {
   getStream: (level: LogLevelType) => {write: any};
 }
-
-/**
- * @param {Object} options
- * @param {Array<Function>} options.formatters
- * @param {String} options.level
- * @param {Array<Object>} options.transporters
- */
-export function createLogger({
+function createLogger({
   formatters = [],
   level = defaultLevel,
-  transporters = defaultTransporters,
+  transports = defaultTransporters,
+  additionalTransports = defaultAdditionalTransports,
 }: ILoggerOptions = {}): IApplicationLogger {
   const logger = winston.createLogger({
     exitOnError: false,
@@ -51,7 +48,7 @@ export function createLogger({
     ),
     level,
     levels: defaultLevels,
-    transports: transporters,
+    transports: transports.concat(additionalTransports),
   });
 
   // for any reason spread operator complain :)

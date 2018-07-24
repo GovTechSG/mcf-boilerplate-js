@@ -3,10 +3,11 @@
   "version": "0.0.6",
   "description": "",
   "main": "dist/index.js",
+  "typings": "dist/index",
   "scripts": {
     "build": "tsc -project ./tsconfig.prod.json",
     "demo-print": "ts-node ./examples/print.ts",
-    "demo-usage": "ts-node ./examples/usage.ts",
+    "usage": "node ./examples/usage",
     "demo-server": "ts-node ./examples/zipkin-server.ts",
     "lint": "tslint -p . -t stylish",
     "test-watch": "npm test -- --watch --watch-extensions ts",
@@ -25,6 +26,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "fluent-logger": "^3.0.0",
     "winston": "^3.0.0"
   },
   "devDependencies": {

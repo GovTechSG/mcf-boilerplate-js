@@ -18,12 +18,15 @@ yarn add @mcf/logger
 
 ## Usage
 
+### Requiring
 ```js
-const {createLogger} = require('@mcf/logger');
+import {createConsoleTransport, createFluentTransport, createLogger} from '@mcf/logger';
 // or
-import {createLogger} from '@mcf/logger';
+const {createConsoleTransport, createFluentTransport, createLogger} = require('@mcf/logger');
+```
 
-// basic usage
+### Basic
+```js
 const basicLogger = createLogger();
 basicLogger.silly('a silly hi');
 basicLogger.debug('a debug hi');
@@ -31,9 +34,11 @@ basicLogger.http('a http hi');
 basicLogger.info('a info hi');
 basicLogger.warn('a warn hi');
 basicLogger.error('a error hi');
+```
 
-// kibana usage
-const kibanaLogger = createLogger({
+### FluentD
+```js
+const fluentLogger = createLogger({
   formatters: [
     (info) => {
       const messageIsObject = typeof info.message === 'object';
@@ -44,9 +49,68 @@ const kibanaLogger = createLogger({
       };
     },
   ],
+  additionalTransports: [
+    createFluentTransport({
+      host: 'localhost',
+      port: 44224,
+      timeout: 2.0,
+      requireAckResponse: false,
+    }),
+  ],
 });
-kibanaLogger.info('hello world!', {hello: 'world'});
-kibanaLogger.info({hello: 'world!'});
+
+fluentLogger.info('hello world!');
+```
+
+## Documentation
+The library exposes the following methods:
+
+| Method | Description |
+| --- | --- |
+| `.createLogger` | Creates the logger object which can be used |
+| `.createFluentTransport` | Creates a FluentD compatible transport |
+| `.createConsoleTransport` | Creates a Console transport |
+
+### `.createLogger(:options)`
+This function accepts a configuration object as the parameter where the keys are documented as follows:
+
+| Key | Description | Default |
+| --- | --- | --- |
+| `formatters` | Winston formatters created via `winston.format(...)()` | `[]` |
+| `level` | Default level (`ENUM { "error", "warn", "info", "http", "debug", "silly" }`) | `"silly"` |
+| `transports` | Winston transports | `[winston.transports.Console()]` |
+| `additionalTransports` | Winston transports to be added on (no overriding of the default Console transport) | `[]` |
+
+### `.createFluentTransport`
+This function accepts a configuration object as the parameter where the keys are documented as follows:
+
+| Key | Description | Default |
+| --- | --- | --- |
+| `host` | FluentD service hostname | `"localhost"` |
+| `port` | FluentD service port | `24224` |
+| `timeout` | Timeout for a push | `3.0` |
+| `requireAckResponse` | Specifies whether we should connect via TCP (`true`) or UDP (`false`) | `false` |
+
+### `.createConsoleTransport`
+This function returns a Console transporter and takes no parameters
+
+## Examples
+Confirm all dependencies have been installed:
+
+```bash
+yarn
+```
+
+To run the `usage` example, set up FluentD first:
+
+```bash
+docker-compose -f ./examples/usage/docker-compose.yml up;
+```
+
+In another terminal, run the usage application which will pipe to the FluentD instance:
+
+```bash
+npm run usage;
 ```
 
 ## Changelog

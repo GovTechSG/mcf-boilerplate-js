@@ -1,4 +1,4 @@
-import {createLogger} from '../dist';
+const {createConsoleTransport, createFluentTransport, createLogger} = require('../../dist');
 
 // basic usage
 const basicLogger = createLogger();
@@ -9,8 +9,8 @@ basicLogger.info('a info hi');
 basicLogger.warn('a warn hi');
 basicLogger.error('a error hi');
 
-// kibana usage
-const kibanaLogger = createLogger({
+// fluentd usage
+const fluentLogger = createLogger({
   formatters: [
     (info) => {
       const messageIsObject = typeof info.message === 'object';
@@ -21,6 +21,15 @@ const kibanaLogger = createLogger({
       };
     },
   ],
+  transports: [
+    createFluentTransport({
+      host: 'localhost',
+      port: 44224,
+      timeout: 2.0,
+      requireAckResponse: false,
+    }),
+    createConsoleTransport(),
+  ],
 });
-kibanaLogger.info('hello world!', {hello: 'world'});
-kibanaLogger.info({hello: 'world!'});
+
+fluentLogger.info('hello world!');
