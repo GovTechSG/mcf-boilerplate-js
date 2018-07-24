@@ -15,7 +15,7 @@ declare const defaultLogLevels: {
  * @param {String} options.logLevel
  * @param {Array<Object>} options.logTransporters
  */
-export declare function createLogger({ logFormatters, logLevel, logTransporters, }: ILoggerOptions): IApplicationLogger;
+export declare function createLogger({ logFormatters, logLevel, logTransporters, }?: ILoggerOptions): IApplicationLogger;
 export declare type LogLevelType = keyof typeof defaultLogLevels;
 export interface ILoggerOptions {
     logFormatters?: TransformFunction[];

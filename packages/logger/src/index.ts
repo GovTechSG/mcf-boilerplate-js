@@ -29,7 +29,7 @@ export function createLogger({
   logFormatters = [],
   logLevel = defaultLogLevel,
   logTransporters = defaultLogTransporter,
-}: ILoggerOptions): IApplicationLogger {
+}: ILoggerOptions = {}): IApplicationLogger {
   const logger = winston.createLogger({
     exitOnError: false,
     format: combine(

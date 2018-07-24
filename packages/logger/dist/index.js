@@ -27,7 +27,7 @@ var defaultLogTransporter = [new winston_1.default.transports.Console()];
  */
 function createLogger(_a) {
     var _this = this;
-    var _b = _a.logFormatters, logFormatters = _b === void 0 ? [] : _b, _c = _a.logLevel, logLevel = _c === void 0 ? defaultLogLevel : _c, _d = _a.logTransporters, logTransporters = _d === void 0 ? defaultLogTransporter : _d;
+    var _b = _a === void 0 ? {} : _a, _c = _b.logFormatters, logFormatters = _c === void 0 ? [] : _c, _d = _b.logLevel, logLevel = _d === void 0 ? defaultLogLevel : _d, _e = _b.logTransporters, logTransporters = _e === void 0 ? defaultLogTransporter : _e;
     var logger = winston_1.default.createLogger({
         exitOnError: false,
         format: combine.apply(void 0, logFormatters.map(winston_1.default.format).map(function (fn) { return fn(); }).concat([// need the second call to unwrap the formatter
