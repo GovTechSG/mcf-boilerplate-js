@@ -4,6 +4,7 @@ src
 **/*.test.js
 test/**
 .eslintignore
+.prettier*
 # typescript stuff
 tsconfig.*
 tslint.*

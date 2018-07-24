@@ -2,7 +2,7 @@
   "name": "@mcf/logger",
   "version": "0.0.3",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -project ./tsconfig.prod.json",
     "demo-print": "ts-node ./examples/print.ts",
