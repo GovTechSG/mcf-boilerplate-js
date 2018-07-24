@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -project ./tsconfig.prod.json",
     "demo-print": "ts-node ./examples/print.ts",
+    "demo-usage": "ts-node ./examples/usage.ts",
     "demo-server": "ts-node ./examples/zipkin-server.ts",
     "lint": "tslint -p . -t stylish",
     "test-watch": "npm test -- --watch --watch-extensions ts",

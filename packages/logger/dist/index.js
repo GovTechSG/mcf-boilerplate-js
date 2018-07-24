@@ -8,7 +8,7 @@ var _a = winston_1.default.format, combine = _a.combine, timestamp = _a.timestam
 // tslint:disable object-literal-sort-keys
 // using value order rather than key order makes more sense
 // TODO see if we can use defaults and http
-var defaultLogLevels = {
+var defaultLevels = {
     error: 0,
     warn: 1,
     info: 2,
@@ -17,30 +17,30 @@ var defaultLogLevels = {
     silly: 5,
 };
 // tslint:enable object-literal-sort-keys
-var defaultLogLevel = 'http';
-var defaultLogTransporter = [new winston_1.default.transports.Console()];
+var defaultLevel = 'silly';
+var defaultTransporters = [new winston_1.default.transports.Console()];
 /**
  * @param {Object} options
- * @param {Array<Function>} options.logFormatters
- * @param {String} options.logLevel
- * @param {Array<Object>} options.logTransporters
+ * @param {Array<Function>} options.formatters
+ * @param {String} options.level
+ * @param {Array<Object>} options.transporters
  */
 function createLogger(_a) {
     var _this = this;
-    var _b = _a === void 0 ? {} : _a, _c = _b.logFormatters, logFormatters = _c === void 0 ? [] : _c, _d = _b.logLevel, logLevel = _d === void 0 ? defaultLogLevel : _d, _e = _b.logTransporters, logTransporters = _e === void 0 ? defaultLogTransporter : _e;
+    var _b = _a === void 0 ? {} : _a, _c = _b.formatters, formatters = _c === void 0 ? [] : _c, _d = _b.level, level = _d === void 0 ? defaultLevel : _d, _e = _b.transporters, transporters = _e === void 0 ? defaultTransporters : _e;
     var logger = winston_1.default.createLogger({
         exitOnError: false,
-        format: combine.apply(void 0, logFormatters.map(winston_1.default.format).map(function (fn) { return fn(); }).concat([// need the second call to unwrap the formatter
+        format: combine.apply(void 0, formatters.map(winston_1.default.format).map(function (fn) { return fn(); }).concat([// need the second call to unwrap the formatter
             timestamp(),
             json()])),
-        level: logLevel,
-        levels: defaultLogLevels,
-        transports: logTransporters,
+        level: level,
+        levels: defaultLevels,
+        transports: transporters,
     });
     // for any reason spread operator complain :)
     // tslint:disable-next-line prefer-object-spread
-    return Object.assign(logger, {
-        getStream: function (level) { return ({
+    return Object.assign({}, logger, {
+        getStream: function (httpLogLevel) { return ({
             // @ts-ignore
             write: function () {
                 var args = [];
@@ -48,7 +48,7 @@ function createLogger(_a) {
                     args[_i] = arguments[_i];
                 }
                 var _a;
-                return (_a = _this.logger)[level].apply(_a, args);
+                return (_a = _this.logger)[httpLogLevel].apply(_a, args);
             },
         }); },
     });

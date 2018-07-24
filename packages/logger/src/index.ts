@@ -7,7 +7,7 @@ const {combine, timestamp, json} = winston.format;
 // tslint:disable object-literal-sort-keys
 // using value order rather than key order makes more sense
 // TODO see if we can use defaults and http
-const defaultLogLevels = {
+const defaultLevels = {
   error: 0, // use for errors
   warn: 1, // use for deprecations
   info: 2, // for application logging
@@ -16,50 +16,50 @@ const defaultLogLevels = {
   silly: 5, // all other uses
 };
 // tslint:enable object-literal-sort-keys
-const defaultLogLevel: LogLevelType = 'http';
-const defaultLogTransporter: Transport[] = [new winston.transports.Console()];
+const defaultLevel: LogLevelType = 'silly';
+const defaultTransporters: Transport[] = [new winston.transports.Console()];
 
-/**
- * @param {Object} options
- * @param {Array<Function>} options.logFormatters
- * @param {String} options.logLevel
- * @param {Array<Object>} options.logTransporters
- */
-export function createLogger({
-  logFormatters = [],
-  logLevel = defaultLogLevel,
-  logTransporters = defaultLogTransporter,
-}: ILoggerOptions = {}): IApplicationLogger {
-  const logger = winston.createLogger({
-    exitOnError: false,
-    format: combine(
-      ...logFormatters.map(winston.format).map((fn) => fn()), // need the second call to unwrap the formatter
-      timestamp(),
-      json(),
-    ),
-    level: logLevel,
-    levels: defaultLogLevels,
-    transports: logTransporters,
-  });
-
-  // for any reason spread operator complain :)
-  // tslint:disable-next-line prefer-object-spread
-  return Object.assign(logger, {
-    getStream: (level: LogLevelType) => ({
-      // @ts-ignore
-      write: (...args: any[]) => this.logger[level](...args),
-    }),
-  });
-}
-
-export type LogLevelType = keyof typeof defaultLogLevels;
+export type LogLevelType = keyof typeof defaultLevels;
 export interface ILoggerOptions {
-  logFormatters?: TransformFunction[];
-  logLevel?: LogLevelType;
-  logTransporters?: Transport[];
+  formatters?: TransformFunction[];
+  level?: LogLevelType;
+  transporters?: Transport[];
 }
 
 // function needed for morgan integration, leave it as it is for the moment but I dont like that
 export interface IApplicationLogger extends winston.Logger {
   getStream: (level: LogLevelType) => {write: any};
+}
+
+/**
+ * @param {Object} options
+ * @param {Array<Function>} options.formatters
+ * @param {String} options.level
+ * @param {Array<Object>} options.transporters
+ */
+export function createLogger({
+  formatters = [],
+  level = defaultLevel,
+  transporters = defaultTransporters,
+}: ILoggerOptions = {}): IApplicationLogger {
+  const logger = winston.createLogger({
+    exitOnError: false,
+    format: combine(
+      ...formatters.map(winston.format).map((fn) => fn()), // need the second call to unwrap the formatter
+      timestamp(),
+      json(),
+    ),
+    level,
+    levels: defaultLevels,
+    transports: transporters,
+  });
+
+  // for any reason spread operator complain :)
+  // tslint:disable-next-line prefer-object-spread
+  return Object.assign({}, logger, {
+    getStream: (httpLogLevel: LogLevelType) => ({
+      // @ts-ignore
+      write: (...args: any[]) => this.logger[httpLogLevel](...args),
+    }),
+  });
 }

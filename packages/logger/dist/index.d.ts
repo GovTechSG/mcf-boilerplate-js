@@ -1,7 +1,7 @@
 import { TransformFunction } from 'logform';
 import winston from 'winston';
 import * as Transport from 'winston-transport';
-declare const defaultLogLevels: {
+declare const defaultLevels: {
     error: number;
     warn: number;
     info: number;
@@ -9,22 +9,22 @@ declare const defaultLogLevels: {
     debug: number;
     silly: number;
 };
-/**
- * @param {Object} options
- * @param {Array<Function>} options.logFormatters
- * @param {String} options.logLevel
- * @param {Array<Object>} options.logTransporters
- */
-export declare function createLogger({ logFormatters, logLevel, logTransporters, }?: ILoggerOptions): IApplicationLogger;
-export declare type LogLevelType = keyof typeof defaultLogLevels;
+export declare type LogLevelType = keyof typeof defaultLevels;
 export interface ILoggerOptions {
-    logFormatters?: TransformFunction[];
-    logLevel?: LogLevelType;
-    logTransporters?: Transport[];
+    formatters?: TransformFunction[];
+    level?: LogLevelType;
+    transporters?: Transport[];
 }
 export interface IApplicationLogger extends winston.Logger {
     getStream: (level: LogLevelType) => {
         write: any;
     };
 }
+/**
+ * @param {Object} options
+ * @param {Array<Function>} options.formatters
+ * @param {String} options.level
+ * @param {Array<Object>} options.transporters
+ */
+export declare function createLogger({ formatters, level, transporters, }?: ILoggerOptions): IApplicationLogger;
 export {};

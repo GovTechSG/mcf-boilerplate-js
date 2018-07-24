@@ -1,27 +1,4 @@
-# `@mcf/logger`
-This logger is based on Winston. It includes formats and plugins for integration with the Morgan request logging library, and Zipkin request distributed tracing library.
-
-## Scope
-
-- [x] OpenTracing context ID integration
-- [x] Morgan logger integration
-- [ ] FluentD log centrailisation
-
-## Installation
-Install it via `npm` or `yarn`:
-
-```sh
-npm i @mcf/logger
-# or
-yarn add @mcf/logger
-```
-
-## Usage
-
-```js
-const {createLogger} = require('@mcf/logger');
-// or
-import {createLogger} from '@mcf/logger';
+import {createLogger} from '../dist';
 
 // basic usage
 const basicLogger = createLogger();
@@ -47,10 +24,3 @@ const kibanaLogger = createLogger({
 });
 kibanaLogger.info('hello world!', {hello: 'world'});
 kibanaLogger.info({hello: 'world!'});
-```
-
-## Changelog
-
-### 0.1.x
-#### 0.1.0
-- Initial release 
