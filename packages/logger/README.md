@@ -3,9 +3,13 @@ This logger is based on Winston. It includes formats and plugins for integration
 
 ## Scope
 
-- [x] OpenTracing context ID integration
-- [x] Morgan logger integration
-- [ ] FluentD log centrailisation
+- [x] Basic logging
+- [x] Allows for formatter extensions
+- [x] Allows for transport extensions
+- [x] Console transport creator
+- [x] FluentD transport creator
+- [x] Fluent transport security configuration
+- [x] Fluent transport ID tagger
 
 ## Installation
 Install it via `npm` or `yarn`:
@@ -26,6 +30,8 @@ const {createConsoleTransport, createFluentTransport, createLogger} = require('@
 ```
 
 ### Basic
+By default, the logger already logs to the console and no configuration is needed. This should suffice for basic apps.
+
 ```js
 const basicLogger = createLogger();
 basicLogger.silly('a silly hi');
@@ -37,8 +43,19 @@ basicLogger.error('a error hi');
 ```
 
 ### FluentD
+We use [fluent](https://www.fluentd.org/) for our centralised logs collector. To initialise the transport, create the logger as such:
+
 ```js
 const fluentLogger = createLogger({
+  additionalTransports: [
+    createFluentTransport({
+      host: 'localhost',
+      port: 44224,
+      timeout: 2.0,
+      requireAckResponse: false,
+    }),
+  ],
+  // optional message transformation, depends on your elasticsearch setup
   formatters: [
     (info) => {
       const messageIsObject = typeof info.message === 'object';
@@ -49,18 +66,26 @@ const fluentLogger = createLogger({
       };
     },
   ],
-  additionalTransports: [
-    createFluentTransport({
-      host: 'localhost',
-      port: 44224,
-      timeout: 2.0,
-      requireAckResponse: false,
-    }),
-  ],
 });
 
 fluentLogger.info('hello world!');
 ```
+
+The following `fluent.conf` should get you up and running:
+
+```xml
+<source>
+  @type forward
+  bind 0.0.0.0
+  port 24224
+</source>
+
+<match **.*>
+  @type stdout
+</match>
+```
+
+See the [usage example](./examples/usage) for a basic setup.
 
 ## Documentation
 The library exposes the following methods:
@@ -81,7 +106,7 @@ This function accepts a configuration object as the parameter where the keys are
 | `transports` | Winston transports | `[winston.transports.Console()]` |
 | `additionalTransports` | Winston transports to be added on (no overriding of the default Console transport) | `[]` |
 
-### `.createFluentTransport`
+### `.createFluentTransport(:options)`
 This function accepts a configuration object as the parameter where the keys are documented as follows:
 
 | Key | Description | Default |
@@ -90,9 +115,12 @@ This function accepts a configuration object as the parameter where the keys are
 | `port` | FluentD service port | `24224` |
 | `timeout` | Timeout for a push | `3.0` |
 | `requireAckResponse` | Specifies whether we should connect via TCP (`true`) or UDP (`false`) | `false` |
+| `security` | A security object with `.clientHostname` : `string` and `.sharedKey` : `string` properties | `undefined` |
 
-### `.createConsoleTransport`
-This function returns a Console transporter and takes no parameters
+This is referenced from [the `fluent-logger` library](https://github.com/fluent/fluent-logger-node).
+
+### `.createConsoleTransport()`
+This function returns a Console transporter and takes no parameters.
 
 ## Examples
 Confirm all dependencies have been installed:
@@ -116,5 +144,14 @@ npm run usage;
 ## Changelog
 
 ### 0.1.x
+#### 0.1.1
+Added more:
+  - Fluent transport security configuration
+  - Fluent transport ID tagger
 #### 0.1.0
-- Initial release 
+Initial release with:
+  - Basic logging
+  - Allows for formatter extensions
+  - Allows for transport extensions
+  - FluentD transport creator
+  - Console transport creator
