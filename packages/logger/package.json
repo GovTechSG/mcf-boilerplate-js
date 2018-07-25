@@ -3,13 +3,14 @@
   "version": "0.1.1",
   "description": "",
   "main": "dist/index.js",
-  "typings": "dist/index",
   "scripts": {
     "build": "tsc -project ./tsconfig.prod.json",
     "demo-print": "ts-node ./examples/print.ts",
-    "usage": "node ./examples/usage",
     "demo-server": "ts-node ./examples/zipkin-server.ts",
+    "demo-usage": "ts-node ./examples/usage/index.ts",
     "lint": "tslint -p . -t stylish",
+    "svc:fluent": "docker-compose -f ./examples/usage/docker-compose.yml up -d; docker logs $(docker ps | grep fluent_mcf_logger_collator | cut -f 1 -d ' ') -f",
+    "svc:fluent:stop": "docker-compose -f ./examples/usage/docker-compose.yml down",
     "test-watch": "npm test -- --watch --watch-extensions ts",
     "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
     "prestart": "npm run build"

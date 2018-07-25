@@ -85,7 +85,7 @@ The following `fluent.conf` should get you up and running:
 </match>
 ```
 
-See the [usage example](./examples/usage) for a basic setup.
+See the [usage example](./examples/usage) for more examples of creating plaintext/encrypted loggers.
 
 ## Documentation
 The library exposes the following methods:
@@ -113,9 +113,12 @@ This function accepts a configuration object as the parameter where the keys are
 | --- | --- | --- |
 | `host` | FluentD service hostname | `"localhost"` |
 | `port` | FluentD service port | `24224` |
-| `timeout` | Timeout for a push | `3.0` |
 | `requireAckResponse` | Specifies whether we should connect via TCP (`true`) or UDP (`false`) | `false` |
 | `security` | A security object with `.clientHostname` : `string` and `.sharedKey` : `string` properties | `undefined` |
+| `tag` | Tag for the logs | `process.env.HOSTNAME || os.hostname() || 'unknown'` |
+| `tls` | Specifies if we should use TLS | `true` |
+| `tlsOptions` | Specifies an options object for the TLS connection which has a `.ca` property | `undefined` |
+| `timeout` | Timeout for a push | `3.0` |
 
 This is referenced from [the `fluent-logger` library](https://github.com/fluent/fluent-logger-node).
 
@@ -126,28 +129,36 @@ This function returns a Console transporter and takes no parameters.
 Confirm all dependencies have been installed:
 
 ```bash
-yarn
+yarn;
 ```
 
 To run the `usage` example, set up FluentD first:
 
 ```bash
-docker-compose -f ./examples/usage/docker-compose.yml up;
+npm run svc:fluent;
 ```
 
 In another terminal, run the usage application which will pipe to the FluentD instance:
 
 ```bash
-npm run usage;
+npm run demo-usage;
+```
+
+To stop FluentD, run:
+
+```bash
+npm run svc:fluent:stop;
 ```
 
 ## Changelog
 
-### 0.1.x
-#### 0.1.1
+### 0.2.x
+#### 0.2.0
 Added more:
-  - Fluent transport security configuration
-  - Fluent transport ID tagger
+  - Fluent transport security configuration (`.security`)
+  - Fluent transport ID tagger (`.tag`)
+  - Fluent transport TLS support (`.tls` and `.tlsOptions`)
+### 0.1.x
 #### 0.1.0
 Initial release with:
   - Basic logging

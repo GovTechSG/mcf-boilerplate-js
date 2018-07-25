@@ -1,6 +1,6 @@
 version: "3.5"
 services:
-  collator:
+  fluent_mcf_logger_collator:
     image: fluent/fluentd:v1.2.3
     entrypoint: ["fluentd", "-c", "/etc/fluent/fluent.conf", "-vv"]
     ports:

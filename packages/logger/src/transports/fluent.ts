@@ -2,10 +2,10 @@ import fluentLogger from 'fluent-logger';
 import os from 'os';
 import * as Transport from 'winston-transport';
 
-const defaultId = process.env.HOSTNAME || os.hostname() || 'unknown';
-const defaultFluentHost = 'localhost';
-const defaultFluentPort = 24224;
-const defaultFluentTimeout = 3.0;
+const defaultTag = process.env.HOSTNAME || os.hostname() || 'unknown';
+const defaultHost = 'localhost';
+const defaultPort = 24224;
+const defaultTimeout = 3.0;
 const defaultRequireAckResponse = false;
 const defaultReconnectInterval = 30000;
 const defaultTls = false;
@@ -18,32 +18,36 @@ export interface ICreateFluentTransportTlsOptions {
   ca: string | Buffer;
 }
 export interface ICreateFluentTransport {
-  id?: typeof defaultId;
-  host?: typeof defaultFluentHost;
-  port?: typeof defaultFluentPort;
-  timeout?: typeof defaultFluentTimeout;
-  requireAckResponse?: typeof defaultRequireAckResponse;
-  reconnectInterval?: typeof defaultReconnectInterval;
+  host?: string;
+  port?: number;
+  timeout?: typeof defaultTimeout;
+  requireAckResponse?: boolean;
+  reconnectInterval?: number;
   security?: ICreateFluentTransportSecurity;
+  tag?: typeof defaultTag;
   tls?: typeof defaultTls;
   tlsOptions?: ICreateFluentTransportTlsOptions;
 }
 
 export function createFluentTransport({
-  host = defaultFluentHost,
-  port = defaultFluentPort,
-  timeout = defaultFluentTimeout,
+  host = defaultHost,
+  port = defaultPort,
   requireAckResponse = defaultRequireAckResponse,
+  reconnectInterval,
   security,
-  tls,
+  tag = defaultTag,
+  timeout = defaultTimeout,
+  tls = defaultTls,
   tlsOptions,
 }: ICreateFluentTransport = {}): Transport {
   const fluentTransport = fluentLogger.support.winstonTransport();
   return new fluentTransport({
     host,
     port,
+    reconnectInterval,
     requireAckResponse,
     security,
+    tag,
     timeout,
     tls,
     tlsOptions,
