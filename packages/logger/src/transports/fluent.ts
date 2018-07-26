@@ -7,7 +7,6 @@ const defaultHost = 'localhost';
 const defaultPort = 24224;
 const defaultTimeout = 3.0;
 const defaultRequireAckResponse = false;
-const defaultReconnectInterval = 30000;
 const defaultTls = false;
 
 export interface ICreateFluentTransportSecurity {

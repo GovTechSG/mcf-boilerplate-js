@@ -95,6 +95,7 @@ The library exposes the following methods:
 | `.createLogger` | Creates the logger object which can be used |
 | `.createFluentTransport` | Creates a FluentD compatible transport |
 | `.createConsoleTransport` | Creates a Console transport |
+| `.createMorganStream` | Creates an object consumable by Morgan |
 
 ### `.createLogger(:options)`
 This function accepts a configuration object as the parameter where the keys are documented as follows:
@@ -125,6 +126,16 @@ This is referenced from [the `fluent-logger` library](https://github.com/fluent/
 ### `.createConsoleTransport()`
 This function returns a Console transporter and takes no parameters.
 
+### `.createMorganStream(:options)`
+This function returns an object that can be used by Morgan to specify a write stream.
+
+The properties for the `:options` object are:
+
+| Key | Description | Default |
+| --- | --- | --- |
+| `logLevel` | The desire level of logs to use for request logs by Morgan | `"silly"` |
+| `logger` | The logger instance to be used | `undefined` |
+
 ## Examples
 Confirm all dependencies have been installed:
 
@@ -153,6 +164,8 @@ npm run svc:fluent:stop;
 ## Changelog
 
 ### 0.2.x
+#### 0.2.1
+Added in stream creator for Morgan (see `.createMorganStream`)
 #### 0.2.0
 Added more:
   - Fluent transport security configuration (`.security`)

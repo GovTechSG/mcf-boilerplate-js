@@ -1,9 +1,15 @@
 import {TransformFunction} from 'logform';
 import winston from 'winston';
 import * as Transport from 'winston-transport';
+import {createMorganStream} from './streams';
 import {createConsoleTransport, createFluentTransport} from './transports';
 
-export {createLogger, createFluentTransport, createConsoleTransport};
+export {
+  createLogger,
+  createFluentTransport,
+  createConsoleTransport,
+  createMorganStream,
+};
 
 const {combine, timestamp, json} = winston.format;
 
