@@ -13,9 +13,7 @@ Boilerplate middleware for Node projects in MyCareersFuture.
 - [x] cross-origin-resource-sharing support
 - [x] application metrics
 - [x] server request logging
-- [ ] application logging
-- [ ] centralised logging
-- [ ] distributed tracing
+- [x] distributed tracing
 - [ ] endpoint: `/healthz`
 - [ ] endpoint protection for `/healthz`
 - [ ] endpoint: `/readyz`
@@ -41,6 +39,38 @@ server.[...expressMethods];
 // ...
 ```
 
+### API
+The returned server is an Express server with the following additional APIs:
+
+#### `.getRequest()`
+Returns a Zipkin instrumented request object based on [`node-fetch`](https://www.npmjs.com/package/node-fetch) for retrieving data from other Zipkin-enabled services.
+
+```js
+const request = server.getRequest();
+```
+
+The returned function signature is:
+
+```js
+function getRequest(:url, :options)
+```
+
+The possible keys/values in `:options` can be found in [`node-fetch`'s documentation](https://github.com/bitinn/node-fetch#options).
+
+To specify the remote service's ID, use a property named `remoteServiceName` in the `:options` object. Example:
+
+```js
+request('http://google.com', {
+  remoteServiceName: 'google',
+}).then(/* ... */);
+```
+
+#### `.getTracer()`
+Returns the tracer instance used to initialise Zipkin.
+
+#### `.getContext()`
+Returns the context used in the tracer that was used to initialise Zipkin.
+
 ### Options
 Options are passed into the constructor function:
 
@@ -50,6 +80,36 @@ const server = serverBoilerplate({
   ...options,
 });
 ```
+
+#### `enableCookieParser` : `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableCookieParser: true})` |
+
+#### `enableCompression` : `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableCompression: true})` |
+
+#### `enableContentSecurityPolicy` : `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableContentSecurityPolicy: true})` |
+
+#### `enableCORS` : `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableCORS: true})` |
+
+#### `enableHttpHeaderSecurity` : `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableHttpHeaderSecurity: true})` |
+
+#### `enableMetricsCollection` : `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableMetricsCollection: true})` |
 
 #### `enableSerializer` : `Boolean`
 | Type | Default | Example |
@@ -61,35 +121,10 @@ const server = serverBoilerplate({
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableServerLogging: true})` |
 
-#### `enableCookieParser` : `Boolean`
+#### `enableTracing` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableCookieParser: true})` |
-
-#### `enableMetricsCollection` : `Boolean`
-| Type | Default | Example |
-| --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableMetricsCollection: true})` |
-
-#### `enableHttpHeaderSecurity` : `Boolean`
-| Type | Default | Example |
-| --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableHttpHeaderSecurity: true})` |
-
-#### `enableContentSecurityPolicy` : `Boolean`
-| Type | Default | Example |
-| --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableContentSecurityPolicy: true})` |
-
-#### `enableCompression` : `Boolean`
-| Type | Default | Example |
-| --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableCompression: true})` |
-
-#### `enableCORS` : `Boolean`
-| Type | Default | Example |
-| --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableCORS: true})` |
+| `Boolean` | `true` | `serverBoilerplate({enableTracing: true})` |
 
 #### `compressionOptions` : `Object`
 > This configuration is only relevant if the `enableCompression` parameter was not set to `false`
@@ -210,6 +245,32 @@ The above configuration produces the following CSP:
 > }
 > ```
 
+#### `tracing` : `Object`
+> This configuration is only relevant if the `enableTracing` parameter was not set to `false`
+
+| Key | Type | Notes | Defaults To |
+| --- | --- | --- | --- |
+| `httpHeaders` | Object | HTTP headers to send along to Zipkin | `{}` |
+| `localServiceName` | String | Local service identifier | `os.hostname() || process.env.HOSTNAME || 'unknown'` |
+| `sampleRate` | Float | Percentage of requests to be sampled | `0.5` |
+| `syncIntervalMs` | Number | Synchronisation interval | `1000` |
+| `serverHost` | String | The hostname of the Zipkin server | `null` |
+| `serverPort` | String | The port of the Zipkin server | `null` |
+| `serverProtocol` | String | The protocol of the Zipkin server | `"http"` |
+
+> Defaults to:
+> ```js
+> {
+>   httpHEaders: {},
+>   localServiceName: os.hostname() || process.env.HOSTNAME || 'unknown',
+>   sampleRate: 0.5,
+>   syncIntervalMs: 1000,
+>   serverHost: null,
+>   serverPort: null,
+>   serverProtocol: 'http',
+> }
+> ```
+
 ## Development
 
 ### Installing Dependencies
@@ -243,7 +304,43 @@ npm start
 npm run build;
 ```
 
+### Integration Example
+
+Run the following to setup an example environment:
+
+```bash
+docker-compose -f test/docker-compose.yml up -d
+```
+
+This should spin up a Zipkin server on port 9411 - [VISIT IT](http://localhost:9411).
+
+Open a new terminal and run the following to **create server a on port 11111**:
+
+```bash
+SVC_ID=a PORT=11111 npm start;
+```
+
+Open another terminal and run the following to **create server b on port 22222**:
+
+```bash
+RSVC_ID=a SVC_ID=b PORT=22222 PROXY_PORT=11111 npm start;
+```
+
+Verify that [your local Zipkin instance](http://localhost:9411) works and then run the following in yet another terminal to demonstrate tracing:
+
+```bash
+curl "http://localhost:22222/proxy";
+```
+
 ## ChangeLog
+### 0.7.x
+#### 0.7.0
+- added distributed tracing capabilities
+- server instance now exports the following methods:
+  - `.getTracer()`
+  - `.getContext()`
+  - `.getRequest()`
+
 ### 0.6.x
 #### 0.6.4
 - added `:logStream` property in `serverLogging` options for providing Morgan with a custom logger to use

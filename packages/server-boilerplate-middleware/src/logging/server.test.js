@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 
 const {expect} = chai;
-const serverLoggingMiddleware = require('./server-logging');
+const serverLoggingMiddleware = require('./server');
 
 describe('logging/server', () => {
   it('exports a function', () => {
@@ -60,7 +60,7 @@ describe('logging/server', () => {
         expect(serverLoggingMiddleware.provisionCustomTokens)
           .to.be.calledWith(
             serverLoggingMiddleware.morgan,
-            {hostnameType}
+            {hostnameType, tracer: {}}
           );
         expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
         expect(serverLoggingMiddleware.getFormatter)
@@ -82,7 +82,7 @@ describe('logging/server', () => {
         expect(serverLoggingMiddleware.provisionCustomTokens)
           .to.be.calledWith(
             serverLoggingMiddleware.morgan,
-            {hostnameType}
+            {hostnameType, tracer: {}}
           );
         expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
         expect(serverLoggingMiddleware.getFormatter)
@@ -109,10 +109,10 @@ describe('logging/server', () => {
     it('creates the correct tokens', () => {
       serverLoggingMiddleware.provisionCustomTokens(morganLoggerMock);
       expect(tokenSpy).to.be.calledWith('hostname');
-      expect(tokenSpy).to.be.calledWith('opentracing-trace-id');
-      expect(tokenSpy).to.be.calledWith('opentracing-parent-span-id');
-      expect(tokenSpy).to.be.calledWith('opentracing-span-id');
-      expect(tokenSpy).to.be.calledWith('opentracing-sampled');
+      expect(tokenSpy).to.be.calledWith('trace-id');
+      expect(tokenSpy).to.be.calledWith('parent-span-id');
+      expect(tokenSpy).to.be.calledWith('span-id');
+      expect(tokenSpy).to.be.calledWith('sampled');
     });
   });
 
@@ -126,10 +126,10 @@ describe('logging/server', () => {
         'status': sinon.spy(),
         'res': sinon.spy(),
         'response-time': sinon.spy(),
-        'opentracing-trace-id': sinon.spy(),
-        'opentracing-span-id': sinon.spy(),
-        'opentracing-parent-span-id': sinon.spy(),
-        'opentracing-sampled': sinon.spy(),
+        'trace-id': sinon.spy(),
+        'span-id': sinon.spy(),
+        'parent-span-id': sinon.spy(),
+        'sampled': sinon.spy(),
         'http-version': sinon.spy(),
         'referrer': sinon.spy(),
         'remote-addr': sinon.spy(),
@@ -166,10 +166,10 @@ describe('logging/server', () => {
       expect(tokenMock['status']).to.be.calledOnce;
       expect(tokenMock['res']).to.be.calledOnce;
       expect(tokenMock['response-time']).to.be.calledOnce;
-      expect(tokenMock['opentracing-trace-id']).to.be.calledOnce;
-      expect(tokenMock['opentracing-span-id']).to.be.calledOnce;
-      expect(tokenMock['opentracing-parent-span-id']).to.be.calledOnce;
-      expect(tokenMock['opentracing-sampled']).to.be.calledOnce;
+      expect(tokenMock['trace-id']).to.be.calledOnce;
+      expect(tokenMock['span-id']).to.be.calledOnce;
+      expect(tokenMock['parent-span-id']).to.be.calledOnce;
+      expect(tokenMock['sampled']).to.be.calledOnce;
       expect(tokenMock['http-version']).to.be.calledOnce;
       expect(tokenMock['referrer']).to.be.calledOnce;
       expect(tokenMock['remote-addr']).to.be.calledOnce;
@@ -186,10 +186,10 @@ describe('logging/server', () => {
         'status': () => true,
         'res': () => true,
         'response-time': () => true,
-        'opentracing-trace-id': () => true,
-        'opentracing-span-id': () => true,
-        'opentracing-parent-span-id': () => true,
-        'opentracing-sampled': () => true,
+        'trace-id': () => true,
+        'span-id': () => true,
+        'parent-span-id': () => true,
+        'sampled': () => true,
         'http-version': () => true,
         'referrer': () => true,
         'remote-addr': () => true,
@@ -205,10 +205,10 @@ describe('logging/server', () => {
         'status',
         'contentLength',
         'responseTimeMs',
-        'otTraceId',
-        'otSpanId',
-        'otParentId',
-        'otSampled',
+        'traceId',
+        'spanId',
+        'parentSpanId',
+        'sampled',
         'httpVersion',
         'referrer',
         'remoteHostname',

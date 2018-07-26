@@ -1,5 +1,5 @@
-import serverLogging from './server-logging';
+import server from './server';
 
 export default {
-  server: serverLogging,
+  server,
 };

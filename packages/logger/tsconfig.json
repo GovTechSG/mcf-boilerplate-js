@@ -1,16 +1,8 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "lib": [
-      "es5",
-      "es2015"
-    ],
-    "sourceMap": true,
-    "outDir": "./dist",
-    "strict": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
     "baseUrl": "./",
+    "outDir": "./dist",
     "paths": {
       "~/*": [
         "src/*"
@@ -19,11 +11,12 @@
         "src/*"
       ]
     },
-    "esModuleInterop": true,
-    "target": "es5"
   },
   "include": [
-    "./src/**/*",
-    "./src/*"
+    "**/src/**/*.ts",
+    "**/src/*.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts"
   ]
 }

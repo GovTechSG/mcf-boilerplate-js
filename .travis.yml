@@ -10,6 +10,7 @@ before_install:
 if: tag IS blank AND branch = "master"
 script:
   - lerna bootstrap
+  - lerna run lint
   - lerna run build
   - nvm use 6 && lerna run test
   - nvm use 8 && lerna run test
@@ -17,6 +18,7 @@ script:
       git checkout ${TRAVIS_BRANCH};
       git reset --hard ${TRAVIS_COMMIT};
       lerna bootstrap;
+      lerna run lint;
       lerna run build;
       git remote set-url origin ${CIVAR_GH_REPOSITORY_URL};
       npm config set '//registry.npmjs.org/:_authToken' "${CIVAR_NPM_TOKEN}";

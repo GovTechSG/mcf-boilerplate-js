@@ -12,7 +12,7 @@
     "pretest": "cd ./src && find ./ -name '*.test.js' | cpio -pdm ../dist",
     "posttest": "find ./dist -name '*.test.js' | xargs -I@ rm -rf @",
     "prestart": "npm run build",
-    "start": "node ./test/server.js"
+    "start": "nodemon ./test/server.js"
   },
   "publishConfig": {
     "access": "public"
@@ -42,20 +42,21 @@
     "express-prom-bundle": "^3.3.0",
     "helmet": "^3.12.1",
     "morgan": "^1.9.0",
-    "prom-client": "^11.0.0"
+    "prom-client": "^11.0.0",
+    "zipkin": "^0.14.0",
+    "zipkin-instrumentation-express": "^0.14.0",
+    "zipkin-instrumentation-fetch": "^0.14.0",
+    "zipkin-transport-http": "^0.14.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "express": "^4.16.3",
-    "mocha": "^5.1.1",
+    "nodemon": "^1.18.3",
     "npx": "^10.2.0",
-    "sinon": "^5.0.7",
-    "sinon-chai": "^3.0.0",
     "supertest": "^3.0.0"
   }
 }

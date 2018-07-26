@@ -6,6 +6,7 @@ import compression from './compression';
 import observability from './observability';
 import logging from './logging';
 
+
 module.exports = createServer;
 
 /**
@@ -47,13 +48,21 @@ module.exports = createServer;
  * @param {String} metricsCollection.pushgatewayTimeout
  * @param {String} metricsCollection.pushgatewayUrl
  * @param {Object} [serverLogging={}]
- * @param {String} [serverLogging.logLevel]
- * @param {String} [serverLogging.logStream]
- * @param {String} [serverLogging.hostnameType]
+ * @param {String} serverLogging.logLevel
+ * @param {String} serverLogging.logStream
+ * @param {String} serverLogging.hostnameType
+ * @param {Object} [tracing={}]
+ * @param {String} tracing.httpHeaders
+ * @param {String} tracing.localServiceName
+ * @param {String} tracing.sampleRate
+ * @param {String} tracing.syncIntervalMs
+ * @param {String} tracing.serverHost
+ * @param {String} tracing.serverPort
+ * @param {String} tracing.serverProtocol
  *
  * @return {express.Application}
  */
-export default function createServer({
+export function createServer({
   enableCORS = true,
   enableCompression = true,
   enableContentSecurityPolicy = true,
@@ -62,13 +71,25 @@ export default function createServer({
   enableMetricsCollection = true,
   enableSerializer = true,
   enableServerLogging = true,
+  enableTracing = true,
   contentSecurityPolicy = {},
   compressionOptions = {},
   crossOriginResourceSharing = {},
   metricsCollection = {},
   serverLogging = {},
+  tracing = {},
 } = {}) {
   const server = express();
+  if (enableTracing) {
+    const tracingInstance = observability.tracing.createTracer(tracing);
+    server.use(tracingInstance.getMiddleware());
+    const requestInstance = observability.request.createRequest({
+      tracer: tracingInstance.getTracer(),
+    });
+    server.getTracer = () => tracingInstance.getTracer();
+    server.getContext = () => tracingInstance.getContext();
+    server.getRequest = () => requestInstance;
+  }
   if (enableCookieParser) {
     server.use(cookieParser());
   }

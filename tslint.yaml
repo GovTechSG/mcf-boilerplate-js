@@ -1,0 +1,10 @@
+extends:
+  - tslint:latest
+  - tslint-eslint-rules
+  - tslint-plugin-prettier
+  - tslint-config-prettier
+  - tslint-no-unused-expression-chai
+rules:
+  no-submodule-imports: false
+  no-implicit-dependencies: false
+  prettier: true
