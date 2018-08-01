@@ -1,0 +1,56 @@
+version: "3.5"
+services:
+  app_a:
+    image: node:8.11.3-alpine
+    working_dir: /app
+    entrypoint: ["npm", "start"]
+    environment:
+      - PORT=8084
+      - SVC_ID=app_a
+      - SVC_TWO_ID=app_b
+      - SVC_TWO_URL=http://app_b:8085
+      - ZIPKIN_HOST=zipkin
+      - ZIPKIN_PORT=9411
+      - FLUENTD_HOST=fluentd
+      - FLUENTD_PORT=24224
+    ports:
+      - "8084:8084"
+    volumes:
+      - "./:/app:Z"
+    depends_on:
+      - fluentd
+      - zipkin
+  app_b:
+    image: node:8.11.3-alpine
+    working_dir: /app
+    entrypoint: ["npm", "start"]
+    environment:
+      - PORT=8085
+      - SVC_ID=app_b
+      - SVC_TWO_ID=app_a
+      - SVC_TWO_URL=http://app_a:8084
+      - ZIPKIN_HOST=zipkin
+      - ZIPKIN_PORT=9411
+      - FLUENTD_HOST=fluentd
+      - FLUENTD_PORT=24224
+    ports:
+      - "8085:8085"
+    volumes:
+      - "./:/app:Z"
+    depends_on:
+      - fluentd
+      - zipkin
+  fluentd:
+    image: fluent/fluentd:v1.2.3
+    entrypoint: ["fluentd", "-c", "/etc/fluent/fluent.conf"]
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    volumes:
+      - "./data/fluentd.d/fluent.conf:/etc/fluent/fluent.conf"
+  zipkin:
+    logging:
+      driver: none
+    image: openzipkin/zipkin:2.10.2
+    ports:
+      - "9411:9411"

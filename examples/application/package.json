@@ -1,0 +1,24 @@
+{
+  "name": "application",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "start:watch": "npm run prestart; nodemon index.js; npm run poststart",
+    "prestart:dev": "docker-compose up -d",
+    "start:dev": "nodemon index.js",
+    "poststart:dev": "docker-compose down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mcf/logger": "^0.3.0",
+    "@mcf/provision-process": "^0.2.0",
+    "@mcf/server-boilerplate-middleware": "^0.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
