@@ -2,7 +2,7 @@
   "name": "@mcf/provision-process",
   "version": "0.2.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",
     "lint": "npx eslint -c ../../.eslintrc.json .",
