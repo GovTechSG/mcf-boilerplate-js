@@ -3,9 +3,9 @@
 [![Build Status](https://travis-ci.org/GovTechSG/mcf-boilerplate-js.svg?branch=master)](https://travis-ci.org/GovTechSG/mcf-boilerplate-js)
 
 ## Contents
-- [`@mcf/logger`](./packages/logger)
-- [`@mcf/provision-process`](./packages/provision-process)
-- [`@mcf/server-boilerplate-middleware`](./packages/server-boilerplate-middleware) 
+- [`@mcf/logger`](./packages/logger) [![npm version](https://badge.fury.io/js/%40mcf%2Flogger.svg)](https://badge.fury.io/js/%40mcf%2Flogger)
+- [`@mcf/provision-process`](./packages/provision-process) [![npm version](https://badge.fury.io/js/%40mcf%2Fprovision-process.svg)](https://badge.fury.io/js/%40mcf%2Fprovision-process)
+- [`@mcf/server-boilerplate-middleware`](./packages/server-boilerplate-middleware) [![npm version](https://badge.fury.io/js/%40mcf%2Fserver-boilerplate-middleware.svg)](https://badge.fury.io/js/%40mcf%2Fserver-boilerplate-middleware)
 
 ## Contributing
 ### For Contributors

@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/GovTechSG/mcf-boilerplate-js.svg?branch=master)](https://travis-ci.org/GovTechSG/mcf-boilerplate-js)
+[![npm version](https://badge.fury.io/js/%40mcf%2Fprovision-process.svg)](https://badge.fury.io/js/%40mcf%2Fprovision-process)
 
-# Utility - provisionProcess
+# `@mcf/provision-process`
 Provisions the process for a graceful termination.
 
 ## Installation

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/GovTechSG/mcf-boilerplate-js.svg?branch=master)](https://travis-ci.org/GovTechSG/mcf-boilerplate-js)
+[![npm version](https://badge.fury.io/js/%40mcf%2Fserver-boilerplate-middleware.svg)](https://badge.fury.io/js/%40mcf%2Fserver-boilerplate-middleware)
 
 # Boilerplate Middleware
 Boilerplate middleware for Node projects in MyCareersFuture.
