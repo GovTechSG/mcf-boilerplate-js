@@ -10,7 +10,7 @@
     "sourceMap": true,
     "listEmittedFiles": true,
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "target": "es5"

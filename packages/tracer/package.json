@@ -1,0 +1,29 @@
+{
+  "name": "@mcf/tracer",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.json",
+    "lint": "tslint --project ./tsconfig.json -t stylish",
+    "pretest": "docker-compose -f ../../provisioning/zipkin.yml up -d",
+    "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
+    "test:watch": "npm test -- --watch --watch-extensions ts",
+    "posttest": "docker-compose -f ../../provisioning/zipkin.yml down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zipkin": "^0.13.0",
+    "zipkin-instrumentation-express": "^0.14.0",
+    "zipkin-transport-http": "^0.14.0"
+  },
+  "devDependencies": {
+    "superagent": "^3.8.3",
+    "supertest": "^3.1.0",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1"
+  }
+}
