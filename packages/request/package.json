@@ -1,0 +1,32 @@
+{
+  "name": "request",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.json",
+    "lint": "tslint --project ./tsconfig.json -t stylish",
+    "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
+    "test:watch": "npm test -- --watch --watch-extensions ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GovTechSG/mcf-boilerplate-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node-fetch": "^2.1.2",
+    "node-fetch": "^2.2.0",
+    "zipkin-instrumentation-fetch": "^0.14.0"
+  },
+  "devDependencies": {
+    "ts-node": "^7.0.0",
+    "zipkin": "^0.14.0"
+  }
+}
