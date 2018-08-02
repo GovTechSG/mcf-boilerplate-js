@@ -2,7 +2,6 @@ import * as chai from 'chai';
 import express from 'express';
 import * as superagent from 'superagent';
 import supertest from 'supertest';
-import {ExplicitContext} from 'zipkin';
 import {
   createTracer,
   IContextShape,
@@ -43,8 +42,6 @@ describe('@mcf/tracer', () => {
   describe('integration tests', () => {
     let server: express.Application;
     let tracer: ITracer;
-    let observedTraceFromRequest: IContextShape | undefined;
-    let observedTraceFromContext: IContextShape;
 
     before(() => {
       server = express();

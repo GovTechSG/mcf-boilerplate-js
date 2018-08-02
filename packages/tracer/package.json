@@ -2,7 +2,7 @@
   "name": "@mcf/tracer",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
     "lint": "tslint --project ./tsconfig.json -t stylish",
@@ -11,15 +11,24 @@
     "test:watch": "npm test -- --watch --watch-extensions ts",
     "posttest": "docker-compose -f ../../provisioning/zipkin.yml down"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GovTechSG/mcf-boilerplate-js.git"
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "zipkin": "^0.13.0",
     "zipkin-instrumentation-express": "^0.14.0",
     "zipkin-transport-http": "^0.14.0"
   },
   "devDependencies": {
+    "express": "^4.16.3",
     "superagent": "^3.8.3",
     "supertest": "^3.1.0",
     "ts-node": "^7.0.0",
