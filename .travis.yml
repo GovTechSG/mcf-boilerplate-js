@@ -9,6 +9,7 @@ before_install:
   - nvm use 8 && npm i -g npx
 if: tag IS blank AND branch = "master"
 script:
+  - set -e
   - lerna bootstrap
   - lerna run lint
   - lerna run build
