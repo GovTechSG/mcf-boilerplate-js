@@ -1,7 +1,7 @@
 {
   "name": "@mcf/server-boilerplate-middleware",
   "version": "0.7.1",
-  "description": "",
+  "description": "Boilerplate middleware for Node projects in MyCareersFuture.",
   "main": "dist/index.js",
   "scripts": {
     "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",

@@ -1,7 +1,7 @@
 {
   "name": "@mcf/tracer",
   "version": "0.0.2",
-  "description": "",
+  "description": "Creates and exposes a Zipkin tracer for consumption by an Express-based application.",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",

@@ -1,7 +1,7 @@
 {
   "name": "@mcf/provision-process",
   "version": "0.2.1",
-  "description": "",
+  "description": "Provisions the process for a graceful termination.",
   "main": "dist/index.js",
   "scripts": {
     "build": "npx babel --presets=env src --out-dir dist --ignore '*.test.js' ",

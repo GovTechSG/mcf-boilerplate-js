@@ -1,6 +1,7 @@
 [![npm version](https://badge.fury.io/js/%40mcf%2Flogger.svg)](https://badge.fury.io/js/%40mcf%2Flogger)
+
 # `@mcf/logger`
-This logger is based on Winston. It includes formats and plugins for integration with the Morgan request logging library, and Zipkin request distributed tracing library.
+Exposes a logger based on Winston. It includes formats and plugins for integration with the Morgan request logging library, and Zipkin request distributed tracing library.
 
 ## Scope
 

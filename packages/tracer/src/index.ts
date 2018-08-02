@@ -27,16 +27,6 @@ const {CountingSampler} = sampler;
 
 /**
  * Returns a tracer object
- *
- * @param {Object} options
- * @param {String} options.httpHeaders
- * @param {String} options.localServiceName
- * @param {Number} options.sampleRate
- * @param {Number} options.syncIntervalMs
- * @param {String} options.serverHost
- * @param {Number} options.serverPort
- * @param {String} options.serverProtocol
- * @return {Object}
  */
 export function createTracer({
   httpHeaders = DEFAULT_HTTP_HEADERS,
