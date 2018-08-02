@@ -55,49 +55,52 @@ export function createTracer({
   });
   const middleware = [
     expressMiddleware({tracer}),
-    contextProviderMiddleware({context}),
+    getContextProviderMiddleware({context}),
   ].filter((v) => v);
 
   return {
     getContext: () => context,
     getExpressMiddleware: () => middleware,
-    getMorganTokenizers: () => morganTokenizersProvider(),
     getTracer: () => tracer,
   };
 }
 
-// the following should be synchronised to contextProviderMiddleware
-const morganTokenizersProvider = () => [
-  {
-    fn: (req) => req.context.traceId,
-    id: 'trace-id',
-  },
-  {
-    fn: (req) => req.context.spanId,
-    id: 'span-id',
-  },
-  {
-    fn: (req) => req.context.parentId,
-    id: 'parent-span-id',
-  },
-  {
-    fn: (req) => req.context.sampled,
-    id: 'sampled',
-  },
-];
+// the following should be synchronised to getContextProviderMiddleware
+export function getMorganTokenizers() {
+  return [
+    {
+      fn: (req) => req.context.traceId,
+      id: 'trace-id',
+    },
+    {
+      fn: (req) => req.context.spanId,
+      id: 'span-id',
+    },
+    {
+      fn: (req) => req.context.parentId,
+      id: 'parent-span-id',
+    },
+    {
+      fn: (req) => req.context.sampled,
+      id: 'sampled',
+    },
+  ];
+}
 
 // the following should be synchronised to morganTokenizersProvider
-const contextProviderMiddleware = ({
+export function getContextProviderMiddleware({
   context,
-}: IContextProviderMiddlewareParameters): IExpressHandlerWithContext => (
-  req: IExpressRequestWithContext,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
-  const {spanId, parentId, traceId, sampled} = context.getContext();
-  req.context = {spanId, parentId, traceId, sampled};
-  next();
-};
+}: IContextProviderMiddlewareParameters): IExpressHandlerWithContext {
+  return (
+    req: IExpressRequestWithContext,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    const {spanId, parentId, traceId, sampled} = context.getContext();
+    req.context = {spanId, parentId, traceId, sampled};
+    next();
+  };
+}
 
 function createRecorder({
   httpHeaders = DEFAULT_HTTP_HEADERS,
@@ -171,6 +174,5 @@ export interface IMorganTokenizer {
 export interface ITracer {
   getContext: () => ExplicitContext;
   getExpressMiddleware: () => IExpressHandlerWithContext[];
-  getMorganTokenizers: () => IMorganTokenizer[];
   getTracer: () => Tracer;
 }

@@ -94,7 +94,17 @@ Returns an Express-compatible middleware which does two things:
 1. Add a `.context` property to Node's request object
 2. Manages the trace and span ID for every request
 
-##### `.getMorganTokenizers()`
+##### `.getTracer()`
+Returns the pure Zipkin Tracer object.
+
+### `.getContextProviderMiddleware(:options)`
+Returns an Express-compatible middleware to inject the provided context into the request. The `:options` parameter is an object with the following schema:
+
+| Key | Defaults To | Description |
+| --- | --- | --- |
+| `context` | `undefined` | The context to use |
+
+### `.getMorganTokenizers()`
 Returns an array of Morgan tokens which have the shape:
 
 ```typescript
@@ -108,10 +118,10 @@ These can be used to generate additional tokens for Morgan and using them in Mor
 
 > The transformations here are tied to how `.getExpressMiddleware()` injects the Zipkin context into requests. You'll need to write your own if you are not using `.getExpressMiddleware()`.
 
-##### `.getTracer()`
-Returns the pure Zipkin Tracer object.
-
 ## Changelog
+### 0.0.5
+- Added static exports for retrieving the context provider middleware
+- Added static exports for retrieving the Morgan tokenizers
 ### 0.0.4
 - Added Morgan tokenizer generator
 ### 0.0.3

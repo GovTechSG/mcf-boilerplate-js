@@ -2,8 +2,11 @@ import * as chai from 'chai';
 import express from 'express';
 import * as superagent from 'superagent';
 import supertest from 'supertest';
+import {ExplicitContext} from 'zipkin';
 import {
   createTracer,
+  getContextProviderMiddleware,
+  getMorganTokenizers,
   IContextShape,
   IExpressRequestWithContext,
   ITracer,
@@ -36,6 +39,21 @@ describe('@mcf/tracer', () => {
             waitingForZipkin = setTimeout(waitForZipkin, 1000);
           });
       })();
+    });
+  });
+
+  describe('.getContextProviderMiddleware()', () => {
+    it('retrieves an Express compatible middleware', () => {
+      expect(() => {
+        const context = new ExplicitContext();
+        getContextProviderMiddleware({context});
+      }).to.not.throw();
+    });
+  });
+
+  describe('.getMorganTokenizers()', () => {
+    it('retrieves an array of morgan tokenizers', () => {
+      expect(() => getMorganTokenizers()).to.not.throw();
     });
   });
 
@@ -96,14 +114,6 @@ describe('@mcf/tracer', () => {
           .catch((err) => {
             throw new Error("Zipkin didn't receive trace ID");
           }));
-    });
-
-    describe('.getMorganTokenizers()', () => {
-      it('retrieves a list of tokenizers for use with Morgan', () => {
-        expect(() => {
-          tracer.getMorganTokenizers();
-        }).to.not.throw();
-      });
     });
 
     describe('.getTracer()', () => {
