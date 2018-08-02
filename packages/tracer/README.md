@@ -8,6 +8,7 @@ Creates and exposes a Zipkin tracer for consumption by an Express-based applicat
 - [x] Create a tracer
 - [x] Expose the internal context
 - [x] Expose an Express middleware component
+- [x] Expose Morgan tokenizers
 
 ## Installation
 
@@ -93,9 +94,25 @@ Returns an Express-compatible middleware which does two things:
 1. Add a `.context` property to Node's request object
 2. Manages the trace and span ID for every request
 
+##### `.getMorganTokenizers()`
+Returns an array of Morgan tokens which have the shape:
+
+```typescript
+{
+  id: string;
+  fn: (req?: Request, res?: Response) => any;
+}
+```
+
+These can be used to generate additional tokens for Morgan and using them in Morgan logs.
+
+> The transformations here are tied to how `.getExpressMiddleware()` injects the Zipkin context into requests. You'll need to write your own if you are not using `.getExpressMiddleware()`.
+
 ##### `.getTracer()`
 Returns the pure Zipkin Tracer object.
 
 ## Changelog
+### 0.0.4
+- Added Morgan tokenizer generator
 ### 0.0.3
 - Initial release

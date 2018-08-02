@@ -61,10 +61,32 @@ export function createTracer({
   return {
     getContext: () => context,
     getExpressMiddleware: () => middleware,
+    getMorganTokenizers: () => morganTokenizersProvider(),
     getTracer: () => tracer,
   };
 }
 
+// the following should be synchronised to contextProviderMiddleware
+const morganTokenizersProvider = () => [
+  {
+    fn: (req) => req.context.traceId,
+    id: 'trace-id',
+  },
+  {
+    fn: (req) => req.context.spanId,
+    id: 'span-id',
+  },
+  {
+    fn: (req) => req.context.parentId,
+    id: 'parent-span-id',
+  },
+  {
+    fn: (req) => req.context.sampled,
+    id: 'sampled',
+  },
+];
+
+// the following should be synchronised to morganTokenizersProvider
 const contextProviderMiddleware = ({
   context,
 }: IContextProviderMiddlewareParameters): IExpressHandlerWithContext => (
@@ -141,8 +163,14 @@ export interface ICreateTracerParameters {
   serverProtocol?: string;
 }
 
+export interface IMorganTokenizer {
+  fn: (req?: IExpressRequestWithContext) => any;
+  id: string;
+}
+
 export interface ITracer {
   getContext: () => ExplicitContext;
   getExpressMiddleware: () => IExpressHandlerWithContext[];
+  getMorganTokenizers: () => IMorganTokenizer[];
   getTracer: () => Tracer;
 }

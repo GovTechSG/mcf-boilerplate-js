@@ -98,6 +98,14 @@ describe('@mcf/tracer', () => {
           }));
     });
 
+    describe('.getMorganTokenizers()', () => {
+      it('retrieves a list of tokenizers for use with Morgan', () => {
+        expect(() => {
+          tracer.getMorganTokenizers();
+        }).to.not.throw();
+      });
+    });
+
     describe('.getTracer()', () => {
       it('retrieves the tracer instance', () => {
         expect(() => {
