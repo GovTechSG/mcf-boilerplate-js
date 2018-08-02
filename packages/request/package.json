@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "ts-node": "^7.0.0",
-    "zipkin": "^0.14.0"
+    "typescript": "^3.0.1",
+    "zipkin": "^0.13.0"
   }
 }
