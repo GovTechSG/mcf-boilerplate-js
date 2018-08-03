@@ -65,28 +65,6 @@ export function createTracer({
   };
 }
 
-// the following should be synchronised to getContextProviderMiddleware
-export function getMorganTokenizers() {
-  return [
-    {
-      fn: (req) => req.context.traceId,
-      id: 'trace-id',
-    },
-    {
-      fn: (req) => req.context.spanId,
-      id: 'span-id',
-    },
-    {
-      fn: (req) => req.context.parentId,
-      id: 'parent-span-id',
-    },
-    {
-      fn: (req) => req.context.sampled,
-      id: 'sampled',
-    },
-  ];
-}
-
 // the following should be synchronised to morganTokenizersProvider
 export function getContextProviderMiddleware({
   context,
@@ -100,6 +78,56 @@ export function getContextProviderMiddleware({
     req.context = {spanId, parentId, traceId, sampled};
     next();
   };
+}
+
+// the following should be synchronised to getContextProviderMiddleware
+export function getMorganTokenizers(): IMorganTokenizer[] {
+  return [
+    {
+      fn: (req) => (req.context ? req.context.traceId : null),
+      id: 'trace-id',
+    },
+    {
+      fn: (req) => (req.context ? req.context.spanId : null),
+      id: 'span-id',
+    },
+    {
+      fn: (req) => (req.context ? req.context.parentId : null),
+      id: 'parent-span-id',
+    },
+    {
+      fn: (req) => (req.context ? req.context.sampled : null),
+      id: 'sampled',
+    },
+  ];
+}
+
+/**
+ * Returns a single Winston transform function. Call `winston.format(...)`
+ * on this to generate the formatter and then call it to unwrap the
+ * formatter.
+ *
+ * @example
+ *  const winston = require('winston')
+ *  const formats = winston.format.combine(
+ *    winston.format(getWinstonFormat({context}))(),
+ *    winston.format.json()
+ *  );
+ *
+ * @param {IGetWinstonFormatParameters} opts
+ */
+export function getWinstonFormat({
+  context,
+}: IGetWinstonFormatParameters): IExtendedWinstonTransformFunction {
+  return (info) => ({
+    ...info,
+    context: {
+      parentSpanId: context.currentCtx.parentId,
+      sampled: context.currentCtx.sampled,
+      spanId: context.currentCtx.spanId,
+      traceId: context.currentCtx.traceId,
+    },
+  });
 }
 
 function createRecorder({
@@ -136,18 +164,6 @@ export interface IContextShape {
   traceId: string;
 }
 
-export interface IExpressRequestWithContext extends express.Request {
-  context?: IContextShape;
-}
-
-export interface IExpressHandlerWithContext extends express.RequestHandler {
-  (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ): void;
-}
-
 export interface ICreateLoggerParameters {
   httpHeaders?: object;
   serverHost?: string;
@@ -166,8 +182,30 @@ export interface ICreateTracerParameters {
   serverProtocol?: string;
 }
 
+export interface IExpressRequestWithContext extends express.Request {
+  context?: IContextShape;
+}
+
+export interface IExpressHandlerWithContext extends express.RequestHandler {
+  (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ): void;
+}
+
+export type IExtendedWinstonTransformFunction = (info) => object;
+
+export interface IExtendedExplicitContext extends ExplicitContext {
+  currentCtx: IContextShape;
+}
+
+export interface IGetWinstonFormatParameters {
+  context: IExtendedExplicitContext;
+}
+
 export interface IMorganTokenizer {
-  fn: (req?: IExpressRequestWithContext) => any;
+  fn: (req: IExpressRequestWithContext, res?: express.Response) => any;
   id: string;
 }
 

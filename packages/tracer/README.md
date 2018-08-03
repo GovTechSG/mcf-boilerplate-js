@@ -118,7 +118,17 @@ These can be used to generate additional tokens for Morgan and using them in Mor
 
 > The transformations here are tied to how `.getExpressMiddleware()` injects the Zipkin context into requests. You'll need to write your own if you are not using `.getExpressMiddleware()`.
 
+### `.getWinstonFormat(:options)`
+Returns a Winston transform function which adds `spanId`, `parentSpanId`, `traceId`, and `sampled` properties to the Winston logs. The `:options` parameter is an object with the following schema:
+
+| Key | Defaults To | Description |
+| --- | --- | --- |
+| `context` | `undefined` | The context to use for the formatter |
+
 ## Changelog
+### 0.1.0
+- Added static exports for retrieving a Winston formatter to add context details to the logs
+- Release!
 ### 0.0.5
 - Added static exports for retrieving the context provider middleware
 - Added static exports for retrieving the Morgan tokenizers
