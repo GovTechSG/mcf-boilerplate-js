@@ -5,7 +5,7 @@ import {createTracer} from './tracing';
 
 const {expect} = chai;
 
-describe.only('observability/tracing', () => {
+describe('observability/tracing', () => {
   it('works', () => {
     expect(() => {
       createTracer();

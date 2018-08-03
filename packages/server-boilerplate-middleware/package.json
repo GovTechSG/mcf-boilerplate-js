@@ -34,7 +34,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@mcf/tracer": "0.0.3",
     "body-parser": "^1.18.3",
+    "case": "^1.5.5",
     "compression": "^1.7.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -44,9 +46,7 @@
     "morgan": "^1.9.0",
     "prom-client": "^11.0.0",
     "zipkin": "^0.14.0",
-    "zipkin-instrumentation-express": "^0.14.0",
-    "zipkin-instrumentation-fetch": "^0.14.0",
-    "zipkin-transport-http": "^0.14.0"
+    "zipkin-instrumentation-express": "^0.14.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

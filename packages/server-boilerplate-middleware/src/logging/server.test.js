@@ -57,18 +57,19 @@ describe('logging/server', () => {
           hostnameType,
         });
         expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledOnce;
-        expect(serverLoggingMiddleware.provisionCustomTokens)
-          .to.be.calledWith(
-            serverLoggingMiddleware.morgan,
-            {hostnameType, tracer: {}}
-          );
-        expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
-        expect(serverLoggingMiddleware.getFormatter)
-          .to.be.calledWith({logLevel});
-        expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
-        expect(serverLoggingMiddleware.morgan).to.be.calledWith(
-          undefined, {stream: logStream}
+        expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledWith(
+          serverLoggingMiddleware.morgan,
+          {additionalTokenizers: [], hostnameType}
         );
+        expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
+        expect(serverLoggingMiddleware.getFormatter).to.be.calledWith({
+          additionalTokenizers: [],
+          logLevel,
+        });
+        expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
+        expect(serverLoggingMiddleware.morgan).to.be.calledWith(undefined, {
+          stream: logStream,
+        });
       });
     });
 
@@ -79,20 +80,31 @@ describe('logging/server', () => {
           hostnameType,
         });
         expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledOnce;
-        expect(serverLoggingMiddleware.provisionCustomTokens)
-          .to.be.calledWith(
-            serverLoggingMiddleware.morgan,
-            {hostnameType, tracer: {}}
-          );
+        expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledWith(
+          serverLoggingMiddleware.morgan,
+          {additionalTokenizers: [], hostnameType}
+        );
         expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
-        expect(serverLoggingMiddleware.getFormatter)
-          .to.be.calledWith({logLevel});
+        expect(serverLoggingMiddleware.getFormatter).to.be.calledWith({
+          additionalTokenizers: [],
+          logLevel,
+        });
         expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
       });
     });
   });
 
   describe('.provisionCustomTokens()', () => {
+    const additionalTokenizers = [
+      {
+        fn: () => 'a',
+        id: 'a',
+      },
+      {
+        fn: () => 'b',
+        id: 'b',
+      },
+    ];
     const tokenSpy = sinon.spy();
     let morganLoggerMock;
 
@@ -107,29 +119,37 @@ describe('logging/server', () => {
     });
 
     it('creates the correct tokens', () => {
-      serverLoggingMiddleware.provisionCustomTokens(morganLoggerMock);
+      serverLoggingMiddleware.provisionCustomTokens(morganLoggerMock, {
+        additionalTokenizers,
+      });
       expect(tokenSpy).to.be.calledWith('hostname');
-      expect(tokenSpy).to.be.calledWith('trace-id');
-      expect(tokenSpy).to.be.calledWith('parent-span-id');
-      expect(tokenSpy).to.be.calledWith('span-id');
-      expect(tokenSpy).to.be.calledWith('sampled');
+      expect(tokenSpy).to.be.calledWith('a');
+      expect(tokenSpy).to.be.calledWith('b');
     });
   });
 
   describe('.getFormatter()', () => {
+    const additionalTokenizers = [
+      {
+        fn: () => 'a',
+        id: 'a',
+      },
+      {
+        fn: () => 'b',
+        id: 'b',
+      },
+    ];
     let tokenMock;
 
     before(() => {
       tokenMock = {
+        'a': sinon.spy(),
+        'b': sinon.spy(),
         'method': sinon.spy(),
         'url': sinon.spy(),
         'status': sinon.spy(),
         'res': sinon.spy(),
         'response-time': sinon.spy(),
-        'trace-id': sinon.spy(),
-        'span-id': sinon.spy(),
-        'parent-span-id': sinon.spy(),
-        'sampled': sinon.spy(),
         'http-version': sinon.spy(),
         'referrer': sinon.spy(),
         'remote-addr': sinon.spy(),
@@ -159,17 +179,17 @@ describe('logging/server', () => {
     });
 
     it('calls the required tokens as required', () => {
-      const fn = serverLoggingMiddleware.getFormatter();
+      const fn = serverLoggingMiddleware.getFormatter({
+        additionalTokenizers,
+      });
       fn(tokenMock, 'res', 'req');
+      expect(tokenMock['a']).to.be.calledOnce;
+      expect(tokenMock['b']).to.be.calledOnce;
       expect(tokenMock['method']).to.be.calledOnce;
       expect(tokenMock['url']).to.be.calledOnce;
       expect(tokenMock['status']).to.be.calledOnce;
       expect(tokenMock['res']).to.be.calledOnce;
       expect(tokenMock['response-time']).to.be.calledOnce;
-      expect(tokenMock['trace-id']).to.be.calledOnce;
-      expect(tokenMock['span-id']).to.be.calledOnce;
-      expect(tokenMock['parent-span-id']).to.be.calledOnce;
-      expect(tokenMock['sampled']).to.be.calledOnce;
       expect(tokenMock['http-version']).to.be.calledOnce;
       expect(tokenMock['referrer']).to.be.calledOnce;
       expect(tokenMock['remote-addr']).to.be.calledOnce;
@@ -179,36 +199,42 @@ describe('logging/server', () => {
     });
 
     it('returns a correctly shaped object', () => {
-      const fn = serverLoggingMiddleware.getFormatter();
-      expect(JSON.parse(fn({
-        'method': () => true,
-        'url': () => true,
-        'status': () => true,
-        'res': () => true,
-        'response-time': () => true,
-        'trace-id': () => true,
-        'span-id': () => true,
-        'parent-span-id': () => true,
-        'sampled': () => true,
-        'http-version': () => true,
-        'referrer': () => true,
-        'remote-addr': () => true,
-        'hostname': () => true,
-        'date': () => true,
-        'user-agent': () => true,
-      }, {
-        'hostname': true,
-      }, '__res'))).to.have.keys([
+      const fn = serverLoggingMiddleware.getFormatter({
+        additionalTokenizers,
+      });
+      expect(
+        JSON.parse(
+          fn(
+            {
+              'a': () => true,
+              'b': () => true,
+              'method': () => true,
+              'url': () => true,
+              'status': () => true,
+              'res': () => true,
+              'response-time': () => true,
+              'http-version': () => true,
+              'referrer': () => true,
+              'remote-addr': () => true,
+              'hostname': () => true,
+              'date': () => true,
+              'user-agent': () => true,
+            },
+            {
+              hostname: true,
+            },
+            '__res'
+          )
+        )
+      ).to.have.keys([
+        'a',
+        'b',
         'level',
         'method',
         'url',
         'status',
         'contentLength',
         'responseTimeMs',
-        'traceId',
-        'spanId',
-        'parentSpanId',
-        'sampled',
         'httpVersion',
         'referrer',
         'remoteHostname',

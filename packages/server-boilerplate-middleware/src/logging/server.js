@@ -1,10 +1,10 @@
+const Case = require('case');
 const os = require('os');
 const morgan = require('morgan');
 
 const DEFAULT_LOG_LEVEL = 'access';
 const DEFAULT_LOG_STREAM = null;
 const DEFAULT_HOSTNAME_TYPE = 'os';
-const DEFAULT_TRACER = {};
 
 module.exports = serverLoggingMiddleware;
 
@@ -17,26 +17,32 @@ module.exports = serverLoggingMiddleware;
  * @return {Function}
  */
 export default function serverLoggingMiddleware({
+  additionalTokenizers = [],
   logLevel = DEFAULT_LOG_LEVEL,
   logStream = DEFAULT_LOG_STREAM,
   hostnameType = DEFAULT_HOSTNAME_TYPE,
-  tracer = DEFAULT_TRACER,
 } = {}) {
   serverLoggingMiddleware.provisionCustomTokens(
     serverLoggingMiddleware.morgan,
     {
       hostnameType,
-      tracer,
+      additionalTokenizers,
     }
   );
-  return (logStream) ?
-    serverLoggingMiddleware.morgan(
-      serverLoggingMiddleware.getFormatter({logLevel}),
-      {stream: logStream}
-    ) :
-    serverLoggingMiddleware.morgan(
-      serverLoggingMiddleware.getFormatter({logLevel})
-    );
+  return logStream
+    ? serverLoggingMiddleware.morgan(
+        serverLoggingMiddleware.getFormatter({
+          additionalTokenizers,
+          logLevel,
+        }),
+        {stream: logStream}
+      )
+    : serverLoggingMiddleware.morgan(
+        serverLoggingMiddleware.getFormatter({
+          additionalTokenizers,
+          logLevel,
+        })
+      );
 }
 
 serverLoggingMiddleware.morgan = morgan;
@@ -51,6 +57,7 @@ serverLoggingMiddleware.morgan = morgan;
  *
  * @param {Object} morganLogger
  * @param {Object} options
+ * @param {Array<Object>} options.additionalTokenizers
  * @param {String} options.hostnameType
  * @param {Object} options.tracer
  * @param {Object} options.tracer.id
@@ -59,23 +66,24 @@ serverLoggingMiddleware.morgan = morgan;
  * @param {String} options.tracer.id.parentId
  * @param {Symbol} options.tracer.id.sampled
  */
-serverLoggingMiddleware.provisionCustomTokens = (morganLogger, {
-  hostnameType = DEFAULT_HOSTNAME_TYPE,
-  tracer = DEFAULT_TRACER,
-} = {}) => {
+serverLoggingMiddleware.provisionCustomTokens = (
+  morganLogger,
+  {
+    additionalTokenizers = [],
+    hostnameType = DEFAULT_HOSTNAME_TYPE,
+  } = {}
+) => {
   // for knowing which instance the log is coming from, essential
   // when scaling horizontally in a container-based architecture to
   // know which container the log is coming from
-  morganLogger.token('hostname', () =>
-    (hostnameType === 'os')?
-      os.hostname() : process.env[hostnameType]
+  morganLogger.token(
+    'hostname',
+    () => (hostnameType === 'os' ? os.hostname() : process.env[hostnameType])
   );
 
-  // for logging of open tracing headers
-  morganLogger.token('trace-id', (req) => req.context.traceId);
-  morganLogger.token('span-id', (req) => req.context.spanId);
-  morganLogger.token('parent-span-id', (req) => req.context.parentId);
-  morganLogger.token('sampled', (req) => req.context.sampled);
+  additionalTokenizers.forEach(({id, fn}) => {
+    morganLogger.token(id, fn);
+  });
 };
 
 /**
@@ -84,24 +92,22 @@ serverLoggingMiddleware.provisionCustomTokens = (morganLogger, {
  * .provisionCustomTokens() should have been run prior to this
  *
  * @param {Object} options
+ * @param {Array<Object>} options.additionalTokenizers
  * @param {String} options.logLevel
  *
  * @return {Function}
  */
 serverLoggingMiddleware.getFormatter = ({
+  additionalTokenizers = [],
   logLevel = DEFAULT_LOG_LEVEL,
-} = {}) => ((tokens, req, res) =>
-  JSON.stringify({
+} = {}) => (tokens, req, res) => {
+  let message = {
     level: logLevel,
     method: tokens['method'](req, res),
     url: tokens['url'](req, res),
     status: tokens['status'](req, res),
     contentLength: tokens['res'](req, res, 'content-length'),
     responseTimeMs: tokens['response-time'](req, res),
-    traceId: tokens['trace-id'](req, res),
-    spanId: tokens['span-id'](req, res),
-    parentSpanId: tokens['parent-span-id'](req, res),
-    sampled: tokens['sampled'](req, res),
     httpVersion: tokens['http-version'](req, res),
     referrer: tokens['referrer'](req, res),
     remoteHostname: req['hostname'],
@@ -109,4 +115,9 @@ serverLoggingMiddleware.getFormatter = ({
     serverHostname: tokens['hostname'](req, res),
     time: tokens['date'](req, res, 'iso'),
     userAgent: tokens['user-agent'](req, res),
-  }));
+  };
+  additionalTokenizers.forEach(({id}) => {
+    message[Case.camel(id)] = tokens[id](req, res);
+  });
+  return JSON.stringify(message);
+};

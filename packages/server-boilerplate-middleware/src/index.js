@@ -1,11 +1,12 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import * as tracer from '@mcf/tracer';
+import {expressMiddleware} from 'zipkin-instrumentation-express';
 import serializer from './serializer';
 import security from './security';
 import compression from './compression';
 import observability from './observability';
 import logging from './logging';
-
 
 module.exports = createServer;
 
@@ -51,14 +52,9 @@ module.exports = createServer;
  * @param {String} serverLogging.logLevel
  * @param {String} serverLogging.logStream
  * @param {String} serverLogging.hostnameType
- * @param {Object} [tracing={}]
- * @param {String} tracing.httpHeaders
- * @param {String} tracing.localServiceName
- * @param {String} tracing.sampleRate
- * @param {String} tracing.syncIntervalMs
- * @param {String} tracing.serverHost
- * @param {String} tracing.serverPort
- * @param {String} tracing.serverProtocol
+ * @param {Object} tracing
+ * @param {zipkin.ExplicitContext} tracing.context
+ * @param {zipkin.Tracer} tracing.tracer
  *
  * @return {express.Application}
  */
@@ -81,14 +77,21 @@ export function createServer({
 } = {}) {
   const server = express();
   if (enableTracing) {
-    const tracingInstance = observability.tracing.createTracer(tracing);
-    server.use(tracingInstance.getMiddleware());
-    const requestInstance = observability.request.createRequest({
-      tracer: tracingInstance.getTracer(),
-    });
-    server.getTracer = () => tracingInstance.getTracer();
-    server.getContext = () => tracingInstance.getContext();
-    server.getRequest = () => requestInstance;
+    if (!tracing.tracer || !tracing.context) {
+      console.warn(
+        ':enableTracing was set to true but no :tracer or :context was ' +
+          'passed into the :tracing option. Tracing is disabled.'
+      );
+    } else {
+      const tracerInstance = tracing.tracer;
+      const tracerContext = tracing.context;
+      server.use(expressMiddleware({tracer: tracerInstance}));
+      server.use(tracer.getContextProviderMiddleware({context: tracerContext}));
+      serverLogging.additionalTokenizers =
+        serverLogging.additionalTokenizers || [];
+      serverLogging.additionalTokenizers =
+        serverLogging.additionalTokenizers.concat(tracer.getMorganTokenizers());
+    }
   }
   if (enableCookieParser) {
     server.use(cookieParser());
@@ -109,10 +112,9 @@ export function createServer({
     server.use(security.crossOriginResourceSharing(crossOriginResourceSharing));
   }
   if (enableMetricsCollection) {
-    const metricsEndpoint =
-      metricsCollection.metricsEndpoint ?
-        metricsCollection.metricsEndpoint
-        : observability.metrics.constant.defaultMetricsEndpoint;
+    const metricsEndpoint = metricsCollection.metricsEndpoint
+      ? metricsCollection.metricsEndpoint
+      : observability.metrics.constant.defaultMetricsEndpoint;
     server.use(observability.metrics(metricsCollection));
     server.use(
       metricsEndpoint,

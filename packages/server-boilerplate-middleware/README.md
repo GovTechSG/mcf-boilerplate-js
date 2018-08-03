@@ -40,39 +40,10 @@ server.[...expressMethods];
 ```
 
 ### API
-The returned server is an Express server with the following additional APIs:
-
-#### `.getRequest()`
-Returns a Zipkin instrumented request object based on [`node-fetch`](https://www.npmjs.com/package/node-fetch) for retrieving data from other Zipkin-enabled services.
-
-```js
-const request = server.getRequest();
-```
-
-The returned function signature is:
-
-```js
-function getRequest(:url, :options)
-```
-
-The possible keys/values in `:options` can be found in [`node-fetch`'s documentation](https://github.com/bitinn/node-fetch#options).
-
-To specify the remote service's ID, use a property named `remoteServiceName` in the `:options` object. Example:
-
-```js
-request('http://google.com', {
-  remoteServiceName: 'google',
-}).then(/* ... */);
-```
-
-#### `.getTracer()`
-Returns the tracer instance used to initialise Zipkin.
-
-#### `.getContext()`
-Returns the context used in the tracer that was used to initialise Zipkin.
+The returned server is an Express server with the following additional APIs.
 
 ### Options
-Options are passed into the constructor function:
+Options are passed into the constructor function to create the server
 
 ```js
 const serverBoilerplate = require('@mcf/server-boilerplate-middleware');
@@ -125,6 +96,8 @@ const server = serverBoilerplate({
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableTracing: true})` |
+
+> If the `:tracing` option parameter is not configured with a `:context` and `:tracer`, tracing will still remain disabled.
 
 #### `compressionOptions` : `Object`
 > This configuration is only relevant if the `enableCompression` parameter was not set to `false`
@@ -232,13 +205,15 @@ The above configuration produces the following CSP:
 
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
-| logLevel | String | Determines the `level` property in the logs | `"access"` |
-| logStream | String | Specifies a stream to use instead of the default `console`. For example, use this to link Morgan up with Winston | `null` |
-| hostnameType | String | If set to `"os"`, the `os.hostname()` will be used. For all other values, `process.env[hostnameType]` is used. | `"os"`
+| `additionalTokenizers` | Array of Tokenizers | Additional tokenizers with the schema `{id: string, fn: (req: Request, res: Response) => any}` | `[]` |
+| `logLevel` | String | Determines the `level` property in the logs | `"access"` |
+| `logStream` | String | Specifies a stream to use instead of the default `console`. For example, use this to link Morgan up with Winston | `null` |
+| `hostnameType` | String | If set to `"os"`, the `os.hostname()` will be used. For all other values, `process.env[hostnameType]` is used. | `"os"`
 
 > Defaults to:
 > ```js
 > {
+>   additionalTokenizers: [],
 >   logLevel: 'access',
 >   logStream: null,
 >   hostnameType: 'os',
@@ -250,24 +225,14 @@ The above configuration produces the following CSP:
 
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
-| `httpHeaders` | Object | HTTP headers to send along to Zipkin | `{}` |
-| `localServiceName` | String | Local service identifier | `os.hostname() || process.env.HOSTNAME || 'unknown'` |
-| `sampleRate` | Float | Percentage of requests to be sampled | `0.5` |
-| `syncIntervalMs` | Number | Synchronisation interval | `1000` |
-| `serverHost` | String | The hostname of the Zipkin server | `null` |
-| `serverPort` | String | The port of the Zipkin server | `null` |
-| `serverProtocol` | String | The protocol of the Zipkin server | `"http"` |
+| `tracer` | `zipkin.Tracer` | The Zipkin Tracer instance to use | `undefined` |
+| `context` | `zipkin.ExplicitContext | `undefined` |
 
 > Defaults to:
 > ```js
 > {
->   httpHEaders: {},
->   localServiceName: os.hostname() || process.env.HOSTNAME || 'unknown',
->   sampleRate: 0.5,
->   syncIntervalMs: 1000,
->   serverHost: null,
->   serverPort: null,
->   serverProtocol: 'http',
+>   tracer: undefined,
+>   context: undefined,
 > }
 > ```
 
