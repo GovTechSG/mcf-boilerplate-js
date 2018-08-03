@@ -49,6 +49,7 @@ module.exports = createServer;
  * @param {String} metricsCollection.pushgatewayTimeout
  * @param {String} metricsCollection.pushgatewayUrl
  * @param {Object} [serverLogging={}]
+ * @param {Array<Function>} serverLogging.additionalTokenizers
  * @param {String} serverLogging.logLevel
  * @param {String} serverLogging.logStream
  * @param {String} serverLogging.hostnameType

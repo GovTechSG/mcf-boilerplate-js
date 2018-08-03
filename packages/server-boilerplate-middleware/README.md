@@ -298,6 +298,10 @@ curl "http://localhost:22222/proxy";
 ```
 
 ## ChangeLog
+### 0.8.x
+#### 0.8.1
+- changed configuration signature for tracing
+
 ### 0.7.x
 #### 0.7.0
 - added distributed tracing capabilities
