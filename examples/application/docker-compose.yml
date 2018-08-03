@@ -6,9 +6,9 @@ services:
     entrypoint: ["npm", "start"]
     environment:
       - PORT=8084
-      - SVC_ID=app_a
-      - SVC_TWO_ID=app_b
-      - SVC_TWO_URL=http://app_b:8085
+      - SVC_NAME=app_a
+      - SVC_OTHER_NAME=app_b
+      - SVC_OTHER_URL=http://app_b:8085
       - ZIPKIN_HOST=zipkin
       - ZIPKIN_PORT=9411
       - FLUENTD_HOST=fluentd
@@ -26,9 +26,9 @@ services:
     entrypoint: ["npm", "start"]
     environment:
       - PORT=8085
-      - SVC_ID=app_b
-      - SVC_TWO_ID=app_a
-      - SVC_TWO_URL=http://app_a:8084
+      - SVC_NAME=app_b
+      - SVC_OTHER_NAME=app_a
+      - SVC_OTHER_URL=http://app_a:8084
       - ZIPKIN_HOST=zipkin
       - ZIPKIN_PORT=9411
       - FLUENTD_HOST=fluentd

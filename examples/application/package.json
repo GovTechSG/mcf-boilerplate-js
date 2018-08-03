@@ -4,21 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon --exec babel-node --presets=@babel/env index.js",
     "start:watch": "npm run prestart; nodemon index.js; npm run poststart",
     "prestart:dev": "docker-compose up -d",
-    "start:dev": "nodemon index.js",
+    "start:dev": "nodemon --exec babel-node --presets=@babel/env index.js",
     "poststart:dev": "docker-compose down"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mcf/logger": "^0.3.0",
+    "@mcf/logger": "^0.4.0",
     "@mcf/provision-process": "^0.2.0",
-    "@mcf/server-boilerplate-middleware": "^0.7.0"
+    "@mcf/request": "^1.0.1",
+    "@mcf/server-boilerplate-middleware": "^0.8.1",
+    "@mcf/tracer": "0.0.5",
+    "convict": "^4.3.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.55",
+    "@babel/node": "^7.0.0-beta.55",
+    "@babel/preset-env": "^7.0.0-beta.55",
     "nodemon": "^1.18.3"
   }
 }
