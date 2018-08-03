@@ -119,13 +119,12 @@ export function getMorganTokenizers(): IMorganTokenizer[] {
 export function getWinstonFormat({
   context,
 }: IGetWinstonFormatParameters): IExtendedWinstonTransformFunction {
-  const {currentCtx} = context;
   return (info) => ({
     ...info,
-    parentSpanId: currentCtx ? currentCtx.parentId : null,
-    sampled: currentCtx ? currentCtx.sampled : null,
-    spanId: currentCtx ? currentCtx.spanId : null,
-    traceId: currentCtx ? currentCtx.traceId : null,
+    parentSpanId: context.currentCtx ? context.currentCtx.parentId : null,
+    sampled: context.currentCtx ? context.currentCtx.sampled : null,
+    spanId: context.currentCtx ? context.currentCtx.spanId : null,
+    traceId: context.currentCtx ? context.currentCtx.traceId : null,
   });
 }
 
