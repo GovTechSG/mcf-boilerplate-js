@@ -26,7 +26,7 @@ const defaultLevels = {
 };
 // tslint:enable object-literal-sort-keys
 const defaultLevel: LogLevelType = 'silly';
-const defaultTransporters: Transport[] = [createConsoleTransport()];
+const defaultTransports: Transport[] = [createConsoleTransport()];
 const defaultAdditionalTransports: Transport[] = [];
 
 export type LogLevelType = keyof typeof defaultLevels;
@@ -42,7 +42,7 @@ export interface IApplicationLogger extends winston.Logger {
 function createLogger({
   formatters = [],
   level = defaultLevel,
-  transports = defaultTransporters,
+  transports = defaultTransports,
   additionalTransports = defaultAdditionalTransports,
 }: ILoggerOptions = {}): IApplicationLogger {
   const logger = winston.createLogger({
