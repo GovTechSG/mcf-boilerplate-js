@@ -7,4 +7,7 @@ extends:
 rules:
   no-submodule-imports: false
   no-implicit-dependencies: false
+  ordered-imports:
+    - true
+    - import-sources-order: "any"
   prettier: true
