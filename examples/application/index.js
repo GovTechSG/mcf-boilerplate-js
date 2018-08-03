@@ -1,7 +1,7 @@
 import convict from 'convict';
 import {createFluentTransport, createLogger} from '@mcf/logger';
 import createServer from '@mcf/server-boilerplate-middleware';
-import {createTracer} from '@mcf/tracer';
+import {createTracer, getWinstonFormat} from '@mcf/tracer';
 import {createRequest} from '@mcf/request';
 
 const config = convict({
@@ -49,25 +49,13 @@ export const tracer = createTracer({
 export const context = tracer.getContext();
 
 export const logger = createLogger({
-  formatters: [
-    (info) => {
-      return {
-        ...info,
-        context: {
-          spanId: context.currentCtx.spanId,
-          traceId: context.currentCtx.traceId,
-          parentId: context.currentCtx.parentId,
-          sampled: context.currentCtx.sampled,
-        },
-      };
-    },
-  ],
+  formatters: [getWinstonFormat({context})],
   level: 0,
   transports: [
     createFluentTransport({
       host: config.get('fluentHost'),
       port: config.get('fluentPort'),
-    })
+    }),
   ],
 });
 
@@ -88,7 +76,7 @@ server.get('/other', (req, res) => {
     .then((otherResponseBody) => {
       res.json(otherResponseBody);
     });
-})
+});
 
 server.get('/context', (req, res) => {
   logger.info('returning from /context');
