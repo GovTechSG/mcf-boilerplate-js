@@ -14,11 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mcf/logger": "^0.4.0",
+    "@mcf/logger": "^0.4.5",
     "@mcf/provision-process": "^0.2.0",
     "@mcf/request": "^1.0.1",
-    "@mcf/server-boilerplate-middleware": "^0.8.1",
-    "@mcf/tracer": "0.0.6",
+    "@mcf/server-boilerplate-middleware": "^0.8.4",
+    "@mcf/tracer": "0.0.8",
     "convict": "^4.3.2"
   },
   "devDependencies": {

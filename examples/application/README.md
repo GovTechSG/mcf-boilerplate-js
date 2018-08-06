@@ -15,6 +15,12 @@ curl "http://localhost:8084/trace/other"
 
 This will utilise the packaged `request` module to send a request to a second server. All logs will be sent to the FluentD service, so check that out to see the centralised logs together with the B3 propagation headers required for distributed tracing.
 
-You could also check out the Zipkin service at http://localhost:9411 to see the traces which were recorded.
+The following services are made available while this example is running:
+
+| Service | URL |
+| --- | --- |
+| Kibana | [http://localhost:5601](http://localhost:5601) |
+| Prometheus | [http://localhost:9090](http://localhost:9090) |
+| Zipkin | [http://localhost:9411](http://localhost:9411) |
 
 # Cheers

@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 3s
+  scrape_timeout: 3s
+  evaluation_interval: 5s
+alerting:
+scrape_configs:
+- job_name: Application A
+  static_configs:
+  - targets:
+    - app_a:8084
+- job_name: Application B
+  static_configs:
+  - targets:
+    - app_b:8085
+- job_name: Grafana Dashboard
+  static_configs:
+  - targets:
+    - grafana:3000
+- job_name: Distributed Tracing
+  metrics_path: /prometheus
+  static_configs:
+  - targets:
+    - zipkin:9411
