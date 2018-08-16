@@ -1,4 +1,4 @@
-import {TransformFunction} from 'logform';
+import {TransformableInfo, TransformFunction} from 'logform';
 import winston from 'winston';
 import * as Transport from 'winston-transport';
 import {createMorganStream} from './streams';
@@ -29,9 +29,13 @@ const defaultLevel: LogLevelType = 'silly';
 const defaultTransports: Transport[] = [createConsoleTransport()];
 const defaultAdditionalTransports: Transport[] = [];
 
-export interface IExtendedTransformFunction extends TransformFunction {
+export interface IExtendedTransformableInfo extends TransformableInfo {
   [key: string]: any;
 }
+
+export type IExtendedTransformFunction = (
+  info: TransformableInfo,
+) => IExtendedTransformableInfo;
 
 export type LogLevelType = keyof typeof defaultLevels;
 export interface ILoggerOptions {
@@ -53,7 +57,9 @@ function createLogger({
   const logger = winston.createLogger({
     exitOnError: false,
     format: combine(
-      ...formatters.map(winston.format).map((fn) => fn()), // need the second call to unwrap the formatter
+      ...formatters
+        .map((formatter) => winston.format(formatter))
+        .map((fn) => fn()), // need the second call to unwrap the formatter
       timestamp(),
       json(),
     ),

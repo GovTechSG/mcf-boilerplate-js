@@ -192,7 +192,15 @@ export interface IExpressHandlerWithContext extends express.RequestHandler {
   ): void;
 }
 
-export type IExtendedWinstonTransformFunction = (info) => object;
+export interface IExtendedWinstonTransformableInfo {
+  level: string;
+  message: string;
+  [key: string]: any;
+}
+
+export type IExtendedWinstonTransformFunction = (
+  info: IExtendedWinstonTransformableInfo,
+) => IExtendedWinstonTransformableInfo;
 
 export interface IExtendedExplicitContext extends ExplicitContext {
   currentCtx: IContextShape;
