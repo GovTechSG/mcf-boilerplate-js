@@ -29,9 +29,13 @@ const defaultLevel: LogLevelType = 'silly';
 const defaultTransports: Transport[] = [createConsoleTransport()];
 const defaultAdditionalTransports: Transport[] = [];
 
+export interface IExtendedTransformFunction extends TransformFunction {
+  [key: string]: any;
+}
+
 export type LogLevelType = keyof typeof defaultLevels;
 export interface ILoggerOptions {
-  formatters?: TransformFunction[];
+  formatters?: IExtendedTransformFunction[];
   level?: LogLevelType;
   transports?: Transport[];
   additionalTransports?: Transport[];
@@ -39,6 +43,7 @@ export interface ILoggerOptions {
 export interface IApplicationLogger extends winston.Logger {
   getStream: (level: LogLevelType) => {write: any};
 }
+
 function createLogger({
   formatters = [],
   level = defaultLevel,
