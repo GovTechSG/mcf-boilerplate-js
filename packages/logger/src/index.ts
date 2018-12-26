@@ -90,7 +90,7 @@ function createLogger({
 
   // for any reason spread operator complain :)
   // tslint:disable-next-line prefer-object-spread
-  return Object.assign({}, logger, {
+  return Object.assign(logger, {
     getStream: (httpLogLevel: LogLevelType) => ({
       // @ts-ignore
       write: (...args: any[]) => this.logger[httpLogLevel](...args),
