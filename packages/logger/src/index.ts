@@ -72,15 +72,15 @@ function createLogger({
   const logger = winston.createLogger({
     exitOnError: false,
     format: combine(
-      process.env.NODE_ENV === 'production' // add colors for development
-        ? winston.format(identity)()
-        : colorize(),
+      process.env.NODE_ENV === 'development' // add colors for development
+        ? colorize()
+        : winston.format(identity)(),
       ...formatters
         .map((formatter) => winston.format(formatter))
         .map((fn) => fn()), // need the second call to unwrap the formatter
       label({label: namespace}),
       timestamp(),
-      process.env.NODE_ENV === 'production' ? json() : mcfDevelopmentFormat,
+      process.env.NODE_ENV === 'development' ? mcfDevelopmentFormat : json(),
     ),
     level,
     levels: defaultLevels,
