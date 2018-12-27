@@ -2,16 +2,21 @@ import {TransformableInfo} from 'logform';
 import winston from 'winston';
 import * as Transport from 'winston-transport';
 import {createMorganStream} from './streams';
-import {createConsoleTransport, createFluentTransport} from './transports';
+import {
+  createConsoleTransport,
+  createFileTransport,
+  createFluentTransport,
+} from './transports';
 
 export {
   createLogger,
+  createFileTransport,
   createFluentTransport,
   createConsoleTransport,
   createMorganStream,
 };
 
-const {combine, timestamp, json, colorize, printf, label} = winston.format;
+const {label, combine, timestamp} = winston.format;
 
 // tslint:disable object-literal-sort-keys
 // using value order rather than key order makes more sense
@@ -50,37 +55,22 @@ export interface IApplicationLogger extends winston.Logger {
   getStream: (level: LogLevelType) => {write: any};
 }
 
-const magenta = (str: string) => `\u001b[35m${str}\u001b[39m`;
-const identity = (i) => i;
-const mcfDevelopmentFormat = printf(
-  (info) =>
-    `[${magenta(info.label)}] ${info.timestamp} ${info.level}: ${
-      typeof info.message === 'string'
-        ? info.message
-        : JSON.stringify(info.message)
-    }`,
-);
-
 function createLogger({
   formatters = [],
   level = defaultLevel,
   transports = defaultTransports,
   additionalTransports = defaultAdditionalTransports,
-  namespace = '',
+  namespace = 'give-me-a-name',
   silent = false,
 }: ILoggerOptions = {}): IApplicationLogger {
   const logger = winston.createLogger({
     exitOnError: false,
     format: combine(
-      process.env.NODE_ENV === 'development' // add colors for development
-        ? colorize()
-        : winston.format(identity)(),
+      timestamp(),
+      label({label: namespace}),
       ...formatters
         .map((formatter) => winston.format(formatter))
         .map((fn) => fn()), // need the second call to unwrap the formatter
-      label({label: namespace}),
-      timestamp(),
-      process.env.NODE_ENV === 'development' ? mcfDevelopmentFormat : json(),
     ),
     level,
     levels: defaultLevels,

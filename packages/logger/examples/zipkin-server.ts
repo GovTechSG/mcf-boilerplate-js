@@ -5,7 +5,7 @@ import zipkinMiddleware from 'zipkin-instrumentation-express';
 import {createLogger} from '../dist';
 const server = boilerplate();
 const logger = createLogger({
-  logFormatters: [
+  formatters: [
     (info) => {
       return {
         ...info,
@@ -14,7 +14,7 @@ const logger = createLogger({
       };
     },
   ],
-  logLevel: 'silly',
+  level: 'silly',
 });
 
 const ctxImpl = new zipkin.ExplicitContext();

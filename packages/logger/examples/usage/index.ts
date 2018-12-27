@@ -1,8 +1,7 @@
-import crypto from 'crypto';
-import {createConsoleTransport, createFluentTransport, createLogger} from '../../dist';
+import {createFluentTransport, createLogger} from '../../dist';
 
 // basic usage
-const basicLogger = createLogger();
+const basicLogger = createLogger({namespace: 'basic-console-logger'});
 basicLogger.silly('a silly hi');
 basicLogger.debug('a debug hi');
 basicLogger.http('a http hi');
@@ -13,6 +12,7 @@ basicLogger.error('a error hi');
 // fluentd usage
 // demonstrates a plaintext logger
 const fluentLogger1 = createLogger({
+  namespace: 'open-fluentd-logger',
   transports: [
     createFluentTransport({
       host: 'localhost',
@@ -23,22 +23,19 @@ const fluentLogger1 = createLogger({
     }),
   ],
 });
-function encrypt(text: string, password: string): string {
-  const cipher = crypto.createCipher('aes-256-ccm', password);
-  let crypted = cipher.update(text, 'utf8', 'hex');
-  crypted += cipher.final('hex');
-  return crypted;
-}
 // demonstrates an encrypted logger
 const fluentLogger2 = createLogger({
   formatters: [
     (info) => {
       return {
         ...info,
-        message: `enc.${encrypt(info.message, 'supersecretstuff')}`,
+        message: `${info.message.substr(0, 4)}${'*'.repeat(
+          info.message.length - 4,
+        )}`,
       };
     },
   ],
+  namespace: 'secret-fluentd-logger',
   transports: [
     createFluentTransport({
       host: 'localhost',

@@ -1,5 +1,5 @@
 import {createLogger} from '../dist';
-const logger = createLogger({logLevel: 'silly'});
+const logger = createLogger({level: 'silly', namespace: 'basic-logger'});
 
 logger.silly('[SILLY] - this is a .silly log');
 logger.debug('[DEBUG] - this is a .debug log');

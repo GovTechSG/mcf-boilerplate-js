@@ -9,6 +9,7 @@ Exposes a logger based on Winston. It includes formats and plugins for integrati
 - [x] Allows for formatter extensions
 - [x] Allows for transport extensions
 - [x] Console transport creator
+- [x] File transport creator
 - [x] FluentD transport creator
 - [x] Fluent transport security configuration
 - [x] Fluent transport ID tagger
@@ -97,6 +98,7 @@ The library exposes the following methods:
 | `.createLogger` | Creates the logger object which can be used |
 | `.createFluentTransport` | Creates a FluentD compatible transport |
 | `.createConsoleTransport` | Creates a Console transport |
+| `.createFileTransport` | Creates a File transport |
 | `.createMorganStream` | Creates an object consumable by Morgan |
 
 ### `.createLogger(:options)`
@@ -104,10 +106,12 @@ This function accepts a configuration object as the parameter where the keys are
 
 | Key | Description | Default |
 | --- | --- | --- |
+| `additionalTransports` | Winston transports to be added on (no overriding of the default Console transport) | `[]` |
 | `formatters` | Winston formatters created via `winston.format(...)()` | `[]` |
 | `level` | Default level (`ENUM { "error", "warn", "info", "http", "debug", "silly" }`) | `"silly"` |
+| `namespace` | Give a name to your logger) | `give-me-a-name` |
+| `silent` | Set to true to turn off logging | `false` |
 | `transports` | Winston transports | `[winston.transports.Console()]` |
-| `additionalTransports` | Winston transports to be added on (no overriding of the default Console transport) | `[]` |
 
 ### `.createFluentTransport(:options)`
 This function accepts a configuration object as the parameter where the keys are documented as follows:
@@ -125,8 +129,22 @@ This function accepts a configuration object as the parameter where the keys are
 
 This is referenced from [the `fluent-logger` library](https://github.com/fluent/fluent-logger-node).
 
-### `.createConsoleTransport()`
-This function returns a Console transporter and takes no parameters.
+### `.createConsoleTransport(:options)`
+This function accepts a configuration object as the parameter where the keys are documented as follows:
+
+
+| Key | Description | Default |
+| --- | --- | --- |
+| `format` | Winston formatters created via `winston.format(...)()` | Combination of `colorize` and custom `printf` displaying `namespace`, `timestamp`, `level` and `message` |
+
+### `.createFileTransport(:options)`
+This function accepts a configuration object as the parameter where the keys are documented as follows:
+
+
+| Key | Description | Default |
+| --- | --- | --- |
+| `format` | Winston formatters created via `winston.format(...)()` | Custom `printf` displaying `namespace`, `timestamp`, `level` and `message` |
+| `filename` | Filename to output | undefined |
 
 ### `.createMorganStream(:options)`
 This function returns an object that can be used by Morgan to specify a write stream.
@@ -148,19 +166,19 @@ yarn;
 To run the `usage` example, set up FluentD first:
 
 ```bash
-npm run svc:fluent;
+yarn svc:fluent;
 ```
 
 In another terminal, run the usage application which will pipe to the FluentD instance:
 
 ```bash
-npm run demo-usage;
+yarn demo-usage;
 ```
 
 To stop FluentD, run:
 
 ```bash
-npm run svc:fluent:stop;
+yarn svc:fluent:stop;
 ```
 
 ## Changelog
