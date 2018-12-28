@@ -29,6 +29,7 @@ const fluentLogger2 = createLogger({
     (info) => {
       return {
         ...info,
+        // please replace by a real encryption for production usage
         message: `${info.message.substr(0, 4)}${'*'.repeat(
           info.message.length - 4,
         )}`,
