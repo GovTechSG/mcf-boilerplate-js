@@ -5,6 +5,8 @@ import morgan from 'morgan';
 const DEFAULT_LOG_STREAM = null;
 const DEFAULT_HOSTNAME_TYPE = 'os';
 
+module.exports = serverLoggingMiddleware;
+
 /**
  * @param {Object} options
  * @param {String} options.logStream
