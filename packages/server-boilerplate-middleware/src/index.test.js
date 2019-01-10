@@ -128,7 +128,7 @@ describe('createServer()', () => {
     };
 
     const expectedContentSecurityPolicy =
-      'child-src \'self\'; connect-src \'self\'; default-src http://mydomain.com \'self\'; font-src \'none\'; img-src data: \'self\'; script-src \'self\'; style-src \'self\'; report-uri /my-csp-report-uri';
+      'child-src \'self\'; connect-src \'self\'; default-src http://mydomain.com \'self\'; font-src \'none\'; img-src data: \'self\'; script-src \'self\'; style-src \'self\'; report-uri /my-csp-report-uri'; // eslint-disable-line max-len
 
     before(() => {
       require('./security').contentSecurityPolicy.instance = null;

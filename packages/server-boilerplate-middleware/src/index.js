@@ -139,7 +139,7 @@ export function createServer({
         {
           additionalTokenizers: serverLogging.additionalTokenizers,
           hostnameType: serverLogging.hostnameType,
-          logStream: createMorganStream({logger})
+          logStream: createMorganStream({logger}),
         }
       )
     );
