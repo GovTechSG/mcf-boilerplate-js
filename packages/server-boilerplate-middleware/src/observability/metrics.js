@@ -1,4 +1,5 @@
 import prometheusBundle from 'express-prom-bundle';
+import {logger} from '../logger';
 
 const DEFAULT_LIVENESS_CHECK_ENDPOINT = '/healthz';
 const DEFAULT_READINESS_CHECK_ENDPOINT = '/readyz';
@@ -127,12 +128,12 @@ function createPushgatewayHandler({
     (function metricsPush() {
       pushgateway.push({
         jobName: pushgatewayJobName,
-      }, (err, resp, body) => {
+      }, (err) => {
         if (err) {
-          console.error(
+          logger.error(
             `metrics push to ${pushgatewayUrl} not ok. error follows:`
           );
-          console.error(err);
+          logger.error(err);
         }
       });
       clearTimeout(createPushgatewayHandler.timeout);
