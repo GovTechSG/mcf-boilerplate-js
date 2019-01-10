@@ -31,7 +31,6 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "@mcf/server-boilerplate-middleware": "^0.8.5",
     "@types/chai": "4.1.4",
     "@types/logform": "1.2.0",
     "@types/mocha": "5.2.5",
