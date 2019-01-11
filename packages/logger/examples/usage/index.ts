@@ -9,6 +9,10 @@ basicLogger.info('a info hi');
 basicLogger.warn('a warn hi');
 basicLogger.error('a error hi');
 
+// child logger
+const childLogger = basicLogger.child({namespace: 'child-logger'});
+childLogger.info('a silly hi');
+
 // fluentd usage
 // demonstrates a plaintext logger
 const fluentLogger1 = createLogger({

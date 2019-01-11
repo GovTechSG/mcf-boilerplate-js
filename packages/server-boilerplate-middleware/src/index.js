@@ -7,6 +7,8 @@ import security from './security';
 import compression from './compression';
 import observability from './observability';
 import logging from './logging';
+import {buildLogger} from './logger';
+import {createMorganStream} from '@mcf/logger';
 
 module.exports = createServer;
 
@@ -51,7 +53,7 @@ module.exports = createServer;
  * @param {Object} [serverLogging={}]
  * @param {Array<Function>} serverLogging.additionalTokenizers
  * @param {String} serverLogging.logLevel
- * @param {String} serverLogging.logStream
+ * @param {Object} serverLogging.logger
  * @param {String} serverLogging.hostnameType
  * @param {Object} tracing
  * @param {zipkin.ExplicitContext} tracing.context
@@ -76,10 +78,11 @@ export function createServer({
   serverLogging = {},
   tracing = {},
 } = {}) {
+  const logger = buildLogger(serverLogging.logger);
   const server = express();
   if (enableTracing) {
     if (!tracing.tracer || !tracing.context) {
-      console.warn(
+      logger.warn(
         ':enableTracing was set to true but no :tracer or :context was ' +
           'passed into the :tracing option. Tracing is disabled.'
       );
@@ -95,24 +98,31 @@ export function createServer({
     }
   }
   if (enableCookieParser) {
+    logger.silly('enable cookie parser');
     server.use(cookieParser());
   }
   if (enableSerializer) {
+    logger.silly('enable serializer');
     server.use(serializer());
   }
   if (enableHttpHeadersSecurity) {
+    logger.silly('enable http headers security');
     server.use(security.httpHeaders());
   }
   if (enableContentSecurityPolicy) {
+    logger.silly('enable content security policy');
     server.use(security.contentSecurityPolicy(contentSecurityPolicy));
   }
   if (enableCompression) {
+    logger.silly('enable compression');
     server.use(compression(compressionOptions));
   }
   if (enableCORS) {
+    logger.silly('enable CORS');
     server.use(security.crossOriginResourceSharing(crossOriginResourceSharing));
   }
   if (enableMetricsCollection) {
+    logger.silly('enable metrics collection');
     const metricsEndpoint = metricsCollection.metricsEndpoint
       ? metricsCollection.metricsEndpoint
       : observability.metrics.constant.defaultMetricsEndpoint;
@@ -123,7 +133,16 @@ export function createServer({
     );
   }
   if (enableServerLogging) {
-    server.use(logging.server(serverLogging));
+    logger.silly('enable server logging');
+    server.use(
+      logging.server(
+        {
+          additionalTokenizers: serverLogging.additionalTokenizers,
+          hostnameType: serverLogging.hostnameType,
+          logStream: createMorganStream({logger}),
+        }
+      )
+    );
   }
 
   return server;

@@ -20,7 +20,7 @@ export type MorganStreamCreator = (
 ) => IMorganStream;
 
 export function createMorganStream({
-  logLevel = 'silly',
+  logLevel = 'http',
   logger,
 }: IMorganStreamCreatorParameters): IMorganStream {
   if (!logger) {
@@ -31,11 +31,17 @@ export function createMorganStream({
     );
   }
   return {
-    write: (message: any) => {
+    write: (mes: string) => {
+      const message: any = JSON.parse(mes);
       try {
-        logger[logLevel](JSON.parse(message));
+        logger[logLevel](
+          `${message.method} ${message.url} ${message.status} ${
+            message.contentLength
+          } - ${message.responseTimeMs} ms`,
+          message,
+        );
       } catch (ex) {
-        logger[logLevel](message);
+        logger.error(ex.message, message);
       }
     },
   };

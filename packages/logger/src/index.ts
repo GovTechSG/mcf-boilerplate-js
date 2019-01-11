@@ -16,7 +16,7 @@ export {
   createMorganStream,
 };
 
-const {label, combine, timestamp} = winston.format;
+const {label, combine, timestamp, metadata} = winston.format;
 
 // tslint:disable object-literal-sort-keys
 // using value order rather than key order makes more sense
@@ -52,7 +52,7 @@ export interface ILoggerOptions {
   silent?: boolean;
 }
 export interface IApplicationLogger extends winston.Logger {
-  getStream: (level: LogLevelType) => {write: any};
+  child: (options: Partial<ILoggerOptions>) => IApplicationLogger;
 }
 
 function createLogger({
@@ -66,6 +66,7 @@ function createLogger({
   const logger = winston.createLogger({
     exitOnError: false,
     format: combine(
+      metadata({key: 'meta'}),
       timestamp(),
       label({label: namespace}),
       ...formatters
@@ -81,9 +82,15 @@ function createLogger({
   // for any reason spread operator complain :)
   // tslint:disable-next-line prefer-object-spread
   return Object.assign(logger, {
-    getStream: (httpLogLevel: LogLevelType) => ({
-      // @ts-ignore
-      write: (...args: any[]) => this.logger[httpLogLevel](...args),
-    }),
+    child: (options: Partial<ILoggerOptions>) =>
+      createLogger({
+        additionalTransports,
+        formatters,
+        level,
+        namespace,
+        silent,
+        transports,
+        ...options,
+      }),
   });
 }

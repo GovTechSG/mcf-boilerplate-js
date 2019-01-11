@@ -18,7 +18,6 @@ describe('logging/server', () => {
   });
 
   describe('constructor()', () => {
-    const logLevel = '_test_log_level';
     const hostnameType = '_test_hostname_type';
 
     let original = {};
@@ -52,7 +51,6 @@ describe('logging/server', () => {
 
       it('works as expected', () => {
         serverLoggingMiddleware({
-          logLevel,
           logStream,
           hostnameType,
         });
@@ -64,7 +62,6 @@ describe('logging/server', () => {
         expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
         expect(serverLoggingMiddleware.getFormatter).to.be.calledWith({
           additionalTokenizers: [],
-          logLevel,
         });
         expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
         expect(serverLoggingMiddleware.morgan).to.be.calledWith(undefined, {
@@ -76,7 +73,6 @@ describe('logging/server', () => {
     context(':logStream not specified', () => {
       it('works as expected', () => {
         serverLoggingMiddleware({
-          logLevel,
           hostnameType,
         });
         expect(serverLoggingMiddleware.provisionCustomTokens).to.be.calledOnce;
@@ -87,7 +83,6 @@ describe('logging/server', () => {
         expect(serverLoggingMiddleware.getFormatter).to.be.calledOnce;
         expect(serverLoggingMiddleware.getFormatter).to.be.calledWith({
           additionalTokenizers: [],
-          logLevel,
         });
         expect(serverLoggingMiddleware.morgan).to.be.calledOnce;
       });
@@ -229,7 +224,6 @@ describe('logging/server', () => {
       ).to.have.keys([
         'a',
         'b',
-        'level',
         'method',
         'url',
         'status',

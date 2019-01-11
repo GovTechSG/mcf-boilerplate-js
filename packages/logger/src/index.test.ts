@@ -94,6 +94,19 @@ describe('@mcf/logger', () => {
       expect(spy).to.have.been.calledWith(match.has('message', 'error'));
     });
   });
+  describe('child logger', () => {
+    it('should be able to create child logger with same options', () => {
+      const logger = createLogger({
+        level: 'error',
+        transports: [consoleLogger],
+      });
+      const childLogger = logger.child({});
+
+      log(childLogger);
+      expect(spy.callCount).to.equal(1);
+      expect(spy).to.have.been.calledWith(match.has('message', 'error'));
+    });
+  });
 });
 
 function log(logger: any) {

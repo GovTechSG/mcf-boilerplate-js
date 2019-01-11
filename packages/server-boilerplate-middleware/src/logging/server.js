@@ -1,8 +1,7 @@
-const Case = require('case');
-const os = require('os');
-const morgan = require('morgan');
+import Case from 'case';
+import os from 'os';
+import morgan from 'morgan';
 
-const DEFAULT_LOG_LEVEL = 'access';
 const DEFAULT_LOG_STREAM = null;
 const DEFAULT_HOSTNAME_TYPE = 'os';
 
@@ -10,15 +9,12 @@ module.exports = serverLoggingMiddleware;
 
 /**
  * @param {Object} options
- * @param {String} options.logLevel
  * @param {String} options.logStream
  * @param {String} options.hostnameType
- * @param {Object} options.tracer
  * @return {Function}
  */
 export default function serverLoggingMiddleware({
   additionalTokenizers = [],
-  logLevel = DEFAULT_LOG_LEVEL,
   logStream = DEFAULT_LOG_STREAM,
   hostnameType = DEFAULT_HOSTNAME_TYPE,
 } = {}) {
@@ -33,14 +29,12 @@ export default function serverLoggingMiddleware({
     ? serverLoggingMiddleware.morgan(
         serverLoggingMiddleware.getFormatter({
           additionalTokenizers,
-          logLevel,
         }),
         {stream: logStream}
       )
     : serverLoggingMiddleware.morgan(
         serverLoggingMiddleware.getFormatter({
           additionalTokenizers,
-          logLevel,
         })
       );
 }
@@ -59,12 +53,6 @@ serverLoggingMiddleware.morgan = morgan;
  * @param {Object} options
  * @param {Array<Object>} options.additionalTokenizers
  * @param {String} options.hostnameType
- * @param {Object} options.tracer
- * @param {Object} options.tracer.id
- * @param {String} options.tracer.id.traceId
- * @param {String} options.tracer.id.spanId
- * @param {String} options.tracer.id.parentId
- * @param {Symbol} options.tracer.id.sampled
  */
 serverLoggingMiddleware.provisionCustomTokens = (
   morganLogger,
@@ -93,16 +81,13 @@ serverLoggingMiddleware.provisionCustomTokens = (
  *
  * @param {Object} options
  * @param {Array<Object>} options.additionalTokenizers
- * @param {String} options.logLevel
  *
  * @return {Function}
  */
 serverLoggingMiddleware.getFormatter = ({
   additionalTokenizers = [],
-  logLevel = DEFAULT_LOG_LEVEL,
 } = {}) => (tokens, req, res) => {
   let message = {
-    level: logLevel,
     method: tokens['method'](req, res),
     url: tokens['url'](req, res),
     status: tokens['status'](req, res),

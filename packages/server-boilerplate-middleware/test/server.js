@@ -1,10 +1,10 @@
 const boilerplate = require('../dist');
+const {createLogger} = require('@mcf/logger');
 
+const logger = createLogger({namespace: 'application'});
 const server = boilerplate({
   serverLogging: {
-    logStream: {
-      write: (...args) => console.info.apply(null, [...args]),
-    },
+    logger,
   },
   tracing: {
     localServiceName: process.env.SVC_ID,
@@ -20,7 +20,7 @@ if (process.env.PROXY_PORT) {
       remoteServiceName: process.env.RSVC_ID,
     })
       .then((v) => v.json())
-      .then((response) => {
+      .then(() => {
         res.json('ok');
       });
   });
@@ -34,8 +34,8 @@ server.use('*', (req, res) => {
     timestamp: (new Date()).toISOString(),
   });
 });
-const serverInstance = server.listen(process.env.PORT);
+const serverInstance = server.listen(35349);
 serverInstance.on('listening', () => {
-  console.info(`Listening on:\n\thttp://localhost:${serverInstance.address().port}`);
-  console.info(`Proxying to :\n\t${proxyPath}`);
+  logger.info(`Listening on: http://localhost:${serverInstance.address().port}`);
+  logger.info(`Proxying to : ${proxyPath}`);
 });
