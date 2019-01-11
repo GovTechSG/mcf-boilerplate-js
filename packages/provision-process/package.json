@@ -1,6 +1,6 @@
 {
   "name": "@mcf/provision-process",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Provisions the process for a graceful termination.",
   "main": "dist/index.js",
   "scripts": {
