@@ -16,6 +16,11 @@ import {ILoggingMiddlewareOptions, loggingMiddleware} from './logging-middleware
 import {buildLogger} from './logger';
 import {createMorganStream, IApplicationLogger} from '@mcf/logger';
 
+interface ITracingOptions {
+  context?: any;
+  tracer?: any;
+}
+
 interface IMcfMiddlewareOptions {
   enableCORS?: boolean;
   enableCompression?: boolean;
@@ -31,7 +36,7 @@ interface IMcfMiddlewareOptions {
   corsOptions?: ICorsMiddlewareOptions;
   metricsOptions?: Partial<IMetricsMiddlewareOptions>;
   loggingOptions?: ILoggingMiddlewareOptions & {logger?: IApplicationLogger};
-  tracingOptions?: any; // TODO
+  tracingOptions?: ITracingOptions; // TODO
 }
 /**
  * Returns an Express compatible server

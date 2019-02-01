@@ -3,19 +3,21 @@ import {
   createConsoleTransport,
   createFluentTransport,
   createLogger,
-} from '@mcf/logger';
-import createServer from '@mcf/server-boilerplate-middleware';
-import {createTracer, getWinstonFormat} from '@mcf/tracer';
-import {createRequest} from '@mcf/request';
+  IApplicationLogger,
+} from '../../packages/logger/dist';
+import {createServer} from '../../packages/server-boilerplate-middleware/dist';
+import {createTracer, getWinstonFormat, IExpressRequestWithContext} from '../../packages/tracer/dist';
+import {createRequest} from '../../packages/request/dist';
+import {AddressInfo} from 'net';
 
 const config = convict({
-  serviceName: {
-    default: 'unknown',
-    env: 'SVC_NAME',
+  fluentHost: {
+    default: 'localhost',
+    env: 'FLUENTD_HOST',
   },
-  servicePort: {
-    default: '11111',
-    env: 'PORT',
+  fluentPort: {
+    default: '24224',
+    env: 'FLUENTD_PORT',
   },
   otherServiceName: {
     default: 'unknown2',
@@ -25,13 +27,13 @@ const config = convict({
     default: 'http://localhost',
     env: 'SVC_OTHER_URL',
   },
-  fluentHost: {
-    default: 'localhost',
-    env: 'FLUENTD_HOST',
+  serviceName: {
+    default: 'unknown',
+    env: 'SVC_NAME',
   },
-  fluentPort: {
-    default: '24224',
-    env: 'FLUENTD_PORT',
+  servicePort: {
+    default: '11111',
+    env: 'PORT',
   },
   zipkinHost: {
     default: 'localhost',
@@ -45,16 +47,16 @@ const config = convict({
 
 export const tracer = createTracer({
   localServiceName: config.get('serviceName'),
+  sampleRate: 1,
   serverHost: config.get('zipkinHost'),
   serverPort: config.get('zipkinPort'),
-  sampleRate: 1,
 });
 
 export const context = tracer.getContext();
 
-export const logger = createLogger({
+export const logger: IApplicationLogger = createLogger({
   formatters: [getWinstonFormat({context})],
-  level: 0,
+  level: 'silly',
   transports: [
     createConsoleTransport(),
     createFluentTransport({
@@ -67,24 +69,24 @@ export const logger = createLogger({
 export const request = createRequest({tracer: tracer.getTracer()});
 
 export const server = createServer({
-  tracing: {
-    tracer: tracer.getTracer(),
+  tracingOptions: {
     context: tracer.getContext(),
+    tracer: tracer.getTracer(),
   },
 });
 
-server.post('/csp-report', (req, res) => {
+server.post('/csp-report', (req: IExpressRequestWithContext, res) => {
   logger.info(req.body);
   res.json('ok');
 });
 
-server.get('/other/:iteration', (req, res) => {
-  const iteration = parseInt(req.params.iteration);
+server.get('/other/:iteration', (req: IExpressRequestWithContext, res) => {
+  if (req.context) {
+    logger.info(`Caller is ${req.context.traceId}`);
+  }
+  const iteration = parseInt(req.params.iteration, 10);
   logger.info(`iteration ${iteration}`);
-  const url =
-    config.get('otherServiceUrl') + (iteration > 0)
-      ? `/other/${iteration - 1}`
-      : '';
+  const url = config.get('otherServiceUrl') + (iteration > 0 ? `/other/${iteration - 1}` : '');
   logger.info(`sending request to ${url}`);
   request(url, {
     remoteServiceName: config.get('otherServiceName'),
@@ -95,7 +97,7 @@ server.get('/other/:iteration', (req, res) => {
     });
 });
 
-server.get('/other', (req, res) => {
+server.get('/other', (req: IExpressRequestWithContext, res) => {
   logger.info(`sending request to ${config.get('otherServiceUrl')}`);
   request(config.get('otherServiceUrl'), {
     remoteServiceName: config.get('otherServiceName'),
@@ -106,13 +108,15 @@ server.get('/other', (req, res) => {
     });
 });
 
-server.get('/context', (req, res) => {
+server.get('/context', (req: IExpressRequestWithContext, res) => {
   logger.info('returning from /context');
-  logger.info(req.context);
+  if (req.context) {
+    logger.info('Received context: ' + req.context.parentId);
+  }
   res.send(req.context);
 });
 
-server.get('/', (req, res) => {
+server.get('/', (req: IExpressRequestWithContext, res) => {
   logger.info(`called with headers: ${JSON.stringify(req.headers)}`);
   logger.info('returning from /');
   res.json(`hello from ${config.get('serviceName')}`);
@@ -121,6 +125,6 @@ server.get('/', (req, res) => {
 const instance = server.listen(config.get('servicePort'));
 
 instance.on('listening', () => {
-  const {port} = instance.address();
+  const {port} = instance.address() as AddressInfo;
   logger.info(`Listening on http://localhost:${port}`);
 });

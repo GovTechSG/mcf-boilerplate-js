@@ -96,16 +96,14 @@ export function getMorganTokenizers(): IMorganTokenizer[] {
  *    winston.format(getWinstonFormat({context}))(),
  *    winston.format.json()
  *  );
- *
- * @param {IGetWinstonFormatParameters} opts
  */
 export function getWinstonFormat({context}: IGetWinstonFormatParameters): IExtendedWinstonTransformFunction {
   return (info) => ({
     ...info,
-    parentSpanId: context.currentCtx ? context.currentCtx.parentId : null,
-    sampled: context.currentCtx ? context.currentCtx.sampled : null,
-    spanId: context.currentCtx ? context.currentCtx.spanId : null,
-    traceId: context.currentCtx ? context.currentCtx.traceId : null,
+    parentSpanId: context.getContext() ? context.getContext().parentId : null,
+    sampled: context.getContext() ? context.getContext().sampled : null,
+    spanId: context.getContext() ? context.getContext().spanId : null,
+    traceId: context.getContext() ? context.getContext().traceId : null,
   });
 }
 
@@ -179,12 +177,8 @@ export type IExtendedWinstonTransformFunction = (
   info: IExtendedWinstonTransformableInfo,
 ) => IExtendedWinstonTransformableInfo;
 
-export interface IExtendedExplicitContext extends ExplicitContext {
-  currentCtx: IContextShape;
-}
-
 export interface IGetWinstonFormatParameters {
-  context: IExtendedExplicitContext;
+  context: ExplicitContext;
 }
 
 export interface IMorganTokenizer {
