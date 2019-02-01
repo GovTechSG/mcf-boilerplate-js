@@ -4,11 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node --presets=@babel/env index.js",
-    "start:watch": "npm run prestart; nodemon index.js; npm run poststart",
-    "prestart:dev": "docker-compose up -d",
-    "start:dev": "nodemon --exec babel-node --presets=@babel/env index.js",
-    "poststart:dev": "docker-compose down"
+    "start": "node -r ts-node/register index.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,9 +18,7 @@
     "convict": "^4.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.55",
-    "@babel/node": "^7.0.0-beta.55",
-    "@babel/preset-env": "^7.0.0-beta.55",
-    "nodemon": "^1.18.3"
+    "ts-node": "8.0.2",
+    "typescript": "3.3.1"
   }
 }
