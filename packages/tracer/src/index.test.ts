@@ -3,14 +3,7 @@ import express from 'express';
 import * as superagent from 'superagent';
 import supertest from 'supertest';
 import {ExplicitContext} from 'zipkin';
-import {
-  createTracer,
-  getContextProviderMiddleware,
-  getMorganTokenizers,
-  IContextShape,
-  IExpressRequestWithContext,
-  ITracer,
-} from './';
+import {createTracer, getContextProviderMiddleware, getMorganTokenizers, IExpressRequestWithContext, ITracer} from './';
 
 const {expect} = chai;
 
@@ -20,7 +13,7 @@ describe('@mcf/tracer', () => {
   before(function() {
     this.timeout(30000);
     process.stdout.write('(waiting for zipkin...');
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       (function waitForZipkin() {
         superagent
           .get('http://localhost:9411')
@@ -81,12 +74,9 @@ describe('@mcf/tracer', () => {
     describe('.getExpressMiddleware()', () => {
       before(() => {
         server.use(tracer.getExpressMiddleware());
-        server.get(
-          '/_get_express_middleware',
-          (req: IExpressRequestWithContext, res: express.Response) => {
-            res.json({...req.context});
-          },
-        );
+        server.get('/_get_express_middleware', (req: IExpressRequestWithContext, res: express.Response) => {
+          res.json({...req.context});
+        });
       });
 
       it('adds a .context property to the request object', () =>
@@ -108,9 +98,7 @@ describe('@mcf/tracer', () => {
                 setTimeout(resolve.bind(null, traceId), 1000);
               }),
           )
-          .then((traceId) =>
-            superagent.get(`http://localhost:9411/api/v2/trace/${traceId}`),
-          )
+          .then((traceId) => superagent.get(`http://localhost:9411/api/v2/trace/${traceId}`))
           .catch((err) => {
             throw new Error("Zipkin didn't receive trace ID");
           }));

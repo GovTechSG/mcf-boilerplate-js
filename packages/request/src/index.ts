@@ -13,16 +13,12 @@ export interface ICreateRequestOptions extends fetch.RequestInit {
   remoteServiceName?: string;
 }
 
-export type IRequest = (
-  requestUrl: string,
-  options: ICreateRequestOptions,
-) => Promise<fetch.Response>;
+export type IRequest = (requestUrl: string, options: ICreateRequestOptions) => Promise<fetch.Response>;
 
 export function createRequest({tracer}: ICreateRequestParameters): IRequest {
   return (requestUrl, options) =>
     wrappedRequester({
-      remoteServiceName:
-        options.remoteServiceName || url.parse(requestUrl).hostname,
+      remoteServiceName: options.remoteServiceName || url.parse(requestUrl).hostname,
       tracer,
     })(requestUrl, options);
 }

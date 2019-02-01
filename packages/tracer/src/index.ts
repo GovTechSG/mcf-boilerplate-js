@@ -1,21 +1,11 @@
 import express from 'express';
 import os from 'os';
-import {
-  BatchRecorder,
-  ConsoleRecorder,
-  ExplicitContext,
-  jsonEncoder,
-  option,
-  Recorder,
-  sampler,
-  Tracer,
-} from 'zipkin';
+import {BatchRecorder, ConsoleRecorder, ExplicitContext, jsonEncoder, option, Recorder, sampler, Tracer} from 'zipkin';
 import {expressMiddleware} from 'zipkin-instrumentation-express';
 import {HttpLogger as ZipkinHttpTransport} from 'zipkin-transport-http';
 
 const DEFAULT_HTTP_HEADERS = {};
-const DEFAULT_LOCAL_SERVICE_NAME =
-  os.hostname() || process.env.HOSTNAME || 'unknown';
+const DEFAULT_LOCAL_SERVICE_NAME = os.hostname() || process.env.HOSTNAME || 'unknown';
 const DEFAULT_SAMPLE_RATE = 0.5;
 const DEFAULT_SYNC_INTERVAL_MS = 1000;
 const DEFAULT_SERVER_HOST = 'localhost';
@@ -53,10 +43,7 @@ export function createTracer({
     sampler: samplerInstance,
     traceId128Bit: true,
   });
-  const middleware = [
-    expressMiddleware({tracer}),
-    getContextProviderMiddleware({context}),
-  ].filter((v) => v);
+  const middleware = [expressMiddleware({tracer}), getContextProviderMiddleware({context})].filter((v) => v);
 
   return {
     getContext: () => context,
@@ -69,11 +56,7 @@ export function createTracer({
 export function getContextProviderMiddleware({
   context,
 }: IContextProviderMiddlewareParameters): IExpressHandlerWithContext {
-  return (
-    req: IExpressRequestWithContext,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
+  return (req: IExpressRequestWithContext, res: express.Response, next: express.NextFunction) => {
     const {spanId, parentId, traceId, sampled} = context.getContext();
     req.context = {spanId, parentId, traceId, sampled};
     next();
@@ -116,9 +99,7 @@ export function getMorganTokenizers(): IMorganTokenizer[] {
  *
  * @param {IGetWinstonFormatParameters} opts
  */
-export function getWinstonFormat({
-  context,
-}: IGetWinstonFormatParameters): IExtendedWinstonTransformFunction {
+export function getWinstonFormat({context}: IGetWinstonFormatParameters): IExtendedWinstonTransformFunction {
   return (info) => ({
     ...info,
     parentSpanId: context.currentCtx ? context.currentCtx.parentId : null,
@@ -185,11 +166,7 @@ export interface IExpressRequestWithContext extends express.Request {
 }
 
 export interface IExpressHandlerWithContext extends express.RequestHandler {
-  (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ): void;
+  (req: express.Request, res: express.Response, next: express.NextFunction): void;
 }
 
 export interface IExtendedWinstonTransformableInfo {
