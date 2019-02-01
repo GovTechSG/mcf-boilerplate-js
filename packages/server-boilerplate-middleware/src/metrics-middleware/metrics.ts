@@ -26,6 +26,7 @@ export interface IMetricsMiddlewareOptions {
 
 interface IMetricsMiddleware extends RequestHandler {
   metricsMiddleware: RequestHandler;
+  promClient: any;
 }
 
 /**

@@ -55,14 +55,11 @@ describe('metrics-middleware', () => {
       let mockPushgatewayServer;
 
       beforeEach(() => {
-        console.log('before each');
         mockPushgatewayServer = express();
       });
 
       it('works', (done) => {
-        console.log('gggggggggggggggggggggggggg');
         mockPushgatewayServer.put(pushgatewayMetricsEndpoint, (req, res) => {
-          console.log('received request');
           expect(req.params.jobName).to.equal(pushgatewayJobName);
           let data = '';
           req.on('data', (chunk) => (data += chunk.toString()));
@@ -74,14 +71,12 @@ describe('metrics-middleware', () => {
             done();
           });
         });
-        console.log('before listen', mockPushgatewayServer.listen, mockPushgatewayInterface);
         const mockInstance = mockPushgatewayServer.listen(
           null, // this assigns a random open port
           mockPushgatewayInterface,
         );
         mockInstance.on('listening', () => {
           const {port} = mockInstance.address(); // retrieve random port
-          console.log('onlistening', port);
           metricsMiddleware({
             probeIntervalInMilliseconds: 500,
             // ^ any lower than 500 risks race condition to done()
