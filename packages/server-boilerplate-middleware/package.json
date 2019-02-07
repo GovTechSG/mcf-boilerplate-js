@@ -1,6 +1,6 @@
 {
   "name": "@mcf/server-boilerplate-middleware",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "Boilerplate middleware for Node projects in MyCareersFuture.",
   "main": "dist/index.js",
   "scripts": {
@@ -23,9 +23,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@mcf/logger": "^0.4.11",
-    "@mcf/tracer": "^0.0.10",
-    "@mcf/request": "^1.0.2",
+    "@mcf/logger": "^0.4.12",
+    "@mcf/request": "^1.0.4",
+    "@mcf/tracer": "^0.0.11",
     "body-parser": "^1.18.3",
     "case": "^1.5.5",
     "compression": "^1.7.2",
