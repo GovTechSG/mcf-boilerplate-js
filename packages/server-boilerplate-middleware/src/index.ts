@@ -6,20 +6,17 @@ import {
   ICorsMiddlewareOptions,
   ICspMiddlewareOptions,
 } from './security';
-import * as tracer from '@mcf/tracer';
-import {expressMiddleware} from 'zipkin-instrumentation-express';
+import {expressMiddleware as traceMiddleware} from 'zipkin-instrumentation-express';
 import {serializer} from './serializer';
 import express from 'express';
+import fetch from 'node-fetch';
 import {compressionMiddleware, ICompressionMiddlewareOptions} from './compression-middleware';
 import {DEFAULT_METRICS_ENDPOINT, IMetricsMiddlewareOptions, metricsMiddleware} from './metrics-middleware';
 import {ILoggingMiddlewareOptions, loggingMiddleware} from './logging-middleware';
 import {buildLogger} from './logger';
 import {createMorganStream, IApplicationLogger} from '@mcf/logger';
-
-interface ITracingOptions {
-  context?: any;
-  tracer?: any;
-}
+import {createTracer, ITracerOptions} from '@mcf/tracer';
+import {createRequest} from '@mcf/request';
 
 interface IMcfMiddlewareOptions {
   enableCORS?: boolean;
@@ -27,7 +24,7 @@ interface IMcfMiddlewareOptions {
   enableCSP?: boolean;
   enableCookieParser?: boolean;
   enableHttpHeadersSecurity?: boolean;
-  enableMetricsCollection?: boolean;
+  enableMetrics?: boolean;
   enableSerializer?: boolean;
   enableServerLogging?: boolean;
   enableTracing?: boolean;
@@ -36,7 +33,7 @@ interface IMcfMiddlewareOptions {
   corsOptions?: ICorsMiddlewareOptions;
   metricsOptions?: Partial<IMetricsMiddlewareOptions>;
   loggingOptions?: ILoggingMiddlewareOptions & {logger?: IApplicationLogger};
-  tracingOptions?: ITracingOptions; // TODO
+  tracingOptions?: ITracerOptions;
 }
 /**
  * Returns an Express compatible server
@@ -49,7 +46,7 @@ export const createServer = ({
   enableCSP = true,
   enableCookieParser = true,
   enableHttpHeadersSecurity = true,
-  enableMetricsCollection = true,
+  enableMetrics = true,
   enableSerializer = true,
   enableServerLogging = true,
   enableTracing = true,
@@ -62,20 +59,11 @@ export const createServer = ({
 }: IMcfMiddlewareOptions = {}) => {
   const logger = buildLogger(loggingOptions.logger);
   const server = express();
+  let request: ((x: string) => typeof fetch) | undefined;
   if (enableTracing) {
-    if (!tracingOptions.tracer || !tracingOptions.context) {
-      logger.warn(
-        ':enableTracing was set to true but no :tracer or :context was ' +
-          'passed into the :tracingOptions option. Tracing is disabled.',
-      );
-    } else {
-      const tracerInstance = tracingOptions.tracer;
-      const tracerContext = tracingOptions.context;
-      server.use(expressMiddleware({tracer: tracerInstance}));
-      server.use(tracer.getContextProviderMiddleware({context: tracerContext}));
-      loggingOptions.additionalTokenizers = loggingOptions.additionalTokenizers || [];
-      loggingOptions.additionalTokenizers = loggingOptions.additionalTokenizers.concat(tracer.getMorganTokenizers());
-    }
+    const tracer = createTracer(tracingOptions);
+    request = createRequest(tracer);
+    server.use(traceMiddleware({tracer}));
   }
   if (enableCookieParser) {
     logger.silly('enable cookie parser');
@@ -101,7 +89,7 @@ export const createServer = ({
     logger.silly('enable CORS');
     server.use(corsMiddleware(corsOptions));
   }
-  if (enableMetricsCollection) {
+  if (enableMetrics) {
     logger.silly('enable metrics collection');
     const metricsEndpoint = metricsOptions.metricsEndpoint || DEFAULT_METRICS_ENDPOINT;
     const metrics = metricsMiddleware(metricsOptions);
@@ -119,5 +107,8 @@ export const createServer = ({
     );
   }
 
-  return server;
+  return {
+    request,
+    server,
+  };
 };

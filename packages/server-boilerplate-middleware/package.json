@@ -25,6 +25,7 @@
   "dependencies": {
     "@mcf/logger": "^0.4.11",
     "@mcf/tracer": "^0.0.10",
+    "@mcf/request": "^1.0.2",
     "body-parser": "^1.18.3",
     "case": "^1.5.5",
     "compression": "^1.7.2",
@@ -32,8 +33,6 @@
     "cors": "^2.8.4",
     "express-prom-bundle": "^3.3.0",
     "helmet": "^3.12.1",
-    "morgan": "^1.9.0",
-    "prom-client": "^11.0.0",
-    "zipkin-instrumentation-express": "^0.14.0"
+    "prom-client": "^11.0.0"
   }
 }

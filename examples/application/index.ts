@@ -1,14 +1,10 @@
 import convict from 'convict';
-import {
-  createConsoleTransport,
-  createFluentTransport,
-  createLogger,
-  IApplicationLogger,
-} from '../../packages/logger/dist';
+import {createFluentTransport, createLogger, IApplicationLogger} from '../../packages/logger/dist';
 import {createServer} from '../../packages/server-boilerplate-middleware/dist';
-import {createTracer, getWinstonFormat, IExpressRequestWithContext} from '../../packages/tracer/dist';
-import {createRequest} from '../../packages/request/dist';
 import {AddressInfo} from 'net';
+import {Request} from 'express';
+import winston from 'winston';
+import fetch from 'node-fetch';
 
 const config = convict({
   fluentHost: {
@@ -45,20 +41,23 @@ const config = convict({
   },
 });
 
-export const tracer = createTracer({
-  localServiceName: config.get('serviceName'),
-  sampleRate: 1,
-  serverHost: config.get('zipkinHost'),
-  serverPort: config.get('zipkinPort'),
-});
+const getTraceId = (info: any) => {
+  return info && info.meta && info.meta.trace ? info.meta.trace.traceId : '';
+};
+const magenta = (str: string) => `\u001b[35m${str}\u001b[39m`;
+const red = (str: string) => `\u001b[31m${str}\u001b[39m`;
 
-export const context = tracer.getContext();
-
-export const logger: IApplicationLogger = createLogger({
-  formatters: [getWinstonFormat({context})],
+const logger: IApplicationLogger = createLogger({
   level: 'silly',
+  namespace: config.get('serviceName'),
   transports: [
-    createConsoleTransport(),
+    // create a custom console logger to display trace
+    new winston.transports.Console({
+      format: winston.format.printf(
+        (info) =>
+          `[${magenta(info.label)} - ${red(getTraceId(info))}] ${info.timestamp} ${info.level}: ${info.message}`,
+      ),
+    }),
     createFluentTransport({
       host: config.get('fluentHost'),
       port: config.get('fluentPort'),
@@ -66,57 +65,50 @@ export const logger: IApplicationLogger = createLogger({
   ],
 });
 
-export const request = createRequest({tracer: tracer.getTracer()});
-
-export const server = createServer({
+export const {server, request} = createServer({
+  loggingOptions: {
+    logger,
+  },
   tracingOptions: {
-    context: tracer.getContext(),
-    tracer: tracer.getTracer(),
+    localServiceName: config.get('serviceName'),
+    sampleRate: 1,
+    serverHost: config.get('zipkinHost'),
+    serverPort: config.get('zipkinPort'),
   },
 });
+const requestOtherService = request ? request(config.get('otherServiceName')) : fetch;
 
-server.post('/csp-report', (req: IExpressRequestWithContext, res) => {
+server.post('/csp-report', (req: Request, res) => {
   logger.info(req.body);
   res.json('ok');
 });
 
-server.get('/other/:iteration', (req: IExpressRequestWithContext, res) => {
-  if (req.context) {
-    logger.info(`Caller is ${req.context.traceId}`);
-  }
+server.get('/other/:iteration', async (req: Request, res) => {
+  // simulate that it's slow
+  await new Promise((resolve) => setTimeout(resolve, 800));
   const iteration = parseInt(req.params.iteration, 10);
   logger.info(`iteration ${iteration}`);
   const url = config.get('otherServiceUrl') + (iteration > 0 ? `/other/${iteration - 1}` : '');
   logger.info(`sending request to ${url}`);
-  request(url, {
-    remoteServiceName: config.get('otherServiceName'),
-  })
-    .then((otherResponse) => otherResponse.json())
-    .then((otherResponseBody) => {
-      res.json(otherResponseBody);
-    });
+  const otherResponse = await requestOtherService(url);
+  const body = await otherResponse.json();
+  res.json(body);
+  logger.info(`response sent`);
 });
 
-server.get('/other', (req: IExpressRequestWithContext, res) => {
+server.get('/other', async (req: Request, res) => {
+  // simulate that it's slow
+  await new Promise((resolve) => setTimeout(resolve, 400));
   logger.info(`sending request to ${config.get('otherServiceUrl')}`);
-  request(config.get('otherServiceUrl'), {
-    remoteServiceName: config.get('otherServiceName'),
-  })
-    .then((otherResponse) => otherResponse.json())
-    .then((otherResponseBody) => {
-      res.json(otherResponseBody);
-    });
+
+  const otherResponse = await requestOtherService(config.get('otherServiceUrl'));
+  const body = await otherResponse.json();
+  res.json(body);
 });
 
-server.get('/context', (req: IExpressRequestWithContext, res) => {
-  logger.info('returning from /context');
-  if (req.context) {
-    logger.info('Received context: ' + req.context.parentId);
-  }
-  res.send(req.context);
-});
-
-server.get('/', (req: IExpressRequestWithContext, res) => {
+server.get('/', async (req: Request, res) => {
+  // simulate that it's slow
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   logger.info(`called with headers: ${JSON.stringify(req.headers)}`);
   logger.info('returning from /');
   res.json(`hello from ${config.get('serviceName')}`);

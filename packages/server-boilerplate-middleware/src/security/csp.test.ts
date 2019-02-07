@@ -8,9 +8,9 @@ describe('security/csp', () => {
     let server;
 
     const assertCspContains = (res, cspString) => {
-      expect(res.headers['content-security-policy']).to.contain(cspString);
-      expect(res.headers['x-content-security-policy']).to.contain(cspString);
-      expect(res.headers['x-webkit-csp']).to.contain(cspString);
+      expect(res.header['content-security-policy']).to.contain(cspString);
+      expect(res.header['x-content-security-policy']).to.contain(cspString);
+      expect(res.header['x-webkit-csp']).to.contain(cspString);
     };
 
     const provisionRootEndpoint = (securityOptions = {}) => {

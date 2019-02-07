@@ -1,4 +1,3 @@
-import sinon from 'sinon';
 import chai, {expect} from 'chai';
 import sinonChai from 'sinon-chai';
 import supertest from 'supertest';
@@ -27,14 +26,14 @@ describe('compression-middleware', () => {
       supertest(server)
         .get('/underlimit')
         .then((response) => {
-          expect(response.headers).to.not.include.keys('content-encoding');
-          expect(response.headers).to.include.keys('content-length');
+          expect(response.header).to.not.include.keys('content-encoding');
+          expect(response.header).to.include.keys('content-length');
         }),
       supertest(server)
         .get('/overlimit')
         .then((response) => {
-          expect(response.headers).to.include.keys('content-encoding');
-          expect(response.headers['content-encoding']).to.equal('gzip');
+          expect(response.header).to.include.keys('content-encoding');
+          expect(response.header['content-encoding']).to.equal('gzip');
         }),
     ]);
   });

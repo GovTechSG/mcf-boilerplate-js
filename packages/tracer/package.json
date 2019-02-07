@@ -23,8 +23,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "zipkin": "^0.13.0",
-    "zipkin-instrumentation-express": "^0.14.0",
-    "zipkin-transport-http": "^0.14.0"
+    "@mcf/logger": "^0.4.11"
   }
 }

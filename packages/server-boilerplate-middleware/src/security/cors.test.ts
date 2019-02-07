@@ -34,8 +34,8 @@ describe('security/cors', () => {
           .set('Origin', allowedOrigin)
           .expect(200)
           .then((res) => {
-            expect(res.headers).to.includes.keys('access-control-allow-origin');
-            expect(res.headers['access-control-allow-origin']).to.eql(allowedOrigin);
+            expect(res.header).to.includes.keys('access-control-allow-origin');
+            expect(res.header['access-control-allow-origin']).to.eql(allowedOrigin);
           }),
       ),
     ));
@@ -46,7 +46,7 @@ describe('security/cors', () => {
       .set('Origin', invalidOrigin)
       .expect(200)
       .then((res) => {
-        expect(res.headers).to.not.includes.keys('access-control-allow-origin');
+        expect(res.header).to.not.includes.keys('access-control-allow-origin');
       }));
 
   it('correctly returns allowed methods|headers on an OPTIONS request', () =>
@@ -55,12 +55,12 @@ describe('security/cors', () => {
         .options('/')
         .set('Origin', allowedOrigins[0])
         .expect(204)
-        .then((res) => res.headers),
+        .then((res) => res.header),
       supertest(server)
         .options('/')
         .set('Origin', invalidOrigin)
         .expect(204)
-        .then((res) => res.headers),
+        .then((res) => res.header),
     ]).then((results) => {
       results.forEach((res) => {
         expect(res).to.includes.keys('access-control-allow-methods');
@@ -74,27 +74,27 @@ describe('security/cors', () => {
       supertest(server)
         .get('/')
         .expect(200)
-        .then((res) => res.headers),
+        .then((res) => res.header),
       supertest(server)
         .post('/')
         .expect(200)
-        .then((res) => res.headers),
+        .then((res) => res.header),
       supertest(server)
         .put('/')
         .expect(200)
-        .then((res) => res.headers),
+        .then((res) => res.header),
       supertest(server)
         .delete('/')
         .expect(200)
-        .then((res) => res.headers),
+        .then((res) => res.header),
       supertest(server)
         .head('/')
         .expect(200)
-        .then((res) => res.headers),
+        .then((res) => res.header),
       supertest(server)
         .options('/')
         .expect(204)
-        .then((res) => res.headers),
+        .then((res) => res.header),
     ]).then((results) => {
       results.forEach((res) => {
         expect(res).to.includes.keys('access-control-allow-credentials');

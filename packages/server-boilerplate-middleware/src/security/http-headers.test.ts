@@ -1,12 +1,12 @@
 import {expect} from 'chai';
-import express from 'express';
+import express, {Express} from 'express';
 import supertest from 'supertest';
 import {httpHeadersMiddleware} from './http-headers';
 
 describe('security', () => {
   describe('static response header protections', () => {
     const headers: {unprotected?: object; protected?: object} = {};
-    let server;
+    let server: Express;
 
     before(() => {
       server = express();
@@ -18,13 +18,13 @@ describe('security', () => {
           .get('/unprotected')
           .expect(200)
           .then((res) => {
-            headers.unprotected = res.headers;
+            headers.unprotected = res.header;
           }),
         supertest(server)
           .get('/protected')
           .expect(200)
           .then((res) => {
-            headers.protected = res.headers;
+            headers.protected = res.header;
           }),
       ]);
     });

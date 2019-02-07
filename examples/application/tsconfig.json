@@ -14,7 +14,7 @@
     "noImplicitAny": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "target": "es5"
+    "target": "es2018"
   },
   "include": [
     "index.ts"

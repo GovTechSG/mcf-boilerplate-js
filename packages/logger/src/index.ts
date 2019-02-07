@@ -3,6 +3,8 @@ import winston from 'winston';
 import * as Transport from 'winston-transport';
 import {createMorganStream} from './streams';
 import {createConsoleTransport, createFileTransport, createFluentTransport} from './transports';
+import {traceFormat} from './formats';
+export {MCF_TRACE_NAMESPACE} from './formats';
 
 export {createLogger, createFileTransport, createFluentTransport, createConsoleTransport, createMorganStream};
 
@@ -57,6 +59,7 @@ function createLogger({
       metadata({key: 'meta'}),
       timestamp(),
       label({label: namespace}),
+      traceFormat(),
       ...formatters.map((formatter) => winston.format(formatter)).map((fn) => fn()), // need the second call to unwrap the formatter
     ),
     level,

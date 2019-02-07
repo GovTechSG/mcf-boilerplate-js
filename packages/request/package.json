@@ -21,8 +21,5 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node-fetch": "^2.1.2",
-    "node-fetch": "^2.2.0",
-    "zipkin-instrumentation-fetch": "^0.14.0"
   }
 }
