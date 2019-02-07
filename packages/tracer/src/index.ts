@@ -1,26 +1,16 @@
-import express from 'express';
 import os from 'os';
-import {
-  BatchRecorder,
-  ConsoleRecorder,
-  ExplicitContext,
-  jsonEncoder,
-  option,
-  Recorder,
-  sampler,
-  Tracer,
-} from 'zipkin';
-import {expressMiddleware} from 'zipkin-instrumentation-express';
+import {BatchRecorder, ConsoleRecorder, jsonEncoder, Recorder, sampler, Tracer} from 'zipkin';
 import {HttpLogger as ZipkinHttpTransport} from 'zipkin-transport-http';
+import {CLSContext} from './cls-context';
+export {MCF_TRACE_NAMESPACE} from '@mcf/logger';
 
 const DEFAULT_HTTP_HEADERS = {};
-const DEFAULT_LOCAL_SERVICE_NAME =
-  os.hostname() || process.env.HOSTNAME || 'unknown';
+const DEFAULT_LOCAL_SERVICE_NAME = process.env.ZIPKIN_SERVICE_NAME || os.hostname() || 'unknown';
 const DEFAULT_SAMPLE_RATE = 0.5;
 const DEFAULT_SYNC_INTERVAL_MS = 1000;
-const DEFAULT_SERVER_HOST = 'localhost';
-const DEFAULT_SERVER_PORT = '9411';
-const DEFAULT_SERVER_PROTOCOL = 'http';
+const DEFAULT_SERVER_HOST = process.env.ZIPKIN_HOST || 'localhost';
+const DEFAULT_SERVER_PORT = process.env.ZIPKIN_PORT || '9411';
+const DEFAULT_SERVER_PROTOCOL = process.env.ZIPKIN_PROTOCOL || 'http';
 
 const {JSON_V2} = jsonEncoder;
 const {CountingSampler} = sampler;
@@ -28,7 +18,7 @@ const {CountingSampler} = sampler;
 /**
  * Returns a tracer object
  */
-export function createTracer({
+export const createTracer = ({
   httpHeaders = DEFAULT_HTTP_HEADERS,
   localServiceName = DEFAULT_LOCAL_SERVICE_NAME,
   sampleRate = DEFAULT_SAMPLE_RATE,
@@ -36,8 +26,8 @@ export function createTracer({
   serverHost = DEFAULT_SERVER_HOST,
   serverPort = DEFAULT_SERVER_PORT,
   serverProtocol = DEFAULT_SERVER_PROTOCOL,
-}: ICreateTracerParameters = {}): ITracer {
-  const context = new ExplicitContext();
+}: ITracerOptions = {}): Tracer => {
+  const context = new CLSContext();
   const recorder = createRecorder({
     httpHeaders,
     serverHost,
@@ -46,87 +36,14 @@ export function createTracer({
     syncIntervalMs,
   });
   const samplerInstance = new CountingSampler(sampleRate);
-  const tracer = new Tracer({
+  return new Tracer({
     ctxImpl: context,
     localServiceName,
     recorder,
     sampler: samplerInstance,
     traceId128Bit: true,
   });
-  const middleware = [
-    expressMiddleware({tracer}),
-    getContextProviderMiddleware({context}),
-  ].filter((v) => v);
-
-  return {
-    getContext: () => context,
-    getExpressMiddleware: () => middleware,
-    getTracer: () => tracer,
-  };
-}
-
-// the following should be synchronised to morganTokenizersProvider
-export function getContextProviderMiddleware({
-  context,
-}: IContextProviderMiddlewareParameters): IExpressHandlerWithContext {
-  return (
-    req: IExpressRequestWithContext,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
-    const {spanId, parentId, traceId, sampled} = context.getContext();
-    req.context = {spanId, parentId, traceId, sampled};
-    next();
-  };
-}
-
-// the following should be synchronised to getContextProviderMiddleware
-export function getMorganTokenizers(): IMorganTokenizer[] {
-  return [
-    {
-      fn: (req) => (req.context ? req.context.traceId : null),
-      id: 'trace-id',
-    },
-    {
-      fn: (req) => (req.context ? req.context.spanId : null),
-      id: 'span-id',
-    },
-    {
-      fn: (req) => (req.context ? req.context.parentId : null),
-      id: 'parent-span-id',
-    },
-    {
-      fn: (req) => (req.context ? req.context.sampled : null),
-      id: 'sampled',
-    },
-  ];
-}
-
-/**
- * Returns a single Winston transform function. Call `winston.format(...)`
- * on this to generate the formatter and then call it to unwrap the
- * formatter.
- *
- * @example
- *  const winston = require('winston')
- *  const formats = winston.format.combine(
- *    winston.format(getWinstonFormat({context}))(),
- *    winston.format.json()
- *  );
- *
- * @param {IGetWinstonFormatParameters} opts
- */
-export function getWinstonFormat({
-  context,
-}: IGetWinstonFormatParameters): IExtendedWinstonTransformFunction {
-  return (info) => ({
-    ...info,
-    parentSpanId: context.currentCtx ? context.currentCtx.parentId : null,
-    sampled: context.currentCtx ? context.currentCtx.sampled : null,
-    spanId: context.currentCtx ? context.currentCtx.spanId : null,
-    traceId: context.currentCtx ? context.currentCtx.traceId : null,
-  });
-}
+};
 
 function createRecorder({
   httpHeaders = DEFAULT_HTTP_HEADERS,
@@ -134,7 +51,7 @@ function createRecorder({
   serverPort = DEFAULT_SERVER_PORT,
   serverProtocol = DEFAULT_SERVER_PROTOCOL,
   syncIntervalMs = DEFAULT_SYNC_INTERVAL_MS,
-}: ICreateLoggerParameters = {}): Recorder {
+}: IRecorderOptions = {}): Recorder {
   if (serverHost) {
     const zipkinHostname = `${serverHost}:${serverPort}`;
     const zipkinBaseUrl = `${serverProtocol}://${zipkinHostname}`;
@@ -151,18 +68,7 @@ function createRecorder({
   }
 }
 
-export interface IContextProviderMiddlewareParameters {
-  context: ExplicitContext;
-}
-
-export interface IContextShape {
-  parentId: string;
-  sampled: option.IOption<boolean>;
-  spanId: string;
-  traceId: string;
-}
-
-export interface ICreateLoggerParameters {
+export interface IRecorderOptions {
   httpHeaders?: object;
   serverHost?: string;
   serverPort?: string;
@@ -170,7 +76,7 @@ export interface ICreateLoggerParameters {
   syncIntervalMs?: number;
 }
 
-export interface ICreateTracerParameters {
+export interface ITracerOptions {
   httpHeaders?: object;
   localServiceName?: string;
   sampleRate?: number;
@@ -178,45 +84,4 @@ export interface ICreateTracerParameters {
   serverHost?: string;
   serverPort?: string;
   serverProtocol?: string;
-}
-
-export interface IExpressRequestWithContext extends express.Request {
-  context?: IContextShape;
-}
-
-export interface IExpressHandlerWithContext extends express.RequestHandler {
-  (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ): void;
-}
-
-export interface IExtendedWinstonTransformableInfo {
-  level: string;
-  message: string;
-  [key: string]: any;
-}
-
-export type IExtendedWinstonTransformFunction = (
-  info: IExtendedWinstonTransformableInfo,
-) => IExtendedWinstonTransformableInfo;
-
-export interface IExtendedExplicitContext extends ExplicitContext {
-  currentCtx: IContextShape;
-}
-
-export interface IGetWinstonFormatParameters {
-  context: IExtendedExplicitContext;
-}
-
-export interface IMorganTokenizer {
-  fn: (req: IExpressRequestWithContext, res?: express.Response) => any;
-  id: string;
-}
-
-export interface ITracer {
-  getContext: () => ExplicitContext;
-  getExpressMiddleware: () => IExpressHandlerWithContext[];
-  getTracer: () => Tracer;
 }

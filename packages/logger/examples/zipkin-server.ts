@@ -23,7 +23,7 @@ const tracer = new zipkin.Tracer({
   ctxImpl,
   localServiceName: 'test-zipkin-server',
   // @ts-ignore
-  recorder: new zipkin.ConsoleRecorder(() => {}),
+  recorder: new zipkin.ConsoleRecorder(() => void 0),
 });
 
 server.use(zipkinMiddleware.expressMiddleware({tracer}));

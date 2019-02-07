@@ -4,35 +4,22 @@ import path from 'path';
 import {expect} from 'chai';
 import supertest from 'supertest';
 
-import createServer from './';
+import {createServer} from './';
+import {Express} from 'express';
 
 describe('createServer()', () => {
   const TEST_STRING = '__test_string';
   const TEST_HTTP_CODE = 418;
 
-  it('exports a function', () => {
-    expect(createServer).to.be.a('function');
-  });
-
-  it('can also be imported using require', () => {
-    expect(createServer).to.eql(require('./index'));
-  });
-
   describe('returns an Express compatible server', () => {
-    let boilerplateServer;
+    let boilerplateServer: Express;
 
     beforeEach(() => {
-      boilerplateServer = createServer();
-    });
-
-    it('has a .listen() method', () => {
-      expect(boilerplateServer.listen).to.be.a('function');
+      boilerplateServer = createServer().server;
     });
 
     it('is compatible with GET requests', () => {
-      boilerplateServer.get('/get', (req, res) =>
-        res.json(`${TEST_STRING} /get`)
-      );
+      boilerplateServer.get('/get', (req, res) => res.json(`${TEST_STRING} /get`));
 
       return supertest(boilerplateServer)
         .get('/get')
@@ -43,9 +30,7 @@ describe('createServer()', () => {
     });
 
     it('is compatible with POST requests', () => {
-      boilerplateServer.post('/post', (req, res) =>
-        res.json(`${TEST_STRING} /post`)
-      );
+      boilerplateServer.post('/post', (req, res) => res.json(`${TEST_STRING} /post`));
 
       return supertest(boilerplateServer)
         .post('/post')
@@ -56,9 +41,7 @@ describe('createServer()', () => {
     });
 
     it('is compatible with DELETE requests', () => {
-      boilerplateServer.delete('/delete', (req, res) =>
-        res.json(`${TEST_STRING} /delete`)
-      );
+      boilerplateServer.delete('/delete', (req, res) => res.json(`${TEST_STRING} /delete`));
 
       return supertest(boilerplateServer)
         .delete('/delete')
@@ -69,9 +52,7 @@ describe('createServer()', () => {
     });
 
     it('is compatible with PUT requests', () => {
-      boilerplateServer.put('/put', (req, res) =>
-        res.json(`${TEST_STRING} /put`)
-      );
+      boilerplateServer.put('/put', (req, res) => res.json(`${TEST_STRING} /put`));
 
       return supertest(boilerplateServer)
         .put('/put')
@@ -82,9 +63,7 @@ describe('createServer()', () => {
     });
 
     it('is compatible with PATCH requests', () => {
-      boilerplateServer.patch('/patch', (req, res) =>
-        res.json(`${TEST_STRING} /patch`)
-      );
+      boilerplateServer.patch('/patch', (req, res) => res.json(`${TEST_STRING} /patch`));
 
       return supertest(boilerplateServer)
         .patch('/patch')
@@ -95,9 +74,7 @@ describe('createServer()', () => {
     });
 
     it('is compatible with HEAD requests', () => {
-      boilerplateServer.head('/head', (req, res) =>
-        res.status(TEST_HTTP_CODE).end()
-      );
+      boilerplateServer.head('/head', (req, res) => res.status(TEST_HTTP_CODE).end());
 
       return supertest(boilerplateServer)
         .head('/head')
@@ -116,39 +93,32 @@ describe('createServer()', () => {
   });
 
   describe('secure http header', () => {
-    const contentSecurityPolicy = {
-      childSrc: ['\'self\''],
-      connectSrc: ['\'self\''],
-      defaultSrc: ['http://mydomain.com', '\'self\''],
-      fontSrc: ['\'none\''],
-      imgSrc: ['data: \'self\''],
-      scriptSrc: ['\'self\''],
-      styleSrc: ['\'self\''],
+    const cspOptions = {
+      childSrc: ["'self'"],
+      connectSrc: ["'self'"],
+      defaultSrc: ['http://mydomain.com', "'self'"],
+      fontSrc: ["'none'"],
+      imgSrc: ["data: 'self'"],
       reportUri: '/my-csp-report-uri',
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
     };
 
     const expectedContentSecurityPolicy =
-      'child-src \'self\'; connect-src \'self\'; default-src http://mydomain.com \'self\'; font-src \'none\'; img-src data: \'self\'; script-src \'self\'; style-src \'self\'; report-uri /my-csp-report-uri'; // eslint-disable-line max-len
-
-    before(() => {
-      require('./security').contentSecurityPolicy.instance = null;
-    });
+      "child-src 'self'; connect-src 'self'; default-src http://mydomain.com 'self'; font-src 'none'; img-src data: 'self'; report-uri /my-csp-report-uri; script-src 'self'; style-src 'self'"; // eslint-disable-line max-len
 
     it('implements them correctly', () => {
-      const boilerplateServer = createServer({contentSecurityPolicy});
-      boilerplateServer.use((req, res) => {
+      const {server} = createServer({cspOptions});
+      server.use((req, res) => {
         res.status(200).json(req.cookies);
       });
-      return supertest(boilerplateServer)
+      return supertest(server)
         .get('/')
         .expect(200)
         .then((res) => {
-          expect(res.headers['content-security-policy'])
-            .to.deep.equal(expectedContentSecurityPolicy);
-          expect(res.headers['x-content-security-policy'])
-            .to.deep.equal(expectedContentSecurityPolicy);
-          expect(res.headers['x-webkit-csp'])
-            .to.deep.equal(expectedContentSecurityPolicy);
+          expect(res.header['content-security-policy']).to.deep.equal(expectedContentSecurityPolicy);
+          expect(res.header['x-content-security-policy']).to.deep.equal(expectedContentSecurityPolicy);
+          expect(res.header['x-webkit-csp']).to.deep.equal(expectedContentSecurityPolicy);
         });
     });
   });
@@ -160,15 +130,15 @@ describe('createServer()', () => {
     const cookieValue2 = '0987654321';
 
     it('has them', () => {
-      const cookieHeaderValue = [
-        `${cookieName1}=${cookieValue1}`,
-        `${cookieName2}=${cookieValue2}`,
-      ].reduce((prev, curr) => `${prev};${curr}`, '');
-      const boilerplateServer = createServer();
-      boilerplateServer.use((req, res) => {
+      const cookieHeaderValue = [`${cookieName1}=${cookieValue1}`, `${cookieName2}=${cookieValue2}`].reduce(
+        (prev, curr) => `${prev};${curr}`,
+        '',
+      );
+      const {server} = createServer();
+      server.use((req, res) => {
         res.status(200).json(req.cookies);
       });
-      return supertest(boilerplateServer)
+      return supertest(server)
         .get('/')
         .set('Cookie', cookieHeaderValue)
         .expect(200)
@@ -179,17 +149,17 @@ describe('createServer()', () => {
     });
 
     it('can be disabled', () => {
-      const cookieHeaderValue = [
-        `${cookieName1}=${cookieValue1}`,
-        `${cookieName2}=${cookieValue2}`,
-      ].reduce((prev, curr) => `${prev};${curr}`, '');
-      const boilerplateServer = createServer({
+      const cookieHeaderValue = [`${cookieName1}=${cookieValue1}`, `${cookieName2}=${cookieValue2}`].reduce(
+        (prev, curr) => `${prev};${curr}`,
+        '',
+      );
+      const {server} = createServer({
         enableCookieParser: false,
       });
-      boilerplateServer.use((req, res) => {
+      server.use((req, res) => {
         res.status(200).json(req.cookies);
       });
-      return supertest(boilerplateServer)
+      return supertest(server)
         .get('/')
         .set('Cookie', cookieHeaderValue)
         .expect(200)
@@ -203,9 +173,9 @@ describe('createServer()', () => {
   describe('body parsing abilities', () => {
     it('includes json parsing', () => {
       const testData = require('../test/resources/test.json');
-      const boilerplateServer = createServer();
-      boilerplateServer.use((req, res) => res.status(200).json(req.body));
-      return supertest(boilerplateServer)
+      const {server} = createServer();
+      server.use((req, res) => res.status(200).json(req.body));
+      return supertest(server)
         .post('/')
         .send(testData)
         .type('application/json')
@@ -219,9 +189,9 @@ describe('createServer()', () => {
 
     it('includes urlencoded parsing', () => {
       const testData = require('../test/resources/test.json');
-      const boilerplateServer = createServer();
-      boilerplateServer.use((req, res) => res.status(200).json(req.body));
-      return supertest(boilerplateServer)
+      const {server} = createServer();
+      server.use((req, res) => res.status(200).json(req.body));
+      return supertest(server)
         .post('/')
         .send(testData)
         .type('application/x-www-form-urlencoded')
@@ -229,25 +199,13 @@ describe('createServer()', () => {
         .then((res) => {
           expect(res.body).to.be.an('object');
           expect(res.body.error).to.be.undefined;
-          expect(res.body.testing.bigNumberIntegrity).to.eql(
-            `${testData.testing.bigNumberIntegrity}`
-          );
-          expect(res.body.testing.booleanIntegrity).to.eql(
-            `${testData.testing.booleanIntegrity}`
-          );
-          expect(res.body.testing.floatIntegrity).to.eql(
-            `${testData.testing.floatIntegrity}`
-          );
+          expect(res.body.testing.bigNumberIntegrity).to.eql(`${testData.testing.bigNumberIntegrity}`);
+          expect(res.body.testing.booleanIntegrity).to.eql(`${testData.testing.booleanIntegrity}`);
+          expect(res.body.testing.floatIntegrity).to.eql(`${testData.testing.floatIntegrity}`);
           expect(res.body.testing.nullIntegrity).to.be.empty;
-          expect(res.body.testing.numberIntegrity).to.eql(
-            `${testData.testing.numberIntegrity}`
-          );
-          expect(res.body.testing.objectIntegrity.a).to.eql(
-            `${testData.testing.objectIntegrity.a}`
-          );
-          expect(res.body.testing.objectIntegrity.b).to.eql(
-            `${testData.testing.objectIntegrity.b}`
-          );
+          expect(res.body.testing.numberIntegrity).to.eql(`${testData.testing.numberIntegrity}`);
+          expect(res.body.testing.objectIntegrity.a).to.eql(`${testData.testing.objectIntegrity.a}`);
+          expect(res.body.testing.objectIntegrity.b).to.eql(`${testData.testing.objectIntegrity.b}`);
           expect(res.body.testing.objectIntegrity.c).to.be.undefined;
           expect(res.body.testing.objectIntegrity.d).to.be.empty;
         });
@@ -255,9 +213,9 @@ describe('createServer()', () => {
 
     it('can be disabled', () => {
       const testData = require('../test/resources/test.json');
-      const boilerplateServer = createServer({enableSerializer: false});
-      boilerplateServer.post('/', (req, res) => res.json(req.body));
-      return supertest(boilerplateServer)
+      const {server} = createServer({enableSerializer: false});
+      server.post('/', (req, res) => res.json(req.body));
+      return supertest(server)
         .post('/')
         .send(testData)
         .type('application/json')
@@ -268,12 +226,11 @@ describe('createServer()', () => {
     });
 
     describe('large sizes', () => {
-      let boilerplateServer;
-      const getFileWithSize = (size) =>
-        fs.readFileSync(path.join(__dirname, `../test/resources/${size}.file`));
+      let boilerplateServer: Express;
+      const getFileWithSize = (size) => fs.readFileSync(path.join(__dirname, `../test/resources/${size}.file`));
 
       beforeEach(() => {
-        boilerplateServer = createServer();
+        boilerplateServer = createServer().server;
         boilerplateServer.use((err, req, res, next) => {
           if (err.type === 'entity.too.large') {
             res.status(413).json('ok');

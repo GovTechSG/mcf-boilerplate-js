@@ -1,5 +1,8 @@
 {
-  "lerna": "2.11.0",
+  "bootstrap": {
+    "hoist": true
+  },
+  "lerna": "3.10.7",
   "packages": [
     "packages/*"
   ],

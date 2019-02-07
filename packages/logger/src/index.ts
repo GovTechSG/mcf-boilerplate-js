@@ -2,19 +2,11 @@ import {TransformableInfo} from 'logform';
 import winston from 'winston';
 import * as Transport from 'winston-transport';
 import {createMorganStream} from './streams';
-import {
-  createConsoleTransport,
-  createFileTransport,
-  createFluentTransport,
-} from './transports';
+import {createConsoleTransport, createFileTransport, createFluentTransport} from './transports';
+import {traceFormat} from './formats';
+export {MCF_TRACE_NAMESPACE} from './formats';
 
-export {
-  createLogger,
-  createFileTransport,
-  createFluentTransport,
-  createConsoleTransport,
-  createMorganStream,
-};
+export {createLogger, createFileTransport, createFluentTransport, createConsoleTransport, createMorganStream};
 
 const {label, combine, timestamp, metadata} = winston.format;
 
@@ -38,9 +30,7 @@ export interface IExtendedTransformableInfo extends TransformableInfo {
   [key: string]: any;
 }
 
-export type IExtendedTransformFunction = (
-  info: TransformableInfo,
-) => IExtendedTransformableInfo;
+export type IExtendedTransformFunction = (info: TransformableInfo) => IExtendedTransformableInfo;
 
 export type LogLevelType = keyof typeof defaultLevels;
 export interface ILoggerOptions {
@@ -69,9 +59,8 @@ function createLogger({
       metadata({key: 'meta'}),
       timestamp(),
       label({label: namespace}),
-      ...formatters
-        .map((formatter) => winston.format(formatter))
-        .map((fn) => fn()), // need the second call to unwrap the formatter
+      traceFormat(),
+      ...formatters.map((formatter) => winston.format(formatter)).map((fn) => fn()), // need the second call to unwrap the formatter
     ),
     level,
     levels: defaultLevels,

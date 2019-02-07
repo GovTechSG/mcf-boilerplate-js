@@ -1,14 +1,11 @@
 [![npm version](https://badge.fury.io/js/%40mcf%2Ftracer.svg)](https://badge.fury.io/js/%40mcf%2Ftracer)
 
 # `@mcf/tracer`
-Creates and exposes a Zipkin tracer for consumption by an Express-based application.
+Creates a Zipkin tracer for consumption by an Express-based application.
 
 ## Scope
 
 - [x] Create a tracer
-- [x] Expose the internal context
-- [x] Expose an Express middleware component
-- [x] Expose Morgan tokenizers
 
 ## Installation
 
@@ -29,24 +26,29 @@ import {createTracer} from '@mcf/tracer';
 ### Basic
 
 ```js
-const express = require('express');
-const {createTracer} = require('@mcf/tracer');
-const tracerInstance = createTracer();
+import express from 'express';
+import {expressMiddleware} from 'zipkin-instrumentation-express';
+import {createTracer} from '@mcf/tracer';
+const tracer = createTracer();
 const server = express();
-server.use(tracerInstance.getExpressMiddleware());
-server.use((req, res) => {
-  res.json(req.context);
-});
+server.use(expressMiddleware({tracer}));
 server.listen();
-// ...
+
+// access context from anywhere
+import {MCF_TRACE_NAMESPACE} from '@mcf/tracer';
+import {getNamespace} from 'cls-hooked';
+const namespace = getNamespace(MCF_TRACE_NAMESPACE);
+// do whatever you want with namespace
+
 ```
 
 ### Full Configuration (with defaults)
 
 ```js
-const express = require('express');
-const {createTracer} = require('@mcf/tracer');
-const tracerInstance = createTracer({
+import express from 'express';
+import {expressMiddleware} from 'zipkin-instrumentation-express';
+import {createTracer} from '@mcf/tracer';
+const tracer = createTracer({
   httpHeaders: {},
   localServiceName: 'unknown',
   sampleRate: 0.5,
@@ -56,12 +58,7 @@ const tracerInstance = createTracer({
   serverProtocol: 'http',
 });
 const server = express();
-server.use(tracerInstance.getExpressMiddleware());
-server.use((req, res) => {
-  res.json(req.context);
-});
-server.listen();
-// ...
+server.use(expressMiddleware({tracer}));
 ```
 
 ## API
@@ -69,64 +66,20 @@ server.listen();
 ### `.createTracer(:options)`
 Creates the tracer instance. The `:options` parameter has the following schema:
 
-| Key | Defaults To | Description |
-| --- | --- | --- |
-| `httpHeaders` | `{}` | Additional HTTP headers to be sent to the Zipkin server |
-| `localServiceName` | `os.hostname() || process.env.HOSTNAME || 'unknown'` | The identity of the current service |
-| `sampleRate` | `0.5` | The frequency of sampling by Zipkin. Settings this to 1.0 may cause your data store behind Zipkin to be populated very quickly. Use higher numbers for testing only |
-| `syncIntervalMs` | `1000` | Synchronises the data every X milliseconds |
-| `serverHost` | `"localhost"` | The hostname of your Zipkin service |
-| `serverPort` | `"9411"` | The port on which the Zipkin service is listening to |
-| `serverProtocol` | `"http"` | The string identifier of the protocol your are using. Typically `"http"` or `"https"` |
-
-#### Returned Tracer
-The returned tracer instance exposes the following three methods:
-
-- `.getContext()`
-- `.getExpressMiddleware()`
-- `.getTracer()`
-
-##### `.getContext()`
-Returns the context used to create the Zipkin Tracer.
-
-##### `.getExpressMiddleware()`
-Returns an Express-compatible middleware which does two things:
-1. Add a `.context` property to Node's request object
-2. Manages the trace and span ID for every request
-
-##### `.getTracer()`
-Returns the pure Zipkin Tracer object.
-
-### `.getContextProviderMiddleware(:options)`
-Returns an Express-compatible middleware to inject the provided context into the request. The `:options` parameter is an object with the following schema:
-
-| Key | Defaults To | Description |
-| --- | --- | --- |
-| `context` | `undefined` | The context to use |
-
-### `.getMorganTokenizers()`
-Returns an array of Morgan tokens which have the shape:
-
-```typescript
-{
-  id: string;
-  fn: (req?: Request, res?: Response) => any;
-}
-```
-
-These can be used to generate additional tokens for Morgan and using them in Morgan logs.
-
-> The transformations here are tied to how `.getExpressMiddleware()` injects the Zipkin context into requests. You'll need to write your own if you are not using `.getExpressMiddleware()`.
-
-### `.getWinstonFormat(:options)`
-Returns a Winston transform function which adds `spanId`, `parentSpanId`, `traceId`, and `sampled` properties to the Winston logs. The `:options` parameter is an object with the following schema:
-
-| Key | Defaults To | Description |
-| --- | --- | --- |
-| `context` | `undefined` | The context to use for the formatter |
+| Key | Defaults To | Description | Environment variable
+| --- | --- | --- | ---
+| `httpHeaders` | `{}` | Additional HTTP headers to be sent to the Zipkin server | -
+| `localServiceName` | `os.hostname() OR 'unknown'` | The identity of the current service | process.env.HOSTNAME
+| `sampleRate` | `0.5` | The frequency of sampling by Zipkin. Settings this to 1.0 may cause your data store behind Zipkin to be populated very quickly. Use higher numbers for testing only | -
+| `syncIntervalMs` | `1000` | Synchronises the data every X milliseconds | -
+| `serverHost` | `"localhost"` | The hostname of your Zipkin service | process.env.ZIPKIN_HOST
+| `serverPort` | `"9411"` | The port on which the Zipkin service is listening to | process.env.ZIPKIN_PORT
+| `serverProtocol` | `"http"` | The string identifier of the protocol your are using. Typically `"http"` or `"https"` | process.env.ZIPKIN_PROTOCOL
 
 ## Changelog
-### 0.1.0
+### 0.0.11
+- Use cls-hooked for context implementation
+### 0.0.6
 - Added static exports for retrieving a Winston formatter to add context details to the logs
 - Release!
 ### 0.0.5

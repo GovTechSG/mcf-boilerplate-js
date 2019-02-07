@@ -8,15 +8,15 @@ describe('@mcf/request', () => {
   it('works', () => {
     const {CountingSampler} = sampler;
     expect(() => {
-      createRequest({
-        tracer: new Tracer({
+      createRequest(
+        new Tracer({
           ctxImpl: new ExplicitContext(),
           localServiceName: 'bla',
           recorder: new ConsoleRecorder(),
           sampler: new CountingSampler(1),
           traceId128Bit: true,
         }),
-      });
+      )('service');
     }).to.not.throw();
   });
 });

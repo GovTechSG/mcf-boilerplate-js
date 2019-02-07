@@ -2,7 +2,7 @@ version: "3.5"
 services:
   app_a:
     image: node:8.11.3-alpine
-    working_dir: /app
+    working_dir: /app/examples/application
     entrypoint: ["npm", "start"]
     environment:
       - PORT=8084
@@ -16,13 +16,13 @@ services:
     ports:
       - "8084:8084"
     volumes:
-      - "./:/app:Z"
+      - "../../:/app:Z"
     depends_on:
       - fluentd
       - zipkin
   app_b:
     image: node:8.11.3-alpine
-    working_dir: /app
+    working_dir: /app/examples/application
     entrypoint: ["npm", "start"]
     environment:
       - PORT=8085
@@ -36,7 +36,7 @@ services:
     ports:
       - "8085:8085"
     volumes:
-      - "./:/app:Z"
+      - "../../:/app:Z"
     depends_on:
       - fluentd
       - zipkin

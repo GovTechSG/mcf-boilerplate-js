@@ -33,9 +33,8 @@ yarn add @mcf/server-boilerplate-middleware
 ## Usage
 
 ```js
-const serverBoilerplate = require('@mcf/server-boilerplate-middleware');
-const server = serverBoilerplate();
-server.[...expressMethods];
+import {createServer} from '@mcf/server-boilerplate-middleware';
+const {server} = createServer();
 // ...
 ```
 
@@ -46,8 +45,8 @@ The returned server is an Express server with the following additional APIs.
 Options are passed into the constructor function to create the server
 
 ```js
-const serverBoilerplate = require('@mcf/server-boilerplate-middleware');
-const server = serverBoilerplate({
+import {createServer} from '@mcf/server-boilerplate-middleware';
+const {server} = createServer({
   ...options,
 });
 ```
@@ -62,25 +61,25 @@ const server = serverBoilerplate({
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableCompression: true})` |
 
-#### `enableContentSecurityPolicy` : `Boolean`
+#### `enableCSP` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableContentSecurityPolicy: true})` |
+| `Boolean` | `true` | `serverBoilerplate({enableCSP: true})` |
 
 #### `enableCORS` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableCORS: true})` |
 
-#### `enableHttpHeaderSecurity` : `Boolean`
+#### `enableHttpHeadersSecurity` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableHttpHeaderSecurity: true})` |
+| `Boolean` | `true` | `serverBoilerplate({enableHttpHeadersSecurity: true})` |
 
-#### `enableMetricsCollection` : `Boolean`
+#### `enableMetrics` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableMetricsCollection: true})` |
+| `Boolean` | `true` | `serverBoilerplate({enableMetrics: true})` |
 
 #### `enableSerializer` : `Boolean`
 | Type | Default | Example |
@@ -97,7 +96,6 @@ const server = serverBoilerplate({
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableTracing: true})` |
 
-> If the `:tracing` option parameter is not configured with a `:context` and `:tracer`, tracing will still remain disabled.
 
 #### `compressionOptions` : `Object`
 > This configuration is only relevant if the `enableCompression` parameter was not set to `false`
@@ -108,17 +106,17 @@ const server = serverBoilerplate({
 | `level` | `Number` | 0-9 - see https://www.npmjs.com/package/compression for more information | `9` |
 | `threshold` | `Number` | minimum size in bytes before compression kicks in | `102400` |
 
-> Defaults to:
-> ```js
-> {
->   chunkSize: 16 * 1024, // 16kb
->   level: 9,
->   threshold: 300 * 1024, // 300kb
-> }
-> ```
+Defaults to:
+```js
+const conpressionOptions = {
+  chunkSize: 16 * 1024, // 16kb
+  level: 9,
+  threshold: 300 * 1024, // 300kb
+}
+```
 
-#### `contentSecurityPolicy` : `Object`
-> This option is only relevant if the `enableContentSecurityPolicy` flag is not set to `false`.
+#### `cspOptions` : `Object`
+> This option is only relevant if the `enableCSP` flag is not set to `false`.
 
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
@@ -131,19 +129,19 @@ const server = serverBoilerplate({
 | `styleSrc` | `Array<String>` | populates the style-src value of the CSP header | `['\'none\'']` |
 | `reportUri` | `String` | populates the report-uri value of the CSP header | `'/csp-report'` |
 
-> Defaults to:
-> ```js
-> {
->   childSrc: ['\'none\''],
->   connectSrc: ['\'none\''],
->   defaultSrc: ['\'none\''],
->   fontSrc: ['\'none\''],
->   imgSrc: ['\'none\''],
->   scriptSrc: ['\'none\''],
->   styleSrc: ['\'none\''],
->   reportUri: '/csp-report',
-> }
-> ```
+Defaults to:
+```js
+const cspOptions = {
+  childSrc: ['\'none\''],
+  connectSrc: ['\'none\''],
+  defaultSrc: ['\'none\''],
+  fontSrc: ['\'none\''],
+  imgSrc: ['\'none\''],
+  scriptSrc: ['\'none\''],
+  styleSrc: ['\'none\''],
+  reportUri: '/csp-report',
+}
+```
 
 The above configuration produces the following CSP:
 
@@ -151,7 +149,7 @@ The above configuration produces the following CSP:
 "child-src 'none'; connect-src 'none'; default-src 'none'; font-src 'none'; img-src 'none'; script-src 'none'; style-src 'none'; report-uri /csp-report"
 ```
 
-#### `crossOriginResourceSharing` : `Object`
+#### `corsOptions` : `Object`
 > This configuration is only relevant if the `enableCORS` parameter was not set to `false`
 
 | Key | Type | Notes | Defaults To |
@@ -162,20 +160,19 @@ The above configuration produces the following CSP:
 | `credentials` | `Boolean` | provides the Access-Control-Allow-Credentials header value | `true` |
 | `preflightContinue` | `Boolean` | decides whether to pass the request on or respond with 204 | `false` |
 
-> Defaults to:
-> ```js
-> {
->   crossOriginResourceSharing: {
->   allowedHeaders: [],
->   allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
->   allowedOrigins: [],
->   credentials: true,
->   preflightContinue: false,
-> }
-> ```
+Defaults to:
+```js
+const corsOptions = {
+  allowedHeaders: [],
+  allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedOrigins: [],
+  credentials: true,
+  preflightContinue: false,
+}
+```
 
-#### `metricsCollection` : `Object`
-> This configuration is only relevant if the `enableMetricsCollection` parameter was not set to `false`
+#### `metricsOptions` : `Object`
+> This configuration is only relevant if the `enableMetrics` parameter was not set to `false`
 
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
@@ -187,54 +184,43 @@ The above configuration produces the following CSP:
 | `pushgatewayJobName` | `String` | defines the job name of the job being pushed to the pushgateway - use this to define the application instance when running in a cluster | `process.env.USER || 'unknown'` |
 | `pushgatewayTimeout` | `Number` | defines the timeout of the pushgateway if enabled | `10000` |
 
-> Defaults to:
-> ```js
-> {
->   livenessCheckEndpoint: '/healthz',
->   metricsEndpoint: '/metrics',
->   probeIntervalInMilliseconds: 3000,
->   readinessCheckEndpoint: '/readyz',
->   pushgatewayUrl: null,
->   pushgatewayJobName: process.env.USER || 'unknown',
->   pushgatewayTimeout: 10000,
-> }
-> ```
+Defaults to:
+```js
+const metricsOptions = {
+  livenessCheckEndpoint: '/healthz',
+  metricsEndpoint: '/metrics',
+  probeIntervalInMilliseconds: 3000,
+  readinessCheckEndpoint: '/readyz',
+  pushgatewayUrl: null,
+  pushgatewayJobName: process.env.USER || 'unknown',
+  pushgatewayTimeout: 10000,
+}
+```
 
-#### `serverLogging` : `Object`
+#### `loggingOptions` : `Object`
 > This configuration is only relevant if the `enableServerLogging` parameter was not set to `false`
 
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
 | `additionalTokenizers` | Array of Tokenizers | Additional tokenizers with the schema `{id: string, fn: (req: Request, res: Response) => any}` | `[]` |
-| `logLevel` | String | Determines the `level` property in the logs | `"access"` |
+| `logger` | IApplicationLogger | Used by the server to create a child logger | `undefined` |
 | `logStream` | String | Specifies a stream to use instead of the default `console`. For example, use this to link Morgan up with Winston | `null` |
 | `hostnameType` | String | If set to `"os"`, the `os.hostname()` will be used. For all other values, `process.env[hostnameType]` is used. | `"os"`
 
-> Defaults to:
-> ```js
-> {
->   additionalTokenizers: [],
->   logLevel: 'access',
->   logStream: null,
->   hostnameType: 'os',
-> }
-> ```
+Defaults to:
+```js
+const loggingOptions = {
+  additionalTokenizers: [],
+  logger: createLogger(),
+  logStream: null,
+  hostnameType: 'os',
+}
+```
 
-#### `tracing` : `Object`
+#### `tracingOptions` : `Object`
 > This configuration is only relevant if the `enableTracing` parameter was not set to `false`
 
-| Key | Type | Notes | Defaults To |
-| --- | --- | --- | --- |
-| `tracer` | `zipkin.Tracer` | The Zipkin Tracer instance to use | `undefined` |
-| `context` | `zipkin.ExplicitContext | `undefined` |
-
-> Defaults to:
-> ```js
-> {
->   tracer: undefined,
->   context: undefined,
-> }
-> ```
+see `@mcf/tracer`
 
 ## Development
 
@@ -312,7 +298,7 @@ curl "http://localhost:22222/proxy";
 
 ### 0.6.x
 #### 0.6.4
-- added `:logStream` property in `serverLogging` options for providing Morgan with a custom logger to use
+- added `:logStream` property in `loggingOptions` options for providing Morgan with a custom logger to use
 #### 0.6.0
 - added Morgan server request logging
 ### 0.5.x
@@ -320,18 +306,18 @@ curl "http://localhost:22222/proxy";
 - changed the `preflightContinue` option to be `false` by default
 #### 0.5.1
 - added features to accommodate a push gateway model (see `pushgatewayUrl`, `pushgatewayTimeout` and `pushgatewayJobName` for more info)
-  - if `pushgatewayUrl` is defined in the `metricsCollection` options property, the push gateway metrics flow model is activated, metrics will be pushed every `:probeIntervalInMilliseconds` milliseconds`
+- if `pushgatewayUrl` is defined in the `metricsOptions` options property, the push gateway metrics flow model is activated, metrics will be pushed every `:probeIntervalInMilliseconds` milliseconds`
 #### 0.5.0
-- added Prometheus metrics (see `enableMetricsCollection` and `metricsCollection` properties)
+- added Prometheus metrics (see `enableMetrics` and `metricsOptions` properties)
 ### 0.4.0
-- added CORS support (see `enableCORS` and `crossOriginResourceSharing`)
+- added CORS support (see `enableCORS` and `corsOptions`)
 ### 0.3.x
 #### 0.3.1
 - added gzip compression module
 #### 0.3.0
 - refactored security module into two submodules: http headers and csp
 - also changed API for content security policy (CSP)
-- added new flag, `enableContentSecurityPolicy`, for server initialisation
+- added new flag, `enableCSP`, for server initialisation
 ### 0.2.x
 #### 0.2.1
 - added `connect-src` to CSP configuration

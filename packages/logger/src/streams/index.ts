@@ -1,3 +1,1 @@
-import {createMorganStream} from './morgan';
-
-export {createMorganStream};
+export * from './morgan';
