@@ -109,8 +109,27 @@ server.get('/other', async (req: Request, res) => {
 server.get('/', async (req: Request, res) => {
   // simulate that it's slow
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  logger.info(`called with headers: ${JSON.stringify(req.headers)}`);
-  logger.info('returning from /');
+  logger.info(`[x] returning from /, called with headers: ${JSON.stringify(req.headers)}`);
+  (() => {
+    logger.info('[x] calling from within a function, verify span/trace id is as expected');
+  })();
+  (() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        logger.info('[x] calling from within a promised function, verify span/trace id is as expected');
+        resolve();
+      }, 500);
+    });
+  })().then(() => {
+    logger.info('[x] calling after a promised function, verify span/trace id is as expected');
+  });
+  await (() => {
+    return new Promise((resolve, reject) => {
+      logger.warn('[x] calling from within an awaited function, verify span/trace id is as expected');
+      resolve();
+    });
+  })();
+  logger.info('[x] calling from after an awaited function, verify span/trace id is as expected');
   res.json(`hello from ${config.get('serviceName')}`);
 });
 
