@@ -23,6 +23,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@mcf/logger": "^0.4.12"
+    "@mcf/logger": "^0.4.12",
+    "@types/cls-hooked": "4.2.1",
+    "cls-hooked": "4.2.2",
+    "zipkin": "0.13.0",
+    "zipkin-transport-http": "0.14.0"
   }
 }

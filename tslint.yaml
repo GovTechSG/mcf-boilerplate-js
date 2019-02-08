@@ -6,7 +6,10 @@ extends:
   - tslint-no-unused-expression-chai
 rules:
   no-submodule-imports: false
-  no-implicit-dependencies: false
+  no-implicit-dependencies:
+    - true
+    - - "logform"
+      - "winston-transport"
   ordered-imports:
     - true
     - import-sources-order: "any"
