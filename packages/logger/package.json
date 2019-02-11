@@ -15,6 +15,11 @@
     "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
     "prestart": "npm run build"
   },
+  "dependencies": {
+    "cls-hooked": "4.2.2",
+    "fluent-logger": "3.0.0",
+    "winston": "3.1.0"
+  },
   "publishConfig": {
     "access": "public"
   },
