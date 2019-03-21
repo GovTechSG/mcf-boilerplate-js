@@ -1,0 +1,24 @@
+{
+  "name": "@mcf/constants",
+  "version": "0.0.0",
+  "description": "Exposes constants used across MCF products",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.json",
+    "test:watch": "npm test -- --watch --watch-extensions ts",
+    "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\""
+  },
+  "dependencies": {
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GovTechSG/mcf-boilerplate-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

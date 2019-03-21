@@ -110,7 +110,7 @@ lerna bootstrap;
 To run the tests during development, use:
 
 ```sh
-npm run test-watch;
+npm run test:watch;
 ```
 
 To run the tests on the built package, use:
