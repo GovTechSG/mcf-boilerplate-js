@@ -1,4 +1,8 @@
-import {EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES, POSITION_LEVELS as MSF_POSITION_LEVELS} from './msf';
+import {
+  EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES,
+  JOB_CATEGORIES as MSF_JOB_CATEGORIES,
+  POSITION_LEVELS as MSF_POSITION_LEVELS,
+} from './msf';
 
 const MCF_ORDER = ['Permanent', 'Full Time', 'Part Time', 'Contract', 'Flexi-work', 'Temporary'];
 
@@ -38,3 +42,9 @@ const mapMsfToMcfPositionLevels = () => {
   );
 };
 export const POSITION_LEVELS: IPositionLevel[] = mapMsfToMcfPositionLevels();
+
+interface IJobCategory {
+  jobCategoryId: number;
+  jobCategoryName: string;
+}
+export const JOB_CATEGORIES: IJobCategory[] = MSF_JOB_CATEGORIES;
