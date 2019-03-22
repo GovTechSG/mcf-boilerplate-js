@@ -1,4 +1,4 @@
-import {EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES} from './msf';
+import {EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES, POSITION_LEVELS as MSF_POSITION_LEVELS} from './msf';
 
 const MCF_ORDER = ['Permanent', 'Full Time', 'Part Time', 'Contract', 'Flexi-work', 'Temporary'];
 
@@ -9,7 +9,7 @@ interface IEmploymentType {
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
   employmentType !== undefined && !!employmentType.id && !!employmentType.name;
 
-export const mapMsfToMcf = () => {
+const mapMsfToMcfEmploymentTypes = () => {
   // transform Flexi Time (MSF) to Flexi-work (MCF)
   const transformedMsfEmploymentTypes = MSF_EMPLOYMENT_TYPES.map(
     (employmentType) =>
@@ -22,4 +22,19 @@ export const mapMsfToMcf = () => {
     ).filter(isEmploymentType) || []
   );
 };
-export const EMPLOYMENT_TYPES: IEmploymentType[] = mapMsfToMcf();
+export const EMPLOYMENT_TYPES: IEmploymentType[] = mapMsfToMcfEmploymentTypes();
+
+interface IPositionLevel {
+  id: number;
+  description: string;
+}
+const mapMsfToMcfPositionLevels = () => {
+  // remove operational and transform fresh/entry level description
+  return MSF_POSITION_LEVELS.filter((positionLevel) => positionLevel.description !== 'Operational').map(
+    (positionLevel) =>
+      positionLevel.description === 'Fresh / Entry level'
+        ? {...positionLevel, description: 'Fresh/entry level'}
+        : positionLevel,
+  );
+};
+export const POSITION_LEVELS: IPositionLevel[] = mapMsfToMcfPositionLevels();
