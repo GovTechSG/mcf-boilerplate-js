@@ -35,7 +35,7 @@ const mapIcmsToMcfEmploymentTypes = () => {
   // transform expected ordered mcf employment to icms format by mapping by name
   return (
     MCF_EMPLOYMENT_TYPES_ORDER.map((name) =>
-      transformedIcmsEmploymentTypes.find((employmentType) => employmentType.employmentType === name),
+      transformedIcmsEmploymentTypes.find(({employmentType}) => employmentType === name),
     ).filter(isEmploymentType) || []
   );
 };
@@ -61,9 +61,9 @@ interface IPositionLevel {
 }
 const mapIcmsToMcfPositionLevels = () => {
   return (
-    MCF_POSITION_LEVELS_ORDER.map((name) =>
-      ICMS_POSITION_LEVELS.find((employmentType) => employmentType.position === name),
-    ).filter(isPositionLevel) || []
+    MCF_POSITION_LEVELS_ORDER.map((name) => ICMS_POSITION_LEVELS.find(({position}) => position === name)).filter(
+      isPositionLevel,
+    ) || []
   );
 };
 
@@ -77,8 +77,8 @@ interface IJobCategory {
   category: string;
 }
 const mapIcmsToMcfJobCategories = () => {
-  return ICMS_JOB_CATEGORIES.filter((jobCategory: IJobCategory) => jobCategory.category !== 'Others')
+  return ICMS_JOB_CATEGORIES.filter(({category}) => category !== 'Others')
     .sort((a, b) => a.category.localeCompare(b.category))
-    .concat(ICMS_JOB_CATEGORIES.find((jobCategory: IJobCategory) => jobCategory.category === 'Others') || []);
+    .concat(ICMS_JOB_CATEGORIES.find(({category}) => category === 'Others') || []);
 };
 export const JOB_CATEGORIES: IJobCategory[] = mapIcmsToMcfJobCategories();
