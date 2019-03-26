@@ -1,12 +1,14 @@
+// data originating from MSF API
+
 export const EMPLOYMENT_TYPES = [
-  {id: '02', name: 'Temporary'},
-  {id: '03', name: 'Contract'},
-  {id: '05', name: 'Part Time'},
-  {id: '06', name: 'Freelance'},
-  {id: '07', name: 'Permanent'},
-  {id: '08', name: 'Full Time'},
-  {id: '09', name: 'Flexi Time'},
-  {id: '10', name: 'Internship'},
+  {ilpId: '02', ilpDescription: 'Temporary'},
+  {ilpId: '03', ilpDescription: 'Contract Basis'},
+  {ilpId: '05', ilpDescription: 'Part Time'},
+  {ilpId: '06', ilpDescription: 'Freelance'},
+  {ilpId: '07', ilpDescription: 'Permanent'},
+  {ilpId: '08', ilpDescription: 'Full Time'},
+  {ilpId: '09', ilpDescription: 'Flexi Work'},
+  {ilpId: '10', ilpDescription: 'Internship'},
 ];
 
 const EMPLOYMENT_TYPES_MAPPING_TABLE: Array<[number, string]> = [
@@ -22,20 +24,20 @@ const EMPLOYMENT_TYPES_MAPPING_TABLE: Array<[number, string]> = [
 
 export const mapIcmsToMsfEmploymentType = (id: number) => {
   const mappingFound = EMPLOYMENT_TYPES_MAPPING_TABLE.find((mapping) => mapping[0] === id) || [];
-  return EMPLOYMENT_TYPES.find((employmentType) => employmentType.id === mappingFound[1]);
+  return EMPLOYMENT_TYPES.find((employmentType) => employmentType.ilpId === mappingFound[1]);
 };
 
 export const POSITION_LEVELS = [
-  {id: 1, description: 'Senior Management'},
-  {id: 2, description: 'Middle Management'},
-  {id: 3, description: 'Manager'},
-  {id: 6, description: 'Operational'},
-  {id: 7, description: 'Professional'},
-  {id: 8, description: 'Senior Executive'},
-  {id: 9, description: 'Executive'},
-  {id: 10, description: 'Junior Executive'},
-  {id: 11, description: 'Non-executive'},
-  {id: 12, description: 'Fresh / Entry level'},
+  {jobLevelCode: 1, description: 'Senior Management'},
+  {jobLevelCode: 2, description: 'Middle Management'},
+  {jobLevelCode: 3, description: 'Manager'},
+  {jobLevelCode: 6, description: 'Operational'},
+  {jobLevelCode: 7, description: 'Professional'},
+  {jobLevelCode: 8, description: 'Senior Executive'},
+  {jobLevelCode: 9, description: 'Executive'},
+  {jobLevelCode: 10, description: 'Junior Executive'},
+  {jobLevelCode: 11, description: 'Non-executive'},
+  {jobLevelCode: 12, description: 'Fresh / Entry level'},
 ];
 
 // there is no mapping for operational
@@ -53,7 +55,7 @@ const POSITION_LEVELS_MAPPING_TABLE: Array<[number, number]> = [
 
 export const mapIcmsToMsfPositionLevel = (id: number) => {
   const mappingFound = POSITION_LEVELS_MAPPING_TABLE.find((mapping) => mapping[0] === id) || [];
-  return POSITION_LEVELS.find((positionLevel) => positionLevel.id === mappingFound[1]);
+  return POSITION_LEVELS.find((positionLevel) => positionLevel.jobLevelCode === mappingFound[1]);
 };
 
 export const JOB_CATEGORIES = [

@@ -1,12 +1,14 @@
+// data originating from api-job
+
 export const EMPLOYMENT_TYPES = [
-  {id: 440002, employment_type: 'Part Time'},
-  {id: 440003, employment_type: 'Permanent'},
-  {id: 440004, employment_type: 'Temporary'},
-  {id: 440005, employment_type: 'Contract'},
-  {id: 440006, employment_type: 'Freelance'},
-  {id: 440007, employment_type: 'Full Time'},
-  {id: 440008, employment_type: 'Flexi work'},
-  {id: 440009, employment_type: 'Internship'},
+  {id: 440002, employmentType: 'Part Time'},
+  {id: 440003, employmentType: 'Permanent'},
+  {id: 440004, employmentType: 'Temporary'},
+  {id: 440005, employmentType: 'Contract'},
+  {id: 440006, employmentType: 'Freelance'},
+  {id: 440007, employmentType: 'Full Time'},
+  {id: 440008, employmentType: 'Flexi work'},
+  {id: 440009, employmentType: 'Internship'},
 ];
 
 export const POSITION_LEVELS = [
