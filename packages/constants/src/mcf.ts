@@ -85,7 +85,7 @@ export const POSITION_LEVELS: IPositionLevel[] = mapMsfToMcfPositionLevels();
 /*************************************
  * Job categories
  *************************************/
-interface IJobCategory {
+export interface IJobCategory {
   id: number;
   category: string;
 }

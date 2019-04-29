@@ -11,22 +11,6 @@ export const EMPLOYMENT_TYPES = [
   {ilpId: '10', ilpDescription: 'Internship'},
 ];
 
-const EMPLOYMENT_TYPES_MAPPING_TABLE: Array<[number, string]> = [
-  [440002, '05'],
-  [440003, '07'],
-  [440004, '02'],
-  [440005, '03'],
-  [440006, '06'],
-  [440007, '08'],
-  [440008, '09'],
-  [440009, '10'],
-];
-
-export const mapIcmsToMsfEmploymentType = (id: number) => {
-  const mappingFound = EMPLOYMENT_TYPES_MAPPING_TABLE.find((mapping) => mapping[0] === id) || [];
-  return EMPLOYMENT_TYPES.find((employmentType) => employmentType.ilpId === mappingFound[1]);
-};
-
 export const POSITION_LEVELS = [
   {jobLevelCode: 1, description: 'Senior Management'},
   {jobLevelCode: 2, description: 'Middle Management'},
@@ -39,24 +23,6 @@ export const POSITION_LEVELS = [
   {jobLevelCode: 11, description: 'Non-executive'},
   {jobLevelCode: 12, description: 'Fresh / Entry level'},
 ];
-
-// there is no mapping for operational
-const POSITION_LEVELS_MAPPING_TABLE: Array<[number, number]> = [
-  [357009, 8],
-  [357008, 10],
-  [357007, 11],
-  [357003, 3],
-  [357006, 9],
-  [357004, 12],
-  [357005, 7],
-  [357002, 2],
-  [357001, 1],
-];
-
-export const mapIcmsToMsfPositionLevel = (id: number) => {
-  const mappingFound = POSITION_LEVELS_MAPPING_TABLE.find((mapping) => mapping[0] === id) || [];
-  return POSITION_LEVELS.find((positionLevel) => positionLevel.jobLevelCode === mappingFound[1]);
-};
 
 export const JOB_CATEGORIES = [
   {
@@ -224,52 +190,3 @@ export const JOB_CATEGORIES = [
     jobCategoryName: 'Others',
   },
 ];
-
-const JOB_CATEGORIES_MAPPING_TABLE: Array<[number, number]> = [
-  [532010, 8],
-  [532022, 21],
-  [532042, 40],
-  [532002, 2],
-  [532008, 6],
-  [532012, 10],
-  [532038, 35],
-  [532030, 41],
-  [532035, 32],
-  [532013, 11],
-  [532003, 3],
-  [532016, 14],
-  [532028, 26],
-  [532011, 9],
-  [532033, 30],
-  [532001, 1],
-  [532021, 20],
-  [532039, 36],
-  [532031, 28],
-  [532025, 24],
-  [532019, 18],
-  [532017, 15],
-  [532029, 27],
-  [532005, 7],
-  [532006, 34],
-  [532032, 29],
-  [532023, 22],
-  [532041, 39],
-  [532009, 38],
-  [532040, 37],
-  [532026, 16],
-  [532027, 25],
-  [532007, 5],
-  [532020, 19],
-  [532018, 17],
-  [532036, 33],
-  [532004, 4],
-  [532015, 13],
-  [532034, 31],
-  [532024, 23],
-  [532014, 12],
-];
-
-export const mapIcmsToMsfJobCategory = (id: number) => {
-  const mappingFound = JOB_CATEGORIES_MAPPING_TABLE.find((mapping) => mapping[0] === id) || [];
-  return JOB_CATEGORIES.find((jobCategory) => jobCategory.jobCategoryId === mappingFound[1]);
-};
