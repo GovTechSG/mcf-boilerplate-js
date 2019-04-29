@@ -15,14 +15,14 @@ const ICMS_MCF_MAPPING_TABLE: Array<[number, number]> = [
   [357001, 1],
 ];
 
-const map = <T>(
+const map = <T extends {id: any}>(
   mappings: Array<[string | number, string | number]>,
   targetCollection: T[],
   id,
-  {sourceIndex = 0, targetIndex = 1, key: targetKey = 'id'} = {},
+  {sourceIndex = 0, targetIndex = 1} = {},
 ) => {
   const mappingFound = mappings.find((mapping) => mapping[sourceIndex] === id) || [];
-  return targetCollection.find((employmentType) => employmentType[targetKey] === mappingFound[targetIndex]);
+  return targetCollection.find((item) => item.id === mappingFound[targetIndex]);
 };
 
 export const mapIcmsToMcfPositionLevel = (id: number) => map(ICMS_MCF_MAPPING_TABLE, MCF_POSITION_LEVELS, id);
@@ -31,7 +31,6 @@ export const mapMcfToIcmsPositionLevel = (id: number) =>
   map(ICMS_MCF_MAPPING_TABLE, ICMS_POSITION_LEVELS, id, {sourceIndex: 1, targetIndex: 0});
 
 // MCF <-> MSF transformation
-export const mapMsfToMcfPositionLevel = (id: number) =>
-  MCF_POSITION_LEVELS.find((employmentType) => employmentType.id === id);
+export const mapMsfToMcfPositionLevel = (id: number) => MCF_POSITION_LEVELS.find((position) => position.id === id);
 export const mapMcfToMsfPositionLevel = (id: number) =>
-  MSF_POSITION_LEVELS.find((employmentType) => employmentType.jobLevelCode === id);
+  MSF_POSITION_LEVELS.find((position) => position.jobLevelCode === id);
