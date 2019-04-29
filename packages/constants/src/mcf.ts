@@ -59,7 +59,7 @@ const MCF_POSITION_LEVELS_ORDER = [
   'Non-executive',
   'Fresh/entry level',
 ];
-interface IPositionLevel {
+export interface IPositionLevel {
   id: number;
   position: string;
 }
