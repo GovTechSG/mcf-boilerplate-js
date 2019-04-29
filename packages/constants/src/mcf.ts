@@ -1,10 +1,10 @@
 // data used by MCF PRODUCT, following the specific order required by UIs
 
 import {
-  EMPLOYMENT_TYPES as ICMS_EMPLOYMENT_TYPES,
-  JOB_CATEGORIES as ICMS_JOB_CATEGORIES,
-  POSITION_LEVELS as ICMS_POSITION_LEVELS,
-} from './icms';
+  EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES,
+  JOB_CATEGORIES as MSF_JOB_CATEGORIES,
+  POSITION_LEVELS as MSF_POSITION_LEVELS,
+} from './msf';
 
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
   employmentType !== undefined && !!employmentType.id && !!employmentType.employmentType;
@@ -17,29 +17,33 @@ const isPositionLevel = (positionLevel?: IPositionLevel): positionLevel is IPosi
  *************************************/
 const MCF_EMPLOYMENT_TYPES_ORDER = ['Permanent', 'Full Time', 'Part Time', 'Contract', 'Flexi-work', 'Temporary'];
 
-interface IEmploymentType {
+export interface IEmploymentType {
   id: number;
   employmentType: string;
 }
 
-const mapIcmsToMcfEmploymentTypes = () => {
-  // transform Flexi work (ICMS) to Flexi-work (MCF)
-  const transformedIcmsEmploymentTypes = ICMS_EMPLOYMENT_TYPES.map(
+const mapMsfToMcfEmploymentTypes = () => {
+  const transformedMsfEmploymentTypes = MSF_EMPLOYMENT_TYPES.map(
     (employmentType): IEmploymentType => {
-      if (employmentType.employmentType === 'Flexi work') {
-        return {...employmentType, employmentType: 'Flexi-work'};
+      // transform Flexi Work (MSF) to Flexi-work (MCF)
+      if (employmentType.ilpDescription === 'Flexi Work') {
+        return {id: parseInt(employmentType.ilpId, 10), employmentType: 'Flexi-work'};
       }
-      return employmentType;
+      // transform Contract Basis (MSF) to Contract (MCF)
+      if (employmentType.ilpDescription === 'Contract Basis') {
+        return {id: parseInt(employmentType.ilpId, 10), employmentType: 'Contract'};
+      }
+      return {id: parseInt(employmentType.ilpId, 10), employmentType: employmentType.ilpDescription};
     },
   );
-  // transform expected ordered mcf employment to icms format by mapping by name
+  // transform expected ordered mcf employment to msf format by mapping by name
   return (
     MCF_EMPLOYMENT_TYPES_ORDER.map((name) =>
-      transformedIcmsEmploymentTypes.find(({employmentType}) => employmentType === name),
+      transformedMsfEmploymentTypes.find(({employmentType}) => employmentType === name),
     ).filter(isEmploymentType) || []
   );
 };
-export const EMPLOYMENT_TYPES: IEmploymentType[] = mapIcmsToMcfEmploymentTypes();
+export const EMPLOYMENT_TYPES: IEmploymentType[] = mapMsfToMcfEmploymentTypes();
 
 /*************************************
  * Position levels
@@ -59,15 +63,24 @@ interface IPositionLevel {
   id: number;
   position: string;
 }
-const mapIcmsToMcfPositionLevels = () => {
+const mapMsfToMcfPositionLevels = () => {
+  const transformedMsfPositionLevels = MSF_POSITION_LEVELS.map(
+    (positionLevel): IPositionLevel => {
+      // transform Fresh / Entry level (MSF) to Fresh/entry level (MCF)
+      if (positionLevel.description === 'Fresh / Entry level') {
+        return {id: positionLevel.jobLevelCode, position: 'Fresh/entry level'};
+      }
+      return {id: positionLevel.jobLevelCode, position: positionLevel.description};
+    },
+  );
   return (
-    MCF_POSITION_LEVELS_ORDER.map((name) => ICMS_POSITION_LEVELS.find(({position}) => position === name)).filter(
-      isPositionLevel,
-    ) || []
+    MCF_POSITION_LEVELS_ORDER.map((name) =>
+      transformedMsfPositionLevels.find(({position}) => position === name),
+    ).filter(isPositionLevel) || []
   );
 };
 
-export const POSITION_LEVELS: IPositionLevel[] = mapIcmsToMcfPositionLevels();
+export const POSITION_LEVELS: IPositionLevel[] = mapMsfToMcfPositionLevels();
 
 /*************************************
  * Job categories
@@ -77,8 +90,15 @@ interface IJobCategory {
   category: string;
 }
 const mapIcmsToMcfJobCategories = () => {
-  return ICMS_JOB_CATEGORIES.filter(({category}) => category !== 'Others')
+  const transformedMsfJobCategories = MSF_JOB_CATEGORIES.map(
+    (jobCategory): IJobCategory => {
+      return {id: jobCategory.jobCategoryId, category: jobCategory.jobCategoryName};
+    },
+  );
+
+  return transformedMsfJobCategories
+    .filter(({category}) => category !== 'Others')
     .sort((a, b) => a.category.localeCompare(b.category))
-    .concat(ICMS_JOB_CATEGORIES.find(({category}) => category === 'Others') || []);
+    .concat(transformedMsfJobCategories.find(({category}) => category === 'Others') || []);
 };
 export const JOB_CATEGORIES: IJobCategory[] = mapIcmsToMcfJobCategories();
