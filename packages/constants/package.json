@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Exposes constants used across MCF products",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
     "test:watch": "npm test -- --watch --watch-extensions ts",
