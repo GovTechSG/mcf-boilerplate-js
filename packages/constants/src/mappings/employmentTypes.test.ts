@@ -19,8 +19,8 @@ describe('mapIcmsToMcfEmploymentType', () => {
   it('should map to Contract when id is 440005', () => {
     expect(mapIcmsToMcfEmploymentType(440005)).to.deep.equal({id: 3, employmentType: 'Contract'});
   });
-  it('should not map when id is 440006', () => {
-    expect(mapIcmsToMcfEmploymentType(440006)).to.not.exist;
+  it('should map to Freelance when id is 440006', () => {
+    expect(mapIcmsToMcfEmploymentType(440006)).to.deep.equal({id: 6, employmentType: 'Freelance'});
   });
   it('should map to Full Time when id is 440007', () => {
     expect(mapIcmsToMcfEmploymentType(440007)).to.deep.equal({id: 8, employmentType: 'Full Time'});
@@ -28,8 +28,8 @@ describe('mapIcmsToMcfEmploymentType', () => {
   it('should map to Flexi-work when id is 440008', () => {
     expect(mapIcmsToMcfEmploymentType(440008)).to.deep.equal({id: 9, employmentType: 'Flexi-work'});
   });
-  it('should not map when id is 440009', () => {
-    expect(mapIcmsToMcfEmploymentType(440009)).to.not.exist;
+  it('should map to Internship when id is 440009', () => {
+    expect(mapIcmsToMcfEmploymentType(440009)).to.deep.equal({id: 10, employmentType: 'Internship'});
   });
 });
 
@@ -52,6 +52,12 @@ describe('mapMcfToIcmsEmploymentType', () => {
   it('should map to Flexi work when id is 9', () => {
     expect(mapMcfToIcmsEmploymentType(9)).to.deep.equal({id: 440008, employmentType: 'Flexi work'});
   });
+  it('should map to Internship when id is 10', () => {
+    expect(mapMcfToIcmsEmploymentType(10)).to.deep.equal({id: 440009, employmentType: 'Internship'});
+  });
+  it('should map to Freelance when id is 6', () => {
+    expect(mapMcfToIcmsEmploymentType(6)).to.deep.equal({id: 440006, employmentType: 'Freelance'});
+  });
 });
 
 describe('mapMsfToMcfEmploymentType', () => {
@@ -67,8 +73,8 @@ describe('mapMsfToMcfEmploymentType', () => {
   it('should map to Contract when id is 03', () => {
     expect(mapMsfToMcfEmploymentType('03')).to.deep.equal({id: 3, employmentType: 'Contract'});
   });
-  it('should not map when id is 06', () => {
-    expect(mapMsfToMcfEmploymentType('06')).to.not.exist;
+  it('should map to Freelance when id is 06', () => {
+    expect(mapMsfToMcfEmploymentType('06')).to.deep.equal({id: 6, employmentType: 'Freelance'});
   });
   it('should map to Full Time when id is 08', () => {
     expect(mapMsfToMcfEmploymentType('08')).to.deep.equal({id: 8, employmentType: 'Full Time'});
@@ -76,8 +82,8 @@ describe('mapMsfToMcfEmploymentType', () => {
   it('should map to Flexi-work when id is 09', () => {
     expect(mapMsfToMcfEmploymentType('09')).to.deep.equal({id: 9, employmentType: 'Flexi-work'});
   });
-  it('should not map when id is 10', () => {
-    expect(mapMsfToMcfEmploymentType('10')).to.not.exist;
+  it('should map to Internship when id is 10', () => {
+    expect(mapMsfToMcfEmploymentType('10')).to.deep.equal({id: 10, employmentType: 'Internship'});
   });
 });
 
@@ -99,5 +105,11 @@ describe('mapMcfToMsfEmploymentType', () => {
   });
   it('should map to Flexi Work when id is 9', () => {
     expect(mapMcfToMsfEmploymentType(9)).to.deep.equal({ilpId: '09', ilpDescription: 'Flexi Work'});
+  });
+  it('should map to Internship when id is 10', () => {
+    expect(mapMcfToMsfEmploymentType(10)).to.deep.equal({ilpId: '10', ilpDescription: 'Internship'});
+  });
+  it('should map to Freelance when id is 6', () => {
+    expect(mapMcfToMsfEmploymentType(6)).to.deep.equal({ilpId: '06', ilpDescription: 'Freelance'});
   });
 });

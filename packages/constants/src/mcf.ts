@@ -15,7 +15,16 @@ const isPositionLevel = (positionLevel?: IPositionLevel): positionLevel is IPosi
 /*************************************
  * Employment types
  *************************************/
-const MCF_EMPLOYMENT_TYPES_ORDER = ['Permanent', 'Full Time', 'Part Time', 'Contract', 'Flexi-work', 'Temporary'];
+const MCF_EMPLOYMENT_TYPES_ORDER = [
+  'Permanent',
+  'Full Time',
+  'Part Time',
+  'Contract',
+  'Flexi-work',
+  'Temporary',
+  'Freelance',
+  'Internship',
+];
 
 export interface IEmploymentType {
   id: number;
