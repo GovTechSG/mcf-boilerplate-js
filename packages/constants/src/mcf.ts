@@ -111,3 +111,18 @@ const mapIcmsToMcfJobCategories = () => {
     .concat(transformedMsfJobCategories.find(({category}) => category === 'Others') || []);
 };
 export const JOB_CATEGORIES: IJobCategory[] = mapIcmsToMcfJobCategories();
+
+/*************************************
+ * Schemes
+ *************************************/
+export interface IScheme {
+  id: number;
+  scheme: string;
+}
+// no auto conversion from MSF for the moment
+export const SCHEMES = [
+  {id: 1, scheme: 'P-Max'},
+  {id: 2, scheme: 'Professional Conversion Programme (PCP)'},
+  {id: 3, scheme: 'Career Trial'},
+  {id: 4, scheme: 'Career Support'},
+];

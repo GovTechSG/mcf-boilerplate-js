@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS} from './mcf';
+import {EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS, SCHEMES} from './mcf';
 
 describe('mcf', () => {
   it('should have correct employment types', () => {
@@ -70,6 +70,14 @@ describe('mcf', () => {
       {id: 39, category: 'Telecommunications'},
       {id: 40, category: 'Travel / Tourism'},
       {id: 41, category: 'Others'},
+    ]);
+  });
+  it('should have correct schemes', () => {
+    expect(SCHEMES).to.deep.equal([
+      {id: 1, scheme: 'P-Max'},
+      {id: 2, scheme: 'Professional Conversion Programme (PCP)'},
+      {id: 3, scheme: 'Career Trial'},
+      {id: 4, scheme: 'Career Support'},
     ]);
   });
 });

@@ -66,3 +66,10 @@ export const JOB_CATEGORIES = [
   {id: 532024, category: 'Legal'},
   {id: 532014, category: 'Entertainment'},
 ];
+
+export const SCHEMES = [
+  {id: 541001, scheme: 'CSP'},
+  {id: 541002, scheme: 'PCP'},
+  {id: 541003, scheme: 'P-Max'},
+  {id: 541005, scheme: 'Career Trial'},
+];
