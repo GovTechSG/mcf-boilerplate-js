@@ -73,3 +73,10 @@ export const SCHEMES = [
   {id: 541003, scheme: 'P-Max'},
   {id: 541005, scheme: 'Career Trial'},
 ];
+
+export const JOB_STATUSES = [
+  {id: 9, status: 'Closed'},
+  {id: 83, status: 'Draft'},
+  {id: 102, status: 'Open'},
+  {id: 103, status: 'Re-open'},
+];

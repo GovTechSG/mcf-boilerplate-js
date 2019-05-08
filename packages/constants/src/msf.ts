@@ -190,3 +190,10 @@ export const JOB_CATEGORIES = [
     jobCategoryName: 'Others',
   },
 ];
+
+export const JOB_STATUSES = [
+  {id: 1, status: 'Closed'},
+  {id: 2, status: 'Draft'},
+  {id: 3, status: 'Open'},
+  {id: 4, status: 'Re-open'},
+];

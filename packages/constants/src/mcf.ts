@@ -4,6 +4,7 @@ import {
   EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES,
   JOB_CATEGORIES as MSF_JOB_CATEGORIES,
   POSITION_LEVELS as MSF_POSITION_LEVELS,
+  JOB_STATUSES as MSF_JOB_STATUSES,
 } from './msf';
 
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
@@ -126,3 +127,12 @@ export const SCHEMES = [
   {id: 3, scheme: 'Career Trial'},
   {id: 4, scheme: 'Career Support'},
 ];
+
+/*************************************
+ * Job Statuses
+ *************************************/
+export interface IJobStatuses {
+  id: number;
+  status: string;
+}
+export const JOB_STATUSES = MSF_JOB_STATUSES;
