@@ -151,11 +151,14 @@ export interface IDistrict {
 const mapMsfToMcfDistricts = () => {
   return MSF_DISTRICTS.map((district) => {
     const icmsDistrict = mapMcfToIcmsDistrict(district.district);
+    const districtIdsWithoutSectors = [998, 999];
     return {
       id: district.district,
       location: district.location,
       region: icmsDistrict ? icmsDistrict.region : district.location,
-      sectors: district.sector.split(',').map((sector) => sector.trim()),
+      sectors: districtIdsWithoutSectors.includes(district.district)
+        ? []
+        : district.sector.split(',').map((sector) => sector.trim()),
     };
   });
 };

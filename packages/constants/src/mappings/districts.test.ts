@@ -231,7 +231,7 @@ describe('mapIcmsToMcfDistrict', () => {
       id: 998,
       location: 'Islandwide',
       region: 'Islandwide',
-      sectors: ['9999'],
+      sectors: [],
     });
   });
 });
@@ -646,7 +646,7 @@ describe('mapMsfToMcfDistrict', () => {
       id: 998,
       location: 'Islandwide',
       region: 'Islandwide',
-      sectors: ['9999'],
+      sectors: [],
     });
   });
   it('should map to Overseas when id is 999', () => {
@@ -654,7 +654,7 @@ describe('mapMsfToMcfDistrict', () => {
       id: 999,
       location: 'Overseas',
       region: 'Overseas',
-      sectors: ['XX'],
+      sectors: [],
     });
   });
 });

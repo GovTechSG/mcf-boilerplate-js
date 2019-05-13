@@ -254,13 +254,13 @@ describe('mcf', () => {
         id: 998,
         location: 'Islandwide',
         region: 'Islandwide',
-        sectors: ['9999'],
+        sectors: [],
       },
       {
         id: 999,
         location: 'Overseas',
         region: 'Overseas',
-        sectors: ['XX'],
+        sectors: [],
       },
     ]);
   });
