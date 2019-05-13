@@ -1,11 +1,13 @@
 // data used by MCF PRODUCT, following the specific order required by UIs
 
 import {
+  DISTRICTS as MSF_DISTRICTS,
   EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES,
   JOB_CATEGORIES as MSF_JOB_CATEGORIES,
-  POSITION_LEVELS as MSF_POSITION_LEVELS,
   JOB_STATUSES as MSF_JOB_STATUSES,
+  POSITION_LEVELS as MSF_POSITION_LEVELS,
 } from './msf';
+import {mapMcfToIcmsDistrict} from './mappings/districts';
 
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
   employmentType !== undefined && !!employmentType.id && !!employmentType.employmentType;
@@ -131,8 +133,30 @@ export const SCHEMES = [
 /*************************************
  * Job Statuses
  *************************************/
-export interface IJobStatuses {
+export interface IJobStatus {
   id: number;
   status: string;
 }
-export const JOB_STATUSES = MSF_JOB_STATUSES;
+export const JOB_STATUSES: IJobStatus[] = MSF_JOB_STATUSES;
+
+/*************************************
+ * Districts
+ *************************************/
+export interface IDistrict {
+  id: number;
+  location: string;
+  region: string;
+  sectors: string[];
+}
+const mapMsfToMcfDistricts = () => {
+  return MSF_DISTRICTS.map((district) => {
+    const icmsDistrict = mapMcfToIcmsDistrict(district.district);
+    return {
+      id: district.district,
+      location: district.location,
+      region: icmsDistrict ? icmsDistrict.region : district.location,
+      sectors: district.sector.split(',').map((sector) => sector.trim()),
+    };
+  });
+};
+export const DISTRICTS: IDistrict[] = mapMsfToMcfDistricts();
