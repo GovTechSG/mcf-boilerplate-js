@@ -80,3 +80,122 @@ export const JOB_STATUSES = [
   {id: 102, status: 'Open'},
   {id: 103, status: 'Re-open'},
 ];
+
+export const DISTRICTS = [
+  {
+    id: 1,
+    region: 'Central',
+  },
+  {
+    id: 2,
+    region: 'Central',
+  },
+  {
+    id: 3,
+    region: 'South',
+  },
+  {
+    id: 4,
+    region: 'South',
+  },
+  {
+    id: 5,
+    region: 'South',
+  },
+  {
+    id: 6,
+    region: 'East',
+  },
+  {
+    id: 7,
+    region: 'East',
+  },
+  {
+    id: 8,
+    region: 'Central',
+  },
+  {
+    id: 9,
+    region: 'Central',
+  },
+  {
+    id: 10,
+    region: 'Central',
+  },
+  {
+    id: 11,
+    region: 'Central',
+  },
+  {
+    id: 12,
+    region: 'Central',
+  },
+  {
+    id: 13,
+    region: 'Central',
+  },
+  {
+    id: 14,
+    region: 'East',
+  },
+  {
+    id: 15,
+    region: 'East',
+  },
+  {
+    id: 16,
+    region: 'East',
+  },
+  {
+    id: 17,
+    region: 'East',
+  },
+  {
+    id: 18,
+    region: 'East',
+  },
+  {
+    id: 19,
+    region: 'North',
+  },
+  {
+    id: 20,
+    region: 'North',
+  },
+  {
+    id: 21,
+    region: 'West',
+  },
+  {
+    id: 22,
+    region: 'West',
+  },
+  {
+    id: 23,
+    region: 'West',
+  },
+  {
+    id: 24,
+    region: 'West',
+  },
+  {
+    id: 25,
+    region: 'North',
+  },
+  {
+    id: 26,
+    region: 'North',
+  },
+  {
+    id: 27,
+    region: 'North',
+  },
+  {
+    id: 28,
+    region: 'North',
+  },
+  {
+    id: 9999,
+    region: 'Islandwide',
+  },
+];
