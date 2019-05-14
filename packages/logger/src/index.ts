@@ -67,6 +67,8 @@ function createLogger({
     silent,
     transports: transports.concat(additionalTransports),
   });
+  // @ts-ignore nobody should use that ... so not available in types :)
+  logger.__originalError = logger.error;
 
   // for any reason spread operator complain :)
   // tslint:disable-next-line prefer-object-spread
@@ -81,5 +83,44 @@ function createLogger({
         transports,
         ...options,
       }),
+    // let's handle error manually so that we can create a custom object containing information and make our console logger displaying the stack trace in development
+    error: (message, meta = {}) => {
+      if (!(message instanceof Error)) {
+        // @ts-ignore nobody should use that ... so not available in types :)
+        logger.__originalError(message, processMeta(meta));
+        return;
+      }
+      const error = message;
+
+      // @ts-ignore nobody should use that ... so not available in types :)
+      logger.__originalError(error.message, {
+        ...meta,
+        error: processError(error),
+      });
+    },
   });
 }
+
+const processMeta = (meta: any) => {
+  if (meta instanceof Error) {
+    return {
+      error: processError(meta),
+    };
+  } else if (meta && meta.error && meta.error instanceof Error) {
+    return {
+      ...meta,
+      error: processError(meta.error),
+    };
+  }
+  return meta;
+};
+
+const processError = (error) => {
+  const keys = process.env.NODE_ENV === 'production' ? ['name', 'message'] : ['name', 'message', 'stack'];
+  return Object.keys(error)
+    .concat(keys)
+    .reduce((acc, key) => {
+      acc[key] = error[key];
+      return acc;
+    }, {});
+};
