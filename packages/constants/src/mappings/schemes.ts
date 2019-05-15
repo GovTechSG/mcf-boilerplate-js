@@ -1,4 +1,5 @@
 import {SCHEMES as MCF_SCHEMES} from '../mcf';
+import {SCHEMES as MSF_SCHEMES} from '../msf';
 import {SCHEMES as ICMS_SCHEMES} from '../icms';
 
 // ICMS <-> MCF transformation
@@ -18,3 +19,10 @@ export const mapIcmsToMcfScheme = (id: number) => map(ICMS_MCF_MAPPING_TABLE, MC
 
 export const mapMcfToIcmsScheme = (id: number) =>
   map(ICMS_MCF_MAPPING_TABLE, ICMS_SCHEMES, id, {sourceIndex: 1, targetIndex: 0});
+
+// MCF <-> MSF transformation
+const MCF_MSF_MAPPING_TABLE: Array<[number, string]> = [[1, '02'], [2, '05'], [3, '06'], [4, '01']];
+export const mapMcfToMsfScheme = (id: number) => map(MCF_MSF_MAPPING_TABLE, MSF_SCHEMES, id);
+
+export const mapMsfToMcfScheme = (id: string) =>
+  map(MCF_MSF_MAPPING_TABLE, MCF_SCHEMES, id, {sourceIndex: 1, targetIndex: 0});
