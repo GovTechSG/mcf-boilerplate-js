@@ -191,6 +191,13 @@ export const JOB_CATEGORIES = [
   },
 ];
 
+export const SCHEMES = [
+  {id: '01', programme: 'CSP'},
+  {id: '05', programme: 'PCP'},
+  {id: '02', programme: 'P-Max'},
+  {id: '06', programme: 'Career Trial'},
+];
+
 export const JOB_STATUSES = [
   {id: 1, status: 'Closed'},
   {id: 2, status: 'Draft'},
