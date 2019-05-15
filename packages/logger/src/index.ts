@@ -67,8 +67,6 @@ function createLogger({
     silent,
     transports: transports.concat(additionalTransports),
   });
-  // @ts-ignore nobody should use that ... so not available in types :)
-  logger.__originalError = logger.error;
 
   // for any reason spread operator complain :)
   // tslint:disable-next-line prefer-object-spread
@@ -84,20 +82,22 @@ function createLogger({
         ...options,
       }),
     // let's handle error manually so that we can create a custom object containing information and make our console logger displaying the stack trace in development
-    error: (message, meta = {}) => {
-      if (!(message instanceof Error)) {
-        // @ts-ignore nobody should use that ... so not available in types :)
-        logger.__originalError(message, processMeta(meta));
-        return;
-      }
-      const error = message;
+    ...['warn', 'error'].reduce((acc: object, logLevel: string) => {
+      const originalMethod = logger[logLevel];
+      acc[logLevel] = (message, meta = {}) => {
+        if (!(message instanceof Error)) {
+          originalMethod.call(logger, message, processMeta(meta));
+          return;
+        }
+        const error = message;
 
-      // @ts-ignore nobody should use that ... so not available in types :)
-      logger.__originalError(error.message, {
-        ...meta,
-        error: processError(error),
-      });
-    },
+        originalMethod.call(logger, error.message, {
+          ...meta,
+          error: processError(error),
+        });
+      };
+      return acc;
+    }, {}),
   });
 }
 

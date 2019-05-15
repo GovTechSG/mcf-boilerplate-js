@@ -115,13 +115,34 @@ describe('@mcf/logger', () => {
     afterEach(() => {
       process.env.NODE_ENV = environment;
     });
-    it('should display error message and add error in meta when logging Error object', () => {
+    it('should display error message and add error in meta when logging Error object through error level method', () => {
       const logger = createLogger({
         level: 'error',
         transports: [consoleLogger],
       });
 
       logger.error(new Error('oops'));
+      expect(spy.callCount).to.equal(1);
+      expect(spy).to.have.been.calledWith(
+        match({
+          message: 'oops',
+          meta: {
+            error: {
+              message: 'oops',
+              name: 'Error',
+              stack: match.string,
+            },
+          },
+        }),
+      );
+    });
+    it('should display error message and add error in meta when logging Error object through warn level method', () => {
+      const logger = createLogger({
+        level: 'warn',
+        transports: [consoleLogger],
+      });
+
+      logger.warn(new Error('oops'));
       expect(spy.callCount).to.equal(1);
       expect(spy).to.have.been.calledWith(
         match({
