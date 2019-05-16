@@ -81,5 +81,46 @@ function createLogger({
         transports,
         ...options,
       }),
+    // let's handle error manually so that we can create a custom object containing information and make our console logger displaying the stack trace in development
+    ...['warn', 'error'].reduce((acc: object, logLevel: string) => {
+      const originalMethod = logger[logLevel];
+      acc[logLevel] = (message, meta = {}) => {
+        if (!(message instanceof Error)) {
+          originalMethod.call(logger, message, processMeta(meta));
+          return;
+        }
+        const error = message;
+
+        originalMethod.call(logger, error.message, {
+          ...meta,
+          error: processError(error),
+        });
+      };
+      return acc;
+    }, {}),
   });
 }
+
+const processMeta = (meta: any) => {
+  if (meta instanceof Error) {
+    return {
+      error: processError(meta),
+    };
+  } else if (meta && meta.error && meta.error instanceof Error) {
+    return {
+      ...meta,
+      error: processError(meta.error),
+    };
+  }
+  return meta;
+};
+
+const processError = (error) => {
+  const keys = process.env.NODE_ENV === 'production' ? ['name', 'message'] : ['name', 'message', 'stack'];
+  return Object.keys(error)
+    .concat(keys)
+    .reduce((acc, key) => {
+      acc[key] = error[key];
+      return acc;
+    }, {});
+};
