@@ -2,11 +2,13 @@
 // using cls-hooked for async/await support
 import {createNamespace, getNamespace, Namespace} from 'cls-hooked';
 import {MCF_TRACE_NAMESPACE} from '@mcf/logger';
+import clsBluebird from 'cls-bluebird';
 
 export class CLSContext {
   private session: Namespace;
   constructor() {
     this.session = getNamespace(MCF_TRACE_NAMESPACE) || createNamespace(MCF_TRACE_NAMESPACE);
+    clsBluebird(this.session);
   }
 
   public setContext(ctx) {

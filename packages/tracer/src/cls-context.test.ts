@@ -1,5 +1,6 @@
 import {CLSContext} from './cls-context';
 import {expect} from 'chai';
+import * as Bluebird from 'bluebird';
 
 describe('CLSContext', () => {
   it('should start with context null', () => {
@@ -80,5 +81,18 @@ describe('CLSContext', () => {
       expect(cid2).to.equal(121);
     };
     await newP(121);
+  });
+  it('should work with Bluebird', () => {
+    const ctx = new CLSContext();
+    const run = (value) => {
+      let promise;
+      ctx.letContext(value, () => {
+        promise = Bluebird.resolve().then(() => {
+          expect(ctx.getContext()).to.equal(value);
+        });
+      });
+      return promise;
+    };
+    return Promise.all([run(1), run(2), run(3)]);
   });
 });
