@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {DISTRICTS, EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS, SCHEMES} from './mcf';
+import {COUNTRIES, DISTRICTS, EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS, SCHEMES} from './mcf';
 
 describe('mcf', () => {
   it('should have correct employment types', () => {
@@ -261,6 +261,1270 @@ describe('mcf', () => {
         location: 'Overseas',
         region: 'Overseas',
         sectors: [],
+      },
+    ]);
+  });
+  it('should have correct countries', () => {
+    expect(COUNTRIES).to.deep.equal([
+      {
+        code: 'SG',
+        codeNumber: 65,
+        description: 'Singapore',
+      },
+      {
+        code: 'AF',
+        codeNumber: 93,
+        description: 'Afghanistan',
+      },
+      {
+        code: 'AL',
+        codeNumber: 355,
+        description: 'Albania',
+      },
+      {
+        code: 'DZ',
+        codeNumber: 213,
+        description: 'Algeria',
+      },
+      {
+        code: 'AS',
+        codeNumber: 1,
+        description: 'American Samoa',
+      },
+      {
+        code: 'AD',
+        codeNumber: 376,
+        description: 'Andorra',
+      },
+      {
+        code: 'AO',
+        codeNumber: 244,
+        description: 'Angola',
+      },
+      {
+        code: 'AI',
+        codeNumber: 1,
+        description: 'Anguilla',
+      },
+      {
+        code: 'AG',
+        codeNumber: 1,
+        description: 'Antigua',
+      },
+      {
+        code: 'AR',
+        codeNumber: 54,
+        description: 'Argentina',
+      },
+      {
+        code: 'AM',
+        codeNumber: 374,
+        description: 'Armenia',
+      },
+      {
+        code: 'AB',
+        codeNumber: 297,
+        description: 'Aruba',
+      },
+      {
+        code: 'AU',
+        codeNumber: 61,
+        description: 'Australia',
+      },
+      {
+        code: 'AT',
+        codeNumber: 43,
+        description: 'Austria',
+      },
+      {
+        code: 'AZ',
+        codeNumber: 994,
+        description: 'Azerbaijan',
+      },
+      {
+        code: 'BS',
+        codeNumber: 1,
+        description: 'Bahamas',
+      },
+      {
+        code: 'BH',
+        codeNumber: 973,
+        description: 'Bahrain',
+      },
+      {
+        code: 'BD',
+        codeNumber: 880,
+        description: 'Bangladesh',
+      },
+      {
+        code: 'BB',
+        codeNumber: 1,
+        description: 'Barbados',
+      },
+      {
+        code: 'BL',
+        codeNumber: 375,
+        description: 'Belarus',
+      },
+      {
+        code: 'BE',
+        codeNumber: 32,
+        description: 'Belgium',
+      },
+      {
+        code: 'BZ',
+        codeNumber: 501,
+        description: 'Belize',
+      },
+      {
+        code: 'BJ',
+        codeNumber: 229,
+        description: 'Benin',
+      },
+      {
+        code: 'BM',
+        codeNumber: 1,
+        description: 'Bermuda',
+      },
+      {
+        code: 'BT',
+        codeNumber: 975,
+        description: 'Bhutan',
+      },
+      {
+        code: 'BO',
+        codeNumber: 591,
+        description: 'Bolivia',
+      },
+      {
+        code: 'BA',
+        codeNumber: 387,
+        description: 'Bosnia-Herzegovina',
+      },
+      {
+        code: 'BW',
+        codeNumber: 267,
+        description: 'Botswana',
+      },
+      {
+        code: 'BR',
+        codeNumber: 55,
+        description: 'Brazil',
+      },
+      {
+        code: 'BQ',
+        codeNumber: 0,
+        description: 'British Antarctic Territory',
+      },
+      {
+        code: 'IO',
+        codeNumber: 246,
+        description: 'British Indian Ocean Territory',
+      },
+      {
+        code: 'VG',
+        codeNumber: 1,
+        description: 'British Virgin Islands',
+      },
+      {
+        code: 'BN',
+        codeNumber: 673,
+        description: 'Brunei',
+      },
+      {
+        code: 'BG',
+        codeNumber: 359,
+        description: 'Bulgaria',
+      },
+      {
+        code: 'BF',
+        codeNumber: 226,
+        description: 'Burkina Faso',
+      },
+      {
+        code: 'BI',
+        codeNumber: 257,
+        description: 'Burundi',
+      },
+      {
+        code: 'KA',
+        codeNumber: 855,
+        description: 'Cambodia',
+      },
+      {
+        code: 'CM',
+        codeNumber: 237,
+        description: 'Cameroon',
+      },
+      {
+        code: 'CA',
+        codeNumber: 1,
+        description: 'Canada',
+      },
+      {
+        code: 'CT',
+        codeNumber: 0,
+        description: 'Canton & Enderbury Islands',
+      },
+      {
+        code: 'CV',
+        codeNumber: 238,
+        description: 'Cape Verde',
+      },
+      {
+        code: 'KY',
+        codeNumber: 1,
+        description: 'Cayman Islands',
+      },
+      {
+        code: 'CF',
+        codeNumber: 236,
+        description: 'Central African Republic',
+      },
+      {
+        code: 'TD',
+        codeNumber: 235,
+        description: 'Chad',
+      },
+      {
+        code: 'CD',
+        codeNumber: 0,
+        description: 'Channel Islands',
+      },
+      {
+        code: 'CL',
+        codeNumber: 56,
+        description: 'Chile',
+      },
+      {
+        code: 'CN',
+        codeNumber: 86,
+        description: 'China',
+      },
+      {
+        code: 'CX',
+        codeNumber: 61,
+        description: 'Christmas Island',
+      },
+      {
+        code: 'CC',
+        codeNumber: 61,
+        description: 'Cocos Keeling Island',
+      },
+      {
+        code: 'CO',
+        codeNumber: 57,
+        description: 'Colombia',
+      },
+      {
+        code: 'KM',
+        codeNumber: 269,
+        description: 'Comoros',
+      },
+      {
+        code: 'CG',
+        codeNumber: 242,
+        description: 'Congo',
+      },
+      {
+        code: 'CK',
+        codeNumber: 682,
+        description: 'Cook Islands',
+      },
+      {
+        code: 'CR',
+        codeNumber: 506,
+        description: 'Costa Rica',
+      },
+      {
+        code: 'CB',
+        codeNumber: 385,
+        description: 'Croatia',
+      },
+      {
+        code: 'CU',
+        codeNumber: 53,
+        description: 'Cuba',
+      },
+      {
+        code: 'CY',
+        codeNumber: 357,
+        description: 'Cyprus',
+      },
+      {
+        code: 'CZ',
+        codeNumber: 420,
+        description: 'Czech Republic',
+      },
+      {
+        code: 'DK',
+        codeNumber: 45,
+        description: 'Denmark',
+      },
+      {
+        code: 'DJ',
+        codeNumber: 253,
+        description: 'Djibouti',
+      },
+      {
+        code: 'DM',
+        codeNumber: 1,
+        description: 'Dominica',
+      },
+      {
+        code: 'DO',
+        codeNumber: 1,
+        description: 'Dominican Republic',
+      },
+      {
+        code: 'TP',
+        codeNumber: 670,
+        description: 'East Timor',
+      },
+      {
+        code: 'EC',
+        codeNumber: 593,
+        description: 'Ecuador',
+      },
+      {
+        code: 'EG',
+        codeNumber: 20,
+        description: 'Egypt',
+      },
+      {
+        code: 'SV',
+        codeNumber: 503,
+        description: 'El Salvador',
+      },
+      {
+        code: 'GQ',
+        codeNumber: 240,
+        description: 'Equatorial Guinea',
+      },
+      {
+        code: 'ER',
+        codeNumber: 291,
+        description: 'Eritrea',
+      },
+      {
+        code: 'EN',
+        codeNumber: 372,
+        description: 'Estonia',
+      },
+      {
+        code: 'ET',
+        codeNumber: 251,
+        description: 'Ethiopia',
+      },
+      {
+        code: 'FO',
+        codeNumber: 298,
+        description: 'Faeroe Islands',
+      },
+      {
+        code: 'FK',
+        codeNumber: 500,
+        description: 'Falkland Islands',
+      },
+      {
+        code: 'FJ',
+        codeNumber: 679,
+        description: 'Fiji',
+      },
+      {
+        code: 'FI',
+        codeNumber: 358,
+        description: 'Finland',
+      },
+      {
+        code: 'FR',
+        codeNumber: 33,
+        description: 'France',
+      },
+      {
+        code: 'GF',
+        codeNumber: 594,
+        description: 'French Guiana',
+      },
+      {
+        code: 'PF',
+        codeNumber: 689,
+        description: 'French Polynesia',
+      },
+      {
+        code: 'FQ',
+        codeNumber: 298,
+        description: 'French Southern & Antarctic Territories',
+      },
+      {
+        code: 'GA',
+        codeNumber: 241,
+        description: 'Gabon',
+      },
+      {
+        code: 'GM',
+        codeNumber: 220,
+        description: 'Gambia',
+      },
+      {
+        code: 'GZ',
+        codeNumber: 0,
+        description: 'Gaza',
+      },
+      {
+        code: 'GO',
+        codeNumber: 995,
+        description: 'Georgia',
+      },
+      {
+        code: 'DG',
+        codeNumber: 49,
+        description: 'Germany',
+      },
+      {
+        code: 'GH',
+        codeNumber: 233,
+        description: 'Ghana',
+      },
+      {
+        code: 'GI',
+        codeNumber: 350,
+        description: 'Gibraltar',
+      },
+      {
+        code: 'GR',
+        codeNumber: 30,
+        description: 'Greece',
+      },
+      {
+        code: 'GL',
+        codeNumber: 299,
+        description: 'Greenland',
+      },
+      {
+        code: 'GD',
+        codeNumber: 1,
+        description: 'Grenada',
+      },
+      {
+        code: 'GP',
+        codeNumber: 590,
+        description: 'Guadeloupe',
+      },
+      {
+        code: 'GU',
+        codeNumber: 1,
+        description: 'Guam',
+      },
+      {
+        code: 'GT',
+        codeNumber: 502,
+        description: 'Guatemala',
+      },
+      {
+        code: 'GK',
+        codeNumber: 44,
+        description: 'Guernsey',
+      },
+      {
+        code: 'GN',
+        codeNumber: 224,
+        description: 'Guinea',
+      },
+      {
+        code: 'GW',
+        codeNumber: 245,
+        description: 'Guinea-Bissau',
+      },
+      {
+        code: 'GY',
+        codeNumber: 592,
+        description: 'Guyana',
+      },
+      {
+        code: 'HT',
+        codeNumber: 509,
+        description: 'Haiti',
+      },
+      {
+        code: 'HM',
+        codeNumber: 0,
+        description: 'Heard Island & McDonald Islands',
+      },
+      {
+        code: 'HN',
+        codeNumber: 504,
+        description: 'Honduras',
+      },
+      {
+        code: 'HK',
+        codeNumber: 852,
+        description: 'Hong Kong',
+      },
+      {
+        code: 'HS',
+        codeNumber: 852,
+        description: 'Hong Kong SAR',
+      },
+      {
+        code: 'HU',
+        codeNumber: 36,
+        description: 'Hungary',
+      },
+      {
+        code: 'IS',
+        codeNumber: 354,
+        description: 'Iceland',
+      },
+      {
+        code: 'IN',
+        codeNumber: 91,
+        description: 'India',
+      },
+      {
+        code: 'ID',
+        codeNumber: 62,
+        description: 'Indonesia',
+      },
+      {
+        code: 'IR',
+        codeNumber: 98,
+        description: 'Iran',
+      },
+      {
+        code: 'IQ',
+        codeNumber: 964,
+        description: 'Iraq',
+      },
+      {
+        code: 'IE',
+        codeNumber: 353,
+        description: 'Ireland',
+      },
+      {
+        code: 'MM',
+        codeNumber: 44,
+        description: 'Isle Of Man',
+      },
+      {
+        code: 'IL',
+        codeNumber: 972,
+        description: 'Israel',
+      },
+      {
+        code: 'IT',
+        codeNumber: 39,
+        description: 'Italy',
+      },
+      {
+        code: 'CI',
+        codeNumber: 225,
+        description: 'Ivory Coast',
+      },
+      {
+        code: 'JM',
+        codeNumber: 1,
+        description: 'Jamaica',
+      },
+      {
+        code: 'JP',
+        codeNumber: 962,
+        description: 'Japan',
+      },
+      {
+        code: 'JT',
+        codeNumber: 81,
+        description: 'Johnston Island',
+      },
+      {
+        code: 'JO',
+        codeNumber: 1,
+        description: 'Jordan',
+      },
+      {
+        code: 'KZ',
+        codeNumber: 7,
+        description: 'Kazakhstan',
+      },
+      {
+        code: 'KE',
+        codeNumber: 254,
+        description: 'Kenya',
+      },
+      {
+        code: 'KG',
+        codeNumber: 0,
+        description: 'Kirghizia',
+      },
+      {
+        code: 'KI',
+        codeNumber: 686,
+        description: 'Kiribati',
+      },
+      {
+        code: 'KP',
+        codeNumber: 82,
+        description: 'Korea, North',
+      },
+      {
+        code: 'KR',
+        codeNumber: 856,
+        description: 'Korea, South',
+      },
+      {
+        code: 'KV',
+        codeNumber: 383,
+        description: 'Kosovo',
+      },
+      {
+        code: 'KW',
+        codeNumber: 965,
+        description: 'Kuwait',
+      },
+      {
+        code: 'KS',
+        codeNumber: 996,
+        description: 'Kyrgyzstan',
+      },
+      {
+        code: 'LA',
+        codeNumber: 218,
+        description: 'Laos',
+      },
+      {
+        code: 'LV',
+        codeNumber: 371,
+        description: 'Latvia',
+      },
+      {
+        code: 'LB',
+        codeNumber: 961,
+        description: 'Lebanon',
+      },
+      {
+        code: 'LS',
+        codeNumber: 266,
+        description: 'Lesotho',
+      },
+      {
+        code: 'LR',
+        codeNumber: 231,
+        description: 'Liberia',
+      },
+      {
+        code: 'LY',
+        codeNumber: 850,
+        description: 'Libya',
+      },
+      {
+        code: 'LI',
+        codeNumber: 423,
+        description: 'Liechtenstein',
+      },
+      {
+        code: 'LH',
+        codeNumber: 370,
+        description: 'Lithuania',
+      },
+      {
+        code: 'LU',
+        codeNumber: 352,
+        description: 'Luxembourg',
+      },
+      {
+        code: 'MO',
+        codeNumber: 853,
+        description: 'Macao',
+      },
+      {
+        code: 'MF',
+        codeNumber: 853,
+        description: 'Macau SAR',
+      },
+      {
+        code: 'MB',
+        codeNumber: 0,
+        description: 'Macedonia',
+      },
+      {
+        code: 'MG',
+        codeNumber: 261,
+        description: 'Madagascar',
+      },
+      {
+        code: 'MW',
+        codeNumber: 265,
+        description: 'Malawi',
+      },
+      {
+        code: 'MY',
+        codeNumber: 60,
+        description: 'Malaysia',
+      },
+      {
+        code: 'MV',
+        codeNumber: 960,
+        description: 'Maldives',
+      },
+      {
+        code: 'ML',
+        codeNumber: 223,
+        description: 'Mali',
+      },
+      {
+        code: 'MT',
+        codeNumber: 356,
+        description: 'Malta',
+      },
+      {
+        code: 'MH',
+        codeNumber: 692,
+        description: 'Marshall Islands',
+      },
+      {
+        code: 'MQ',
+        codeNumber: 596,
+        description: 'Martinique',
+      },
+      {
+        code: 'MR',
+        codeNumber: 222,
+        description: 'Mauritania',
+      },
+      {
+        code: 'MU',
+        codeNumber: 230,
+        description: 'Mauritius',
+      },
+      {
+        code: 'ME',
+        codeNumber: 262,
+        description: 'Mayotte',
+      },
+      {
+        code: 'MX',
+        codeNumber: 52,
+        description: 'Mexico',
+      },
+      {
+        code: 'MI',
+        codeNumber: 1,
+        description: 'Midway Islands',
+      },
+      {
+        code: 'MD',
+        codeNumber: 373,
+        description: 'Moldova',
+      },
+      {
+        code: 'MC',
+        codeNumber: 377,
+        description: 'Monaco',
+      },
+      {
+        code: 'MN',
+        codeNumber: 976,
+        description: 'Mongolia',
+      },
+      {
+        code: 'MJ',
+        codeNumber: 382,
+        description: 'Montenegro',
+      },
+      {
+        code: 'MS',
+        codeNumber: 1,
+        description: 'Montserrat',
+      },
+      {
+        code: 'MA',
+        codeNumber: 212,
+        description: 'Morocco',
+      },
+      {
+        code: 'MZ',
+        codeNumber: 258,
+        description: 'Mozambique',
+      },
+      {
+        code: 'BU',
+        codeNumber: 95,
+        description: 'Myanmar',
+      },
+      {
+        code: 'NA',
+        codeNumber: 264,
+        description: 'Namibia',
+      },
+      {
+        code: 'NR',
+        codeNumber: 674,
+        description: 'Nauru',
+      },
+      {
+        code: 'NP',
+        codeNumber: 977,
+        description: 'Nepal',
+      },
+      {
+        code: 'NL',
+        codeNumber: 31,
+        description: 'Netherlands',
+      },
+      {
+        code: 'AN',
+        codeNumber: 599,
+        description: 'Netherlands Antililles',
+      },
+      {
+        code: 'NC',
+        codeNumber: 687,
+        description: 'New Caledonia',
+      },
+      {
+        code: 'NZ',
+        codeNumber: 64,
+        description: 'New Zealand',
+      },
+      {
+        code: 'NI',
+        codeNumber: 505,
+        description: 'Nicaragua',
+      },
+      {
+        code: 'NE',
+        codeNumber: 227,
+        description: 'Niger',
+      },
+      {
+        code: 'NG',
+        codeNumber: 234,
+        description: 'Nigeria',
+      },
+      {
+        code: 'NU',
+        codeNumber: 683,
+        description: 'Niue Island',
+      },
+      {
+        code: 'NF',
+        codeNumber: 672,
+        description: 'Norfolk Island',
+      },
+      {
+        code: 'NO',
+        codeNumber: 47,
+        description: 'Norway',
+      },
+      {
+        code: 'OM',
+        codeNumber: 968,
+        description: 'Oman',
+      },
+      {
+        code: 'PC',
+        codeNumber: 0,
+        description: 'Pacific Island Trust Territory',
+      },
+      {
+        code: 'PK',
+        codeNumber: 92,
+        description: 'Pakistan',
+      },
+      {
+        code: 'PW',
+        codeNumber: 680,
+        description: 'Palau',
+      },
+      {
+        code: 'PB',
+        codeNumber: 970,
+        description: 'Palestine',
+      },
+      {
+        code: 'PA',
+        codeNumber: 507,
+        description: 'Panama',
+      },
+      {
+        code: 'PZ',
+        codeNumber: 0,
+        description: 'Panama Canal Zone',
+      },
+      {
+        code: 'PG',
+        codeNumber: 675,
+        description: 'Papua New Guinea',
+      },
+      {
+        code: 'PY',
+        codeNumber: 595,
+        description: 'Paraguay',
+      },
+      {
+        code: 'PE',
+        codeNumber: 51,
+        description: 'Peru',
+      },
+      {
+        code: 'PH',
+        codeNumber: 63,
+        description: 'Philippines',
+      },
+      {
+        code: 'PN',
+        codeNumber: 64,
+        description: 'Pitcairn Island',
+      },
+      {
+        code: 'PL',
+        codeNumber: 48,
+        description: 'Poland',
+      },
+      {
+        code: 'PT',
+        codeNumber: 351,
+        description: 'Portugal',
+      },
+      {
+        code: 'PR',
+        codeNumber: 787,
+        description: 'Puerto Rico',
+      },
+      {
+        code: 'QA',
+        codeNumber: 974,
+        description: 'Qatar',
+      },
+      {
+        code: 'RE',
+        codeNumber: 262,
+        description: 'Reunion',
+      },
+      {
+        code: 'RO',
+        codeNumber: 40,
+        description: 'Romania',
+      },
+      {
+        code: 'RF',
+        codeNumber: 7,
+        description: 'Russia',
+      },
+      {
+        code: 'RW',
+        codeNumber: 250,
+        description: 'Rwanda',
+      },
+      {
+        code: 'WM',
+        codeNumber: 685,
+        description: 'Samoa',
+      },
+      {
+        code: 'SM',
+        codeNumber: 378,
+        description: 'San Marino',
+      },
+      {
+        code: 'ST',
+        codeNumber: 239,
+        description: 'Sao Tome & Principe',
+      },
+      {
+        code: 'SA',
+        codeNumber: 966,
+        description: 'Saudi Arabia',
+      },
+      {
+        code: 'SN',
+        codeNumber: 221,
+        description: 'Senegal',
+      },
+      {
+        code: 'RS',
+        codeNumber: 381,
+        description: 'Serbia',
+      },
+      {
+        code: 'SF',
+        codeNumber: 381,
+        description: 'Serbia/Montenegro',
+      },
+      {
+        code: 'SC',
+        codeNumber: 248,
+        description: 'Seychelles',
+      },
+      {
+        code: 'SL',
+        codeNumber: 232,
+        description: 'Sierra Leone',
+      },
+      {
+        code: 'SK',
+        codeNumber: 0,
+        description: 'Slovak Republic',
+      },
+      {
+        code: 'SI',
+        codeNumber: 386,
+        description: 'Slovenia',
+      },
+      {
+        code: 'SB',
+        codeNumber: 677,
+        description: 'Solomon Islands',
+      },
+      {
+        code: 'SO',
+        codeNumber: 252,
+        description: 'Somalia',
+      },
+      {
+        code: 'ZA',
+        codeNumber: 27,
+        description: 'South Africa',
+      },
+      {
+        code: 'ES',
+        codeNumber: 34,
+        description: 'Spain',
+      },
+      {
+        code: 'LK',
+        codeNumber: 94,
+        description: 'Sri Lanka',
+      },
+      {
+        code: 'SH',
+        codeNumber: 290,
+        description: 'St. Helena',
+      },
+      {
+        code: 'KN',
+        codeNumber: 1,
+        description: 'St. Kitts-Nevis',
+      },
+      {
+        code: 'LC',
+        codeNumber: 1,
+        description: 'St. Lucia',
+      },
+      {
+        code: 'PM',
+        codeNumber: 508,
+        description: 'St. Pierre & Miquelon',
+      },
+      {
+        code: 'VC',
+        codeNumber: 1,
+        description: 'St. Vincent',
+      },
+      {
+        code: 'SD',
+        codeNumber: 249,
+        description: 'Sudan',
+      },
+      {
+        code: 'SR',
+        codeNumber: 597,
+        description: 'Suriname',
+      },
+      {
+        code: 'SZ',
+        codeNumber: 268,
+        description: 'Swaziland',
+      },
+      {
+        code: 'SE',
+        codeNumber: 46,
+        description: 'Sweden',
+      },
+      {
+        code: 'CH',
+        codeNumber: 41,
+        description: 'Switzerland',
+      },
+      {
+        code: 'SY',
+        codeNumber: 963,
+        description: 'Syria',
+      },
+      {
+        code: 'TW',
+        codeNumber: 886,
+        description: 'Taiwan',
+      },
+      {
+        code: 'TI',
+        codeNumber: 992,
+        description: 'Tajikistan',
+      },
+      {
+        code: 'TZ',
+        codeNumber: 255,
+        description: 'Tanzania',
+      },
+      {
+        code: 'TH',
+        codeNumber: 66,
+        description: 'Thailand',
+      },
+      {
+        code: 'TE',
+        codeNumber: 0,
+        description: 'Timor',
+      },
+      {
+        code: 'TG',
+        codeNumber: 228,
+        description: 'Togo',
+      },
+      {
+        code: 'TK',
+        codeNumber: 690,
+        description: 'Tokelau Islands',
+      },
+      {
+        code: 'TO',
+        codeNumber: 676,
+        description: 'Tonga',
+      },
+      {
+        code: 'TT',
+        codeNumber: 1,
+        description: 'Trinidad & Tobago',
+      },
+      {
+        code: 'TN',
+        codeNumber: 216,
+        description: 'Tunisia',
+      },
+      {
+        code: 'TR',
+        codeNumber: 90,
+        description: 'Turkey',
+      },
+      {
+        code: 'TM',
+        codeNumber: 993,
+        description: 'Turkmenistan',
+      },
+      {
+        code: 'TC',
+        codeNumber: 1,
+        description: 'Turks & Caicos Islands',
+      },
+      {
+        code: 'TV',
+        codeNumber: 688,
+        description: 'Tuvalu',
+      },
+      {
+        code: 'UG',
+        codeNumber: 256,
+        description: 'Uganda',
+      },
+      {
+        code: 'UR',
+        codeNumber: 380,
+        description: 'Ukraine',
+      },
+      {
+        code: 'AE',
+        codeNumber: 971,
+        description: 'United Arab Emirates',
+      },
+      {
+        code: 'GB',
+        codeNumber: 44,
+        description: 'United Kingdom',
+      },
+      {
+        code: 'US',
+        codeNumber: 1,
+        description: 'United States',
+      },
+      {
+        code: 'HV',
+        codeNumber: 0,
+        description: 'Upper Volta',
+      },
+      {
+        code: 'UY',
+        codeNumber: 598,
+        description: 'Uruguay',
+      },
+      {
+        code: 'VI',
+        codeNumber: 1,
+        description: 'US Virgin Islands',
+      },
+      {
+        code: 'UZ',
+        codeNumber: 998,
+        description: 'Uzbekistan',
+      },
+      {
+        code: 'VU',
+        codeNumber: 678,
+        description: 'Vanuatu',
+      },
+      {
+        code: 'VA',
+        codeNumber: 39,
+        description: 'Vatican City State',
+      },
+      {
+        code: 'VE',
+        codeNumber: 58,
+        description: 'Venezuela',
+      },
+      {
+        code: 'VN',
+        codeNumber: 84,
+        description: 'Vietnam',
+      },
+      {
+        code: 'WK',
+        codeNumber: 1,
+        description: 'Wake Island',
+      },
+      {
+        code: 'WF',
+        codeNumber: 681,
+        description: 'Wallis and Futuna',
+      },
+      {
+        code: 'EH',
+        codeNumber: 0,
+        description: 'Western Sahara',
+      },
+      {
+        code: 'YM',
+        codeNumber: 967,
+        description: 'Yemen',
+      },
+      {
+        code: 'YU',
+        codeNumber: 0,
+        description: 'Yugoslavia',
+      },
+      {
+        code: 'ZR',
+        codeNumber: 243,
+        description: 'Zaire',
+      },
+      {
+        code: 'ZM',
+        codeNumber: 260,
+        description: 'Zambia',
+      },
+      {
+        code: 'ZW',
+        codeNumber: 263,
+        description: 'Zimbabwe',
       },
     ]);
   });

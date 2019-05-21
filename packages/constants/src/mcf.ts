@@ -1,6 +1,7 @@
 // data used by MCF PRODUCT, following the specific order required by UIs
 
 import {
+  COUNTRIES as MSF_COUNTRIES,
   DISTRICTS as MSF_DISTRICTS,
   EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES,
   JOB_CATEGORIES as MSF_JOB_CATEGORIES,
@@ -163,3 +164,46 @@ const mapMsfToMcfDistricts = () => {
   });
 };
 export const DISTRICTS: IDistrict[] = mapMsfToMcfDistricts();
+
+/*************************************
+ * Countries
+ *************************************/
+export interface ICountry {
+  code: string;
+  description: string;
+  codeNumber: number;
+}
+const countryCodeNumberCorrections = [
+  {code: 'AI', codeNumber: 1},
+  {code: 'IO', codeNumber: 246},
+  {code: 'CX', codeNumber: 61},
+  {code: 'CC', codeNumber: 61},
+  {code: 'TP', codeNumber: 670},
+  {code: 'GK', codeNumber: 44},
+  {code: 'HK', codeNumber: 852},
+  {code: 'MM', codeNumber: 44},
+  {code: 'JM', codeNumber: 1},
+  {code: 'KV', codeNumber: 383},
+  {code: 'MO', codeNumber: 853},
+  {code: 'ME', codeNumber: 262},
+  {code: 'BU', codeNumber: 95},
+  {code: 'PB', codeNumber: 970},
+  {code: 'PN', codeNumber: 64},
+  {code: 'RF', codeNumber: 7},
+  {code: 'TI', codeNumber: 992},
+  {code: 'US', codeNumber: 1},
+  {code: 'VA', codeNumber: 39},
+  {code: 'WK', codeNumber: 1},
+  {code: 'ZR', codeNumber: 243},
+];
+const mapMsfToMcfCountries = () => {
+  return MSF_COUNTRIES.map((country) => {
+    const countryCodeNumberCorrection = countryCodeNumberCorrections.find(
+      (codeCorrection) => codeCorrection.code === country.countryCode,
+    );
+    const codeNumber =
+      (countryCodeNumberCorrection && countryCodeNumberCorrection.codeNumber) || country.countryCodeNumber;
+    return {code: country.countryCode, description: country.description, codeNumber};
+  });
+};
+export const COUNTRIES: ICountry[] = mapMsfToMcfCountries();
