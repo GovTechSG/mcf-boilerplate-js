@@ -3,16 +3,36 @@ import {mapIcmsToMcfScheme, mapMcfToIcmsScheme, mapMcfToMsfScheme, mapMsfToMcfSc
 
 describe('mapIcmsToMcfScheme', () => {
   it('should map to Career Support when id is 541001', () => {
-    expect(mapIcmsToMcfScheme(541001)).to.deep.equal({id: 4, scheme: 'Career Support'});
+    expect(mapIcmsToMcfScheme(541001)).to.deep.equal({
+      id: 4,
+      scheme: 'Career Support',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
   it('should map to Professional Conversion Programme (PCP) when id is 541002', () => {
-    expect(mapIcmsToMcfScheme(541002)).to.deep.equal({id: 2, scheme: 'Professional Conversion Programme (PCP)'});
+    expect(mapIcmsToMcfScheme(541002)).to.deep.equal({
+      id: 2,
+      scheme: 'Professional Conversion Programme (PCP)',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
   it('should map to P-Max when id is 541003', () => {
-    expect(mapIcmsToMcfScheme(541003)).to.deep.equal({id: 1, scheme: 'P-Max'});
+    expect(mapIcmsToMcfScheme(541003)).to.deep.equal({
+      id: 1,
+      scheme: 'P-Max',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
   it('should map to Career Trial when id is 541005', () => {
-    expect(mapIcmsToMcfScheme(541005)).to.deep.equal({id: 3, scheme: 'Career Trial'});
+    expect(mapIcmsToMcfScheme(541005)).to.deep.equal({
+      id: 3,
+      scheme: 'Career Trial',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
 });
 
@@ -33,16 +53,36 @@ describe('mapMcfToIcmsScheme', () => {
 
 describe('mapMsfToMcfScheme', () => {
   it('should map to Career Support when id is 01', () => {
-    expect(mapMsfToMcfScheme('01')).to.deep.equal({id: 4, scheme: 'Career Support'});
+    expect(mapMsfToMcfScheme('01')).to.deep.equal({
+      id: 4,
+      scheme: 'Career Support',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
   it('should map to Professional Conversion Programme (PCP) when id is 05', () => {
-    expect(mapMsfToMcfScheme('05')).to.deep.equal({id: 2, scheme: 'Professional Conversion Programme (PCP)'});
+    expect(mapMsfToMcfScheme('05')).to.deep.equal({
+      id: 2,
+      scheme: 'Professional Conversion Programme (PCP)',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
   it('should map to P-Max when id is 02', () => {
-    expect(mapMsfToMcfScheme('02')).to.deep.equal({id: 1, scheme: 'P-Max'});
+    expect(mapMsfToMcfScheme('02')).to.deep.equal({
+      id: 1,
+      scheme: 'P-Max',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
   it('should map to Career Trial when id is 06', () => {
-    expect(mapMsfToMcfScheme('06')).to.deep.equal({id: 3, scheme: 'Career Trial'});
+    expect(mapMsfToMcfScheme('06')).to.deep.equal({
+      id: 3,
+      scheme: 'Career Trial',
+      start_date: '1977-05-25',
+      expiry_date: '2055-05-04',
+    });
   });
 });
 
