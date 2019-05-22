@@ -124,10 +124,10 @@ export interface IScheme {
 }
 // no auto conversion from MSF for the moment
 export const SCHEMES = [
-  {id: 1, scheme: 'P-Max'},
-  {id: 2, scheme: 'Professional Conversion Programme (PCP)'},
-  {id: 3, scheme: 'Career Trial'},
-  {id: 4, scheme: 'Career Support'},
+  {id: 1, scheme: 'P-Max', start_date: '1977-05-25', expiry_date: '2055-05-04'},
+  {id: 2, scheme: 'Professional Conversion Programme (PCP)', start_date: '1977-05-25', expiry_date: '2055-05-04'},
+  {id: 3, scheme: 'Career Trial', start_date: '1977-05-25', expiry_date: '2055-05-04'},
+  {id: 4, scheme: 'Career Support', start_date: '1977-05-25', expiry_date: '2055-05-04'},
 ];
 
 /*************************************
