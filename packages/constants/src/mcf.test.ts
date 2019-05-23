@@ -74,10 +74,10 @@ describe('mcf', () => {
   });
   it('should have correct schemes', () => {
     expect(SCHEMES).to.deep.equal([
-      {id: 1, scheme: 'P-Max'},
-      {id: 2, scheme: 'Professional Conversion Programme (PCP)'},
-      {id: 3, scheme: 'Career Trial'},
-      {id: 4, scheme: 'Career Support'},
+      {id: 1, scheme: 'P-Max', startDate: '1977-05-25', expiryDate: '2055-05-04'},
+      {id: 2, scheme: 'Professional Conversion Programme (PCP)', startDate: '1977-05-25', expiryDate: '2055-05-04'},
+      {id: 3, scheme: 'Career Trial', startDate: '1977-05-25', expiryDate: '2055-05-04'},
+      {id: 4, scheme: 'Career Support', startDate: '1977-05-25', expiryDate: '2055-05-04'},
     ]);
   });
   it('should have correct districts', () => {
