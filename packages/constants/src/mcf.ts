@@ -122,6 +122,8 @@ export const JOB_CATEGORIES: IJobCategory[] = mapIcmsToMcfJobCategories();
 export interface IScheme {
   id: number;
   scheme: string;
+  startDate: string;
+  expiryDate: string;
 }
 // no auto conversion from MSF for the moment
 export const SCHEMES = [
