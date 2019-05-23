@@ -7,6 +7,7 @@ import {
   JOB_CATEGORIES as MSF_JOB_CATEGORIES,
   JOB_STATUSES as MSF_JOB_STATUSES,
   POSITION_LEVELS as MSF_POSITION_LEVELS,
+  SALARY_TYPES as MSF_SALARY_TYPES,
 } from './msf';
 import {mapMcfToIcmsDistrict} from './mappings/districts';
 
@@ -207,3 +208,15 @@ const mapMsfToMcfCountries = () => {
   });
 };
 export const COUNTRIES: ICountry[] = mapMsfToMcfCountries();
+
+/*************************************
+ * Salary Types
+ *************************************/
+export interface ISalaryType {
+  id: number;
+  salaryType: string;
+}
+const mapMsfToMcfSalaryTypes = () => {
+  return MSF_SALARY_TYPES.map((salaryType) => ({id: salaryType.salaryTypeId, salaryType: salaryType.description}));
+};
+export const SALARY_TYPES: ISalaryType[] = mapMsfToMcfSalaryTypes();

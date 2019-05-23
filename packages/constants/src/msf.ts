@@ -1902,3 +1902,16 @@ export const COUNTRIES = [
     isDeleted: false,
   },
 ];
+
+export const SALARY_TYPES = [
+  {
+    description: 'Monthly',
+    isDeleted: false,
+    salaryTypeId: 4,
+  },
+  {
+    description: 'Annual',
+    isDeleted: false,
+    salaryTypeId: 5,
+  },
+];

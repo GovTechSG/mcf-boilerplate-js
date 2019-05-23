@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {COUNTRIES, DISTRICTS, EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS, SCHEMES} from './mcf';
+import {COUNTRIES, DISTRICTS, EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS, SALARY_TYPES, SCHEMES} from './mcf';
 
 describe('mcf', () => {
   it('should have correct employment types', () => {
@@ -1527,5 +1527,8 @@ describe('mcf', () => {
         description: 'Zimbabwe',
       },
     ]);
+  });
+  it('should have correct salary types', () => {
+    expect(SALARY_TYPES).to.deep.equal([{id: 4, salaryType: 'Monthly'}, {id: 5, salaryType: 'Annual'}]);
   });
 });
