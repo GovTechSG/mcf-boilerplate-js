@@ -137,8 +137,14 @@ export const SCHEMES = [
 /*************************************
  * Job Statuses
  *************************************/
+export enum JOB_STATUS {
+  CLOSED = 1,
+  DRAFT = 2,
+  OPEN = 3,
+  REOPEN = 4,
+}
 export interface IJobStatus {
-  id: number;
+  id: JOB_STATUS;
   status: string;
 }
 export const JOB_STATUSES: IJobStatus[] = MSF_JOB_STATUSES;
@@ -214,8 +220,12 @@ export const COUNTRIES: ICountry[] = mapMsfToMcfCountries();
 /*************************************
  * Salary Types
  *************************************/
+export enum SALARY_TYPE {
+  MONTHLY = 4,
+  ANNUAL = 5,
+}
 export interface ISalaryType {
-  id: number;
+  id: SALARY_TYPE;
   salaryType: string;
 }
 const mapMsfToMcfSalaryTypes = () => {
