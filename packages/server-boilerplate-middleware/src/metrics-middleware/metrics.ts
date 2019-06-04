@@ -79,7 +79,7 @@ const createPrometheusBundleInstance = ({
   return prometheusBundle({...DEFAULT_METRICS_OPTIONS, blacklist, promClient});
 };
 
-let createPushgatewayHandlerTimeout: NodeJS.Timer;
+let createPushgatewayHandlerTimeout: any;
 /**
  * Creates a pushgateway configuration that pushes the metrics to
  * :pushgatewayUrl every :probeIntervalInMilliseconds milliseconds.
