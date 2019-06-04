@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/chai": "4.1.4",

@@ -1,36 +1,37 @@
 sudo: required
 language: node_js
+install:
+  - npm ci
+  - lerna bootstrap
 node_js:
   - "8"
+  - "10"
+  - "12"
 services:
   - docker
-before_install:
-  - nvm use 6 && npm i -g npx
-  - nvm use 8 && npm i -g npx
 if: tag IS blank AND branch = "master"
 script:
-  - set -e
-  - lerna bootstrap
   - lerna run lint
   - lerna run build
-  - nvm use 6 && lerna run test
-  - nvm use 8 && lerna run test
-  - if [ "${TRAVIS_BRANCH}" = "master" ] && ! [ `printf -- "${TRAVIS_COMMIT_MESSAGE}" | grep "Publish"` ]; then
-      git checkout ${TRAVIS_BRANCH};
-      git reset --hard ${TRAVIS_COMMIT};
-      lerna bootstrap;
-      lerna run lint;
-      lerna run build;
-      git remote set-url origin ${CIVAR_GH_REPOSITORY_URL};
-      npm config set '//registry.npmjs.org/:_authToken' "${CIVAR_NPM_TOKEN}";
-      if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
-        if [ -z "${TRAVIS_COMMIT_MESSAGE##*"[major release]"*}" ]; then
-          LERNA_CD_VERSION='major';
-        elif [ -z "${TRAVIS_COMMIT_MESSAGE##*"[minor release]"*}" ]; then
-          LERNA_CD_VERSION='minor';
-        else
-          LERNA_CD_VERSION='patch';
-        fi;
-        lerna publish --yes --cd-version ${LERNA_CD_VERSION};
-      fi;
-    fi;
+  - lerna run test
+jobs:
+  include:
+    - stage: deploy
+      node_js: "8"
+      script:
+        - if [ "${TRAVIS_BRANCH}" = "master" ] && ! [ `printf -- "${TRAVIS_COMMIT_MESSAGE}" | grep "Publish"` ]; then
+            git checkout ${TRAVIS_BRANCH};
+            git reset --hard ${TRAVIS_COMMIT};
+            git remote set-url origin ${CIVAR_GH_REPOSITORY_URL};
+            npm config set '//registry.npmjs.org/:_authToken' "${CIVAR_NPM_TOKEN}";
+            if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+              if [ -z "${TRAVIS_COMMIT_MESSAGE##*"[major release]"*}" ]; then
+                LERNA_CD_VERSION='major';
+              elif [ -z "${TRAVIS_COMMIT_MESSAGE##*"[minor release]"*}" ]; then
+                LERNA_CD_VERSION='minor';
+              else
+                LERNA_CD_VERSION='patch';
+              fi;
+              lerna publish --yes --cd-version ${LERNA_CD_VERSION} --message "[skip ci] Publish";
+            fi;
+          fi;
