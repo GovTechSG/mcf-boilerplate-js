@@ -1915,3 +1915,34 @@ export const SALARY_TYPES = [
     salaryTypeId: 5,
   },
 ];
+
+export const COMPANY_REGISTRATION_TYPE = [
+  {
+    description: 'Registry of Company',
+    endDate: '2046-11-02T16:54:28.783',
+    isDeleted: false,
+    registrationTypeCode: 1,
+    startDate: '2016-11-02T16:54:28.783',
+  },
+  {
+    description: 'Registry of Business',
+    endDate: '2046-11-02T16:54:28.783',
+    isDeleted: false,
+    registrationTypeCode: 2,
+    startDate: '2016-11-02T16:54:28.783',
+  },
+  {
+    description: 'Other Unique Establishments (UENO)',
+    endDate: '2046-11-02T16:54:28.783',
+    isDeleted: false,
+    registrationTypeCode: 3,
+    startDate: '2016-11-02T16:54:28.783',
+  },
+  {
+    description: 'Others - None of the Above',
+    endDate: '2046-11-02T16:54:28.783',
+    isDeleted: false,
+    registrationTypeCode: 4,
+    startDate: '2016-11-02T16:54:28.783',
+  },
+];

@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {COUNTRIES, DISTRICTS, EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS, SALARY_TYPES, SCHEMES} from './mcf';
+import {COMPANY_REGISTRATION_TYPE, COUNTRIES, DISTRICTS, EMPLOYMENT_TYPES, JOB_CATEGORIES, POSITION_LEVELS, SALARY_TYPES, SCHEMES} from './mcf';
 
 describe('mcf', () => {
   it('should have correct employment types', () => {
@@ -1530,5 +1530,13 @@ describe('mcf', () => {
   });
   it('should have correct salary types', () => {
     expect(SALARY_TYPES).to.deep.equal([{id: 4, salaryType: 'Monthly'}, {id: 5, salaryType: 'Annual'}]);
+  });
+  it('should have correct company registration types', () => {
+    expect(COMPANY_REGISTRATION_TYPE).to.deep.equal([
+      {id: 1, registrationType: 'Registry of Company'},
+      {id: 2, registrationType: 'Registry of Business'},
+      {id: 3, registrationType: 'Other Unique Establishments (UENO)'},
+      {id: 4, registrationType: 'Others - None of the Above'},
+    ]);
   });
 });

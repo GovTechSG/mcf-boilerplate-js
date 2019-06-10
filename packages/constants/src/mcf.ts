@@ -1,6 +1,7 @@
 // data used by MCF PRODUCT, following the specific order required by UIs
 
 import {
+  COMPANY_REGISTRATION_TYPE as MSF_COMPANY_REGISTRATION_TYPE,
   COUNTRIES as MSF_COUNTRIES,
   DISTRICTS as MSF_DISTRICTS,
   EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES,
@@ -232,3 +233,18 @@ const mapMsfToMcfSalaryTypes = () => {
   return MSF_SALARY_TYPES.map((salaryType) => ({id: salaryType.salaryTypeId, salaryType: salaryType.description}));
 };
 export const SALARY_TYPES: ISalaryType[] = mapMsfToMcfSalaryTypes();
+
+/*************************************
+ * Company Registration Types
+ *************************************/
+export interface ICompanyRegistrationType {
+  id: number;
+  registrationType: string;
+}
+const mapMsfToMcfCompanyRegistrationType = () => {
+  return MSF_COMPANY_REGISTRATION_TYPE.map((registrationType) => ({
+    id: registrationType.registrationTypeCode,
+    registrationType: registrationType.description,
+  }));
+};
+export const COMPANY_REGISTRATION_TYPE: ICompanyRegistrationType[] = mapMsfToMcfCompanyRegistrationType();
