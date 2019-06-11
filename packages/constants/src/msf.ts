@@ -1916,7 +1916,7 @@ export const SALARY_TYPES = [
   },
 ];
 
-export const COMPANY_REGISTRATION_TYPE = [
+export const COMPANY_REGISTRATION_TYPES = [
   {
     description: 'Registry of Company',
     endDate: '2046-11-02T16:54:28.783',
