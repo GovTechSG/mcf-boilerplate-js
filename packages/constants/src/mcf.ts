@@ -1,7 +1,7 @@
 // data used by MCF PRODUCT, following the specific order required by UIs
 
 import {
-  COMPANY_REGISTRATION_TYPE as MSF_COMPANY_REGISTRATION_TYPE,
+  COMPANY_REGISTRATION_TYPES as MSF_COMPANY_REGISTRATION_TYPES,
   COUNTRIES as MSF_COUNTRIES,
   DISTRICTS as MSF_DISTRICTS,
   EMPLOYMENT_TYPES as MSF_EMPLOYMENT_TYPES,
@@ -241,10 +241,28 @@ export interface ICompanyRegistrationType {
   id: number;
   registrationType: string;
 }
-const mapMsfToMcfCompanyRegistrationType = () => {
-  return MSF_COMPANY_REGISTRATION_TYPE.map((registrationType) => ({
+const mapMsfToMcfCompanyRegistrationTypes = () => {
+  return MSF_COMPANY_REGISTRATION_TYPES.map((registrationType) => ({
     id: registrationType.registrationTypeCode,
     registrationType: registrationType.description,
   }));
 };
-export const COMPANY_REGISTRATION_TYPE: ICompanyRegistrationType[] = mapMsfToMcfCompanyRegistrationType();
+export const COMPANY_REGISTRATION_TYPES: ICompanyRegistrationType[] = mapMsfToMcfCompanyRegistrationTypes();
+
+/*************************************
+ * Company Address Purpose
+ *************************************/
+export enum COMPANY_ADDRESS_PURPOSE {
+  REGISTERED,
+  OPERATING,
+  CORRESPONDENCE,
+}
+export interface ICompanyAddressPurpose {
+  id: COMPANY_ADDRESS_PURPOSE;
+  purpose: string;
+}
+export const COMPANY_ADDRESS_PURPOSES: ICompanyAddressPurpose[] = [
+  {id: COMPANY_ADDRESS_PURPOSE.REGISTERED, purpose: 'registered'},
+  {id: COMPANY_ADDRESS_PURPOSE.OPERATING, purpose: 'operating'},
+  {id: COMPANY_ADDRESS_PURPOSE.CORRESPONDENCE, purpose: 'correspondence'},
+];
