@@ -9,8 +9,9 @@ import {
   JOB_STATUSES as MSF_JOB_STATUSES,
   POSITION_LEVELS as MSF_POSITION_LEVELS,
   SALARY_TYPES as MSF_SALARY_TYPES,
+  SUB_SCHEMES as MSF_SUB_SCHEMES,
 } from './msf';
-import {mapMcfToIcmsDistrict} from './mappings/districts';
+import {mapMcfToIcmsDistrict, mapMsfToMcfScheme} from './mappings';
 
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
   employmentType !== undefined && !!employmentType.id && !!employmentType.employmentType;
@@ -266,3 +267,21 @@ export const COMPANY_ADDRESS_PURPOSES: ICompanyAddressPurpose[] = [
   {id: COMPANY_ADDRESS_PURPOSE.OPERATING, purpose: 'operating'},
   {id: COMPANY_ADDRESS_PURPOSE.CORRESPONDENCE, purpose: 'correspondence'},
 ];
+
+export interface ISubScheme {
+  id: number;
+  programme: string;
+  scheme: IScheme;
+  startDate: string;
+  endDate: string;
+}
+const mapMsfToMcfSubSchemes = () => {
+  return MSF_SUB_SCHEMES.map((subScheme) => ({
+    endDate: subScheme.endDate.substring(0, 10),
+    id: subScheme.subProgrammeCodeId,
+    programme: subScheme.description,
+    scheme: mapMsfToMcfScheme(subScheme.programmeCodeId)!,
+    startDate: subScheme.startDate.substring(0, 10),
+  }));
+};
+export const SUB_SCHEMES: ISubScheme[] = mapMsfToMcfSubSchemes();
