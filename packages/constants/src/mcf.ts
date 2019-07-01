@@ -121,18 +121,50 @@ export const JOB_CATEGORIES: IJobCategory[] = mapIcmsToMcfJobCategories();
 /*************************************
  * Schemes
  *************************************/
+export enum SCHEME_ID {
+  P_MAX = 1,
+  PCP = 2,
+  CAREER_TRIAL = 3,
+  CAREER_SUPPORT = 4,
+}
+
 export interface IScheme {
   id: number;
   scheme: string;
   startDate: string;
   expiryDate: string;
+  link: string;
 }
 // no auto conversion from MSF for the moment
-export const SCHEMES = [
-  {id: 1, scheme: 'P-Max', startDate: '1977-05-25', expiryDate: '2055-05-04'},
-  {id: 2, scheme: 'Professional Conversion Programme (PCP)', startDate: '1977-05-25', expiryDate: '2055-05-04'},
-  {id: 3, scheme: 'Career Trial', startDate: '1977-05-25', expiryDate: '2055-05-04'},
-  {id: 4, scheme: 'Career Support', startDate: '1977-05-25', expiryDate: '2055-05-04'},
+export const SCHEMES: IScheme[] = [
+  {
+    id: 1,
+    scheme: 'P-Max',
+    startDate: '1977-05-25',
+    expiryDate: '2055-05-04',
+    link: 'http://www.wsg.gov.sg/programmes-and-initiatives/p-max-employer.html',
+  },
+  {
+    id: 2,
+    scheme: 'Professional Conversion Programme (PCP)',
+    startDate: '1977-05-25',
+    expiryDate: '2055-05-04',
+    link: 'http://www.wsg.gov.sg/programmes-and-initiatives/professional-conversion-programmes-employers.html',
+  },
+  {
+    id: 3,
+    scheme: 'Career Trial',
+    startDate: '1977-05-25',
+    expiryDate: '2055-05-04',
+    link: 'http://www.wsg.gov.sg/programmes-and-initiatives/career-trial-employers.html',
+  },
+  {
+    id: 4,
+    scheme: 'Career Support',
+    startDate: '1977-05-25',
+    expiryDate: '2055-05-04',
+    link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
+  },
 ];
 
 /*************************************
