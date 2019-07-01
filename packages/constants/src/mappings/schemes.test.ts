@@ -8,6 +8,7 @@ describe('mapIcmsToMcfScheme', () => {
       scheme: 'Career Support',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
     });
   });
   it('should map to Professional Conversion Programme (PCP) when id is 541002', () => {
@@ -16,6 +17,7 @@ describe('mapIcmsToMcfScheme', () => {
       scheme: 'Professional Conversion Programme (PCP)',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/professional-conversion-programmes-employers.html',
     });
   });
   it('should map to P-Max when id is 541003', () => {
@@ -24,6 +26,7 @@ describe('mapIcmsToMcfScheme', () => {
       scheme: 'P-Max',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/p-max-employer.html',
     });
   });
   it('should map to Career Trial when id is 541005', () => {
@@ -32,6 +35,7 @@ describe('mapIcmsToMcfScheme', () => {
       scheme: 'Career Trial',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/career-trial-employers.html',
     });
   });
 });
@@ -58,6 +62,7 @@ describe('mapMsfToMcfScheme', () => {
       scheme: 'Career Support',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
     });
   });
   it('should map to Professional Conversion Programme (PCP) when id is 05', () => {
@@ -66,6 +71,7 @@ describe('mapMsfToMcfScheme', () => {
       scheme: 'Professional Conversion Programme (PCP)',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/professional-conversion-programmes-employers.html',
     });
   });
   it('should map to P-Max when id is 02', () => {
@@ -74,6 +80,7 @@ describe('mapMsfToMcfScheme', () => {
       scheme: 'P-Max',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/p-max-employer.html',
     });
   });
   it('should map to Career Trial when id is 06', () => {
@@ -82,6 +89,7 @@ describe('mapMsfToMcfScheme', () => {
       scheme: 'Career Trial',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
+      link: 'http://www.wsg.gov.sg/programmes-and-initiatives/career-trial-employers.html',
     });
   });
 });
