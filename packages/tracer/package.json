@@ -24,13 +24,14 @@
   "license": "MIT",
   "dependencies": {
     "@mcf/logger": "^0.4.15",
-    "@types/cls-hooked": "4.2.1",
-    "cls-bluebird": "2.1.0",
-    "cls-hooked": "4.2.2",
-    "zipkin": "0.13.0",
-    "zipkin-transport-http": "0.14.0"
+    "@types/cls-hooked": "^4.3.0",
+    "cls-bluebird": "^2.1.0",
+    "cls-hooked": "^4.2.2",
+    "zipkin": "^0.18.1",
+    "zipkin-context-cls": "^0.18.0",
+    "zipkin-transport-http": "^0.18.1"
   },
   "devDependencies": {
-    "bluebird": "3.5.4"
+    "bluebird": "3.5.5"
   }
 }

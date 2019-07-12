@@ -10,11 +10,11 @@
     "test:watch": "npm test -- --watch --watch-extensions ts"
   },
   "dependencies": {
-    "@types/node-fetch": "2.1.4",
-    "@types/zipkin-instrumentation-fetch": "0.11.4",
-    "node-fetch": "2.3.0",
-    "zipkin": "0.13.0",
-    "zipkin-instrumentation-fetch": "0.14.3"
+    "@types/node-fetch": "^2.3.4",
+    "@types/zipkin-instrumentation-fetch": "^0.11.4",
+    "node-fetch": "^2.6.0",
+    "zipkin": "^0.18.1",
+    "zipkin-instrumentation-fetch": "^0.18.1"
   },
   "publishConfig": {
     "access": "public"

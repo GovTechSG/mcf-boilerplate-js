@@ -9,6 +9,8 @@ export class CLSContext {
   constructor() {
     this.session = getNamespace(MCF_TRACE_NAMESPACE) || createNamespace(MCF_TRACE_NAMESPACE);
     clsBluebird(this.session);
+    const defaultContext = this.session.createContext();
+    this.session.enter(defaultContext);
   }
 
   public setContext(ctx) {
