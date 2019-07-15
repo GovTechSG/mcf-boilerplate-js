@@ -2,19 +2,19 @@ import {expect} from 'chai';
 import {mapIcmsToMcfScheme, mapMcfToIcmsScheme, mapMcfToMsfScheme, mapMsfToMcfScheme} from './schemes';
 
 describe('mapIcmsToMcfScheme', () => {
-  it('should map to Career Support when id is 541001', () => {
+  it('should map to Career Support Programme when id is 541001', () => {
     expect(mapIcmsToMcfScheme(541001)).to.deep.equal({
       id: 4,
-      scheme: 'Career Support',
+      scheme: 'Career Support Programme',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
       link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
     });
   });
-  it('should map to Professional Conversion Programme (PCP) when id is 541002', () => {
+  it('should map to Professional Conversion Programme when id is 541002', () => {
     expect(mapIcmsToMcfScheme(541002)).to.deep.equal({
       id: 2,
-      scheme: 'Professional Conversion Programme (PCP)',
+      scheme: 'Professional Conversion Programme',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
       link: 'http://www.wsg.gov.sg/programmes-and-initiatives/professional-conversion-programmes-employers.html',
@@ -56,19 +56,19 @@ describe('mapMcfToIcmsScheme', () => {
 });
 
 describe('mapMsfToMcfScheme', () => {
-  it('should map to Career Support when id is 01', () => {
+  it('should map to Career Support Programme when id is 01', () => {
     expect(mapMsfToMcfScheme('01')).to.deep.equal({
       id: 4,
-      scheme: 'Career Support',
+      scheme: 'Career Support Programme',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
       link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
     });
   });
-  it('should map to Professional Conversion Programme (PCP) when id is 05', () => {
+  it('should map to Professional Conversion Programme when id is 05', () => {
     expect(mapMsfToMcfScheme('05')).to.deep.equal({
       id: 2,
-      scheme: 'Professional Conversion Programme (PCP)',
+      scheme: 'Professional Conversion Programme',
       startDate: '1977-05-25',
       expiryDate: '2055-05-04',
       link: 'http://www.wsg.gov.sg/programmes-and-initiatives/professional-conversion-programmes-employers.html',

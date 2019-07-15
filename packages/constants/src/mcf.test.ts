@@ -92,7 +92,7 @@ describe('mcf', () => {
       },
       {
         id: 2,
-        scheme: 'Professional Conversion Programme (PCP)',
+        scheme: 'Professional Conversion Programme',
         startDate: '1977-05-25',
         expiryDate: '2055-05-04',
         link: 'http://www.wsg.gov.sg/programmes-and-initiatives/professional-conversion-programmes-employers.html',
@@ -106,7 +106,7 @@ describe('mcf', () => {
       },
       {
         id: 4,
-        scheme: 'Career Support',
+        scheme: 'Career Support Programme',
         startDate: '1977-05-25',
         expiryDate: '2055-05-04',
         link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
