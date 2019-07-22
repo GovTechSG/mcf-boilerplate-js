@@ -298,3 +298,25 @@ export const COMPANY_ADDRESS_PURPOSES: ICompanyAddressPurpose[] = [
   {id: COMPANY_ADDRESS_PURPOSE.OPERATING, purpose: 'operating'},
   {id: COMPANY_ADDRESS_PURPOSE.CORRESPONDENCE, purpose: 'correspondence'},
 ];
+
+/*************************************
+ * Job Application Statuses
+ *************************************/
+
+export enum JOB_APPLICATION_STATUS {
+  NOT_SENT = 0,
+  UNDER_REVIEW,
+  SUCCESSFUL,
+  UNSUCCESSFUL,
+  RECEIVED,
+  WITHDRAWN,
+}
+
+export const JOB_APPLICATION_STATUSES = {
+  [JOB_APPLICATION_STATUS.NOT_SENT]: 'Not Sent',
+  [JOB_APPLICATION_STATUS.UNDER_REVIEW]: 'Under Review',
+  [JOB_APPLICATION_STATUS.SUCCESSFUL]: 'Successful',
+  [JOB_APPLICATION_STATUS.UNSUCCESSFUL]: 'Unsuccessful',
+  [JOB_APPLICATION_STATUS.RECEIVED]: 'Received',
+  [JOB_APPLICATION_STATUS.WITHDRAWN]: 'Withdrawn',
+};
