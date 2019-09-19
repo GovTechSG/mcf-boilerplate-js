@@ -2,7 +2,7 @@ import cors from 'cors';
 import {RequestHandler} from 'express';
 
 const DEFAULT_ALLOWED_HEADERS = [];
-const DEFAULT_ALLOWED_METHODS: HttpMethod[] = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
+const DEFAULT_ALLOWED_METHODS: HttpMethod[] = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'];
 const DEFAULT_ALLOWED_ORIGINS: string[] = [];
 const DEFAULT_CREDENTIALS = true;
 const DEFAULT_PREFLIGHT_CONTINUE = false;

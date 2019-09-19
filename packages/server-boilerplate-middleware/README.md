@@ -155,7 +155,7 @@ The above configuration produces the following CSP:
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
 | `allowedHeaders` | `Array<String>` | provides the Access-Control-Allow-Headers header value | `[]` |
-| `allowedMethods` | `Array<String>` | provides the Access-Control-Allow-Methods header value | `['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']` |
+| `allowedMethods` | `Array<String>` | provides the Access-Control-Allow-Methods header value | `['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']` |
 | `allowedOrigins` | `Array<String>` | provides the Access-Control-Allow-Origins header value | `[]` |
 | `credentials` | `Boolean` | provides the Access-Control-Allow-Credentials header value | `true` |
 | `preflightContinue` | `Boolean` | decides whether to pass the request on or respond with 204 | `false` |
