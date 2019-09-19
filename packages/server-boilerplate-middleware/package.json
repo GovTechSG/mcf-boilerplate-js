@@ -1,6 +1,6 @@
 {
   "name": "@mcf/server-boilerplate-middleware",
-  "version": "0.8.11",
+  "version": "0.8.12",
   "description": "Boilerplate middleware for Node projects in MyCareersFuture.",
   "main": "dist/index.js",
   "scripts": {
