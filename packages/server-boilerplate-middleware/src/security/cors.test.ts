@@ -84,6 +84,10 @@ describe('security/cors', () => {
         .expect(200)
         .then((res) => res.header),
       supertest(server)
+        .patch('/')
+        .expect(200)
+        .then((res) => res.header),
+      supertest(server)
         .delete('/')
         .expect(200)
         .then((res) => res.header),

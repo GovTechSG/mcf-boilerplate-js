@@ -7,7 +7,7 @@ const DEFAULT_ALLOWED_ORIGINS: string[] = [];
 const DEFAULT_CREDENTIALS = true;
 const DEFAULT_PREFLIGHT_CONTINUE = false;
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS';
+export type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE' | 'OPTIONS';
 
 export interface ICorsMiddlewareOptions {
   allowedHeaders?: string[];
