@@ -155,7 +155,7 @@ The above configuration produces the following CSP:
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
 | `allowedHeaders` | `Array<String>` | provides the Access-Control-Allow-Headers header value | `[]` |
-| `allowedMethods` | `Array<String>` | provides the Access-Control-Allow-Methods header value | `['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']` |
+| `allowedMethods` | `Array<String>` | provides the Access-Control-Allow-Methods header value | `['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']` |
 | `allowedOrigins` | `Array<String>` | provides the Access-Control-Allow-Origins header value | `[]` |
 | `credentials` | `Boolean` | provides the Access-Control-Allow-Credentials header value | `true` |
 | `preflightContinue` | `Boolean` | decides whether to pass the request on or respond with 204 | `false` |
@@ -164,7 +164,7 @@ Defaults to:
 ```js
 const corsOptions = {
   allowedHeaders: [],
-  allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedMethods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedOrigins: [],
   credentials: true,
   preflightContinue: false,
@@ -232,27 +232,27 @@ lerna bootstrap;
 ```
 
 ### Running Tests
-To run the tests during development, use:
+To run the tests during development, use at the root directory:
 
 ```sh
-npm run test:watch;
+npx lerna run --scope @mcf/server-boilerplate-middleware test:watch
 ```
 
 To run the tests on the built package, use:
 
 ```sh
-npm run test;
+npx lerna run --scope @mcf/server-boilerplate-middleware test
 ```
 
 To run a test server using the boilerplate server, use:
 
 ```sh
-npm start
+npx lerna run --scope @mcf/server-boilerplate-middleware start
 ```
 
 ### Building
 ```sh
-npm run build;
+npx lerna run --scope @mcf/server-boilerplate-middleware build
 ```
 
 ### Integration Example
