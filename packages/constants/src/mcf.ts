@@ -320,3 +320,121 @@ export const JOB_APPLICATION_STATUSES = {
   [JOB_APPLICATION_STATUS.RECEIVED]: 'Received',
   [JOB_APPLICATION_STATUS.WITHDRAWN]: 'Withdrawn',
 };
+
+/*************************************
+ * SSECE EQA List (Education)
+ * Extracted from https://www.singstat.gov.sg/-/media/files/standards_and_classifications/educational_classification/ssec2015-report.pdf
+ *************************************/
+
+export interface ISsecEqa {
+  code: string;
+  description: string;
+}
+export const SSEC_EQA_LIST: ISsecEqa[] = [
+  {code: '01', description: 'Never attended school'},
+  {code: '02', description: 'Pre-primary / Kindergarten education'},
+  {code: '03', description: 'Primary education without PSLE / PSPE certification or their equivalent'},
+  {code: '04', description: 'Certificate in BEST 1-3'},
+  {
+    code: '11',
+    description:
+      'Primary School Leaving Certificate (PSLE) / Primary School Proficiency Certificate (PSPE) or other certificates of equivalent standard',
+  },
+  {code: '12', description: 'Certificate in BEST 4'},
+  {
+    code: '13',
+    description:
+      'At least 3 WSQ Statements of Attainment in Workplace Literacy or Numeracy (WPLN) at Level 1 or 2 (eg under ESS, ES)',
+  },
+  {code: '21', description: `Secondary education without a GCE 'O' / 'N' Level pass or their equivalent`},
+  {code: '22', description: 'Certificate in WISE 1-3'},
+  {code: '23', description: 'Basic vocational certificates (including ITE Basic Vocational Training)'},
+  {
+    code: '24',
+    description:
+      'At least 3 WSQ Statements of Attainment in Workplace Literacy or Numeracy (WPLN) at Level 3 or 4 (eg under ESS, ES)',
+  },
+  {code: '31', description: `At least 1 GCE 'N' Level pass`},
+  {code: '32', description: `At least 1 GCE 'O' Level pass`},
+  {
+    code: '33',
+    description:
+      'National ITE Certificate (Intermediate) or equivalent (eg National Technical Certificate Grade 3, Certificate of Vocational Training, BCA Builder Certificate)',
+  },
+  {
+    code: '34',
+    description:
+      'ITE Skills Certificate (ISC) or equivalent (eg Certificate of Competency, Certificate in Service Skills)',
+  },
+  {
+    code: '35',
+    description:
+      'At least 3 WSQ Statements of Attainment in Workplace Literacy or Numeracy (WPLN) at Level 5 and above (eg under ESS, ES)',
+  },
+  {code: '39', description: 'Other certificates or qualifications of equivalent standard (secondary) n.e.c.'},
+  {code: '41', description: `At least 1 GCE 'A'/'H2' Level pass or equivalent (General)`},
+  {
+    code: '42',
+    description:
+      'National ITE Certificate (Nitec) or equivalent (eg Post Nitec Certificate, Specialist Nitec, Certificate in Office Skills, National Technical Certificate Grade 2, National Certificate in Nursing, Advanced  Builder Certificate) ',
+  },
+  {
+    code: '43',
+    description:
+      'Higher Nitec, including Certificate in Business Skills, Industrial Technician Certificate and other polytechnic certificates',
+  },
+  {code: '44', description: 'Master Nitec or equivalent (eg National Technical Certificate Grade 1)'},
+  {code: '45', description: 'WSQ Certificate or equivalent'},
+  {code: '46', description: 'WSQ Higher Certificate or equivalent'},
+  {code: '47', description: 'WSQ Advanced Certificate or equivalent'},
+  {
+    code: '48',
+    description:
+      'Other post-secondary (non-tertiary; General) qualifications, including International Baccalaureate / High School Diploma',
+  },
+  {
+    code: '49',
+    description: 'Other post-secondary (non-tertiary; Vocational) certificates (eg SIM certificates) qualifications',
+  },
+  {code: '51', description: 'Polytechnic diploma'},
+  {
+    code: '52',
+    description:
+      'Polytechnic advanced diploma (including polytechnic advanced/post/ specialist/management/graduate diploma)',
+  },
+  {code: '61', description: 'ITE diploma'},
+  {
+    code: '62',
+    description: 'Diploma qualifications (eg NIE diploma, SIM diploma, LaSalle-SIA diploma, NAFA diploma)',
+  },
+  {code: '63', description: 'Qualifications awarded by professional bodies'},
+  {code: '64', description: 'WSQ diploma'},
+  {code: '65', description: 'WSQ specialist diploma'},
+  {code: '69', description: 'Other advanced diploma, post-diploma qualifications or equivalent n.e.c.'},
+  {code: '70', description: `Bachelor's degree or equivalent`},
+  {code: '81', description: 'Postgraduate diploma (including NIE postgraduate diploma)'},
+  {code: '82', description: 'WSQ graduate certificate'},
+  {code: '83', description: 'WSQ graduate diploma'},
+  {code: '91', description: `Master's or equivalent`},
+  {code: '92', description: 'Doctorate or equivalent'},
+  {
+    code: 'N1',
+    description:
+      'At least 1 WSQ Statement of Attainment or ITE modular certificate at Post-Secondary Level (Non-Tertiary) or equivalent',
+  },
+  {
+    code: 'N2',
+    description: 'At least 1 WSQ Statement of Attainment or other modular certificate at Diploma Level or equivalent',
+  },
+  {
+    code: 'N3',
+    description: 'At least 1 WSQ Statement of Attainment or other modular certificate at Degree Level or equivalent',
+  },
+  {
+    code: 'N4',
+    description:
+      'At least 1 WSQ Statement of Attainment or other modular certificate at Postgraduate Level or equivalent',
+  },
+  {code: 'N9', description: 'Other Statement of Attainment, modular certificate or equivalent n.e.c.'},
+  {code: 'XX', description: 'Not reported'},
+];
