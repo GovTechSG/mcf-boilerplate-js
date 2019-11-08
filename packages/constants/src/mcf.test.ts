@@ -17,6 +17,7 @@ import {
   joinWords,
   cleanWord,
   isJobApplicationPath,
+  formatJobUrl
 } from './mcf';
 
 describe('mcf', () => {
@@ -1582,7 +1583,7 @@ describe('mcf', () => {
     ]);
   });
 
-  describe('formatUrl', () => {
+  describe('formatJobUrl', () => {
     describe('pathToJobId', () => {
       it('should works for just jobId', () => {
         const path = '/job/1580bcedd5fafbcf04ee47e918cf25d2';
@@ -1780,60 +1781,60 @@ describe('mcf', () => {
       });
     });
 
-    // describe('jobToPath', () => {
-    //   it('works for just uuid', () => {
-    //     const job = {uuid: '1580bcedd5fafbcf04ee47e918cf25d2'};
-    //     expect(jobToPath(job)).to.equal('/job/1580bcedd5fafbcf04ee47e918cf25d2');
-    //   });
-    //
-    //   it('works for uuid and job title', () => {
-    //     const job = {
-    //       uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
-    //       jobTitle: 'DIRECTOR OF OPERATIONS',
-    //     };
-    //     expect(jobToPath(job)).to.equal('/job/director-operations-1580bcedd5fafbcf04ee47e918cf25d2');
-    //   });
-    //
-    //   it('works for uuid, job title and company name', () => {
-    //     const job = {
-    //       uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
-    //       jobTitle: 'DIRECTOR OF OPERATIONS',
-    //       company: 'AIRYA CRESTAR INTERNATIONAL PTE. LTD.',
-    //     };
-    //     expect(jobToPath(job)).to.equal(
-    //       '/job/director-operations-airya-crestar-international-1580bcedd5fafbcf04ee47e918cf25d2',
-    //     );
-    //   });
-    //
-    //   it('works for all official language and weird characters', () => {
-    //     expect(
-    //       jobToPath({
-    //         uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
-    //         jobTitle: '软件开发人员🤡',
-    //         company: '谷歌©',
-    //       }),
-    //     ).to.equal(
-    //     '/job/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%F0%9F%A4%A1-%E8%B0%B7%E6%AD%8C%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
-    //     );
-    //
-    //     expect(
-    //       jobToPath({
-    //         uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
-    //         jobTitle: '🤡सॉफ्टवेयर',
-    //         company: 'वलपर–गूगल©',
-    //       }),
-    //     ).to.equal(
-    //     '/job/%F0%9F%A4%A1%E0%A4%B8%E0%A5%89%E0%A4%AB%E0%A5%8D%E0%A4%9F%E0%A4%B5%E0%A5%87%E0%A4%AF%E0%A4%B0-%E0%A4%B5%E0%A4%B2%E0%A4%AA%E0%A4%B0%E2%80%93%E0%A4%97%E0%A5%82%E0%A4%97%E0%A4%B2%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
-    //     );
-    //
-    //     expect(
-    //       jobToPath({
-    //         uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
-    //         jobTitle: 'pemaju-perisian🤡',
-    //         company: 'google©',
-    //       }),
-    //     ).to.equal('/job/pemaju-perisian%F0%9F%A4%A1-google%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2');
-    //   });
-    // });
+    describe('formatJobUrl', () => {
+      it('works for just uuid', () => {
+        const job = {uuid: '1580bcedd5fafbcf04ee47e918cf25d2'};
+        expect(formatJobUrl(job)).to.equal('/job/1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('works for uuid and job title', () => {
+        const job = {
+          uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+          jobTitle: 'DIRECTOR OF OPERATIONS',
+        };
+        expect(formatJobUrl(job)).to.equal('/job/director-operations-1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('works for uuid, job title and company name', () => {
+        const job = {
+          uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+          jobTitle: 'DIRECTOR OF OPERATIONS',
+          company: 'AIRYA CRESTAR INTERNATIONAL PTE. LTD.',
+        };
+        expect(formatJobUrl(job)).to.equal(
+          '/job/director-operations-airya-crestar-international-1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+      });
+
+      it('works for all official language and weird characters', () => {
+        expect(
+          formatJobUrl({
+            uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+            jobTitle: '软件开发人员🤡',
+            company: '谷歌©',
+          }),
+        ).to.equal(
+        '/job/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%F0%9F%A4%A1-%E8%B0%B7%E6%AD%8C%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+
+        expect(
+          formatJobUrl({
+            uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+            jobTitle: '🤡सॉफ्टवेयर',
+            company: 'वलपर–गूगल©',
+          }),
+        ).to.equal(
+        '/job/%F0%9F%A4%A1%E0%A4%B8%E0%A5%89%E0%A4%AB%E0%A5%8D%E0%A4%9F%E0%A4%B5%E0%A5%87%E0%A4%AF%E0%A4%B0-%E0%A4%B5%E0%A4%B2%E0%A4%AA%E0%A4%B0%E2%80%93%E0%A4%97%E0%A5%82%E0%A4%97%E0%A4%B2%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+
+        expect(
+          formatJobUrl({
+            uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+            jobTitle: 'pemaju-perisian🤡',
+            company: 'google©',
+          }),
+        ).to.equal('/job/pemaju-perisian%F0%9F%A4%A1-google%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+    });
   });
 });

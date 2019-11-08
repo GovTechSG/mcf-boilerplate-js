@@ -1130,9 +1130,10 @@ export const CATEGORY = {
   OTHERS:  CategoryKey('others', 'Others', 'Others', 'others'),
 };
 
-export const formatJobUrl = ({jobTitle, company, uuid, category}) => {
+    export const formatJobUrl = ({jobTitle, company, uuid, categoryLabel}: {jobTitle?: string, company?:string, uuid:string, categoryLabel?: string}) => {
     const processedJobTitle = cleanWord(jobTitle);
     const processedCompany = cleanWord(company);
     const urlSegment = `${processedJobTitle && processedJobTitle.concat('-')}${processedCompany &&
         processedCompany.concat('-')}${uuid}`;
-    return getCategoryByLabel(category) ? `/job/${CATEGORY}/${urlSegment}` : `/job/${urlSegment}`; }
+    const category = getCategoryByLabel(categoryLabel);
+    return category ? `/job/${CATEGORY[category].url}/${urlSegment}` : `/job/${urlSegment}`; }
