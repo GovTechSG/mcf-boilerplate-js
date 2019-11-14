@@ -670,7 +670,7 @@ export const joinWords = (str = '') => {
   return str.trim().replace(re, '-');
 };
 
-export const cleanWord = (str = '') => {
+export const processStringToUrlFormat = (str = '') => {
   const currentStr = `${str.toLowerCase()}`;
   return flow(
     removeWordsInBracket,
@@ -704,7 +704,8 @@ export const isJobApplicationPath = (path) => {
 export const pathToJobAlertChecksum = (path) => {
   const regexExp = /jobalert\/remove\/(?:.*-)?(.*$)/i;
   const checksum = regexExp.exec(path);
-  return checksum && checksum[1] ? checksum[1] : null;
+  return checksum && checksum[1] || null;
+
 };
 
 export const getCategoryByLabel = (label) => Object.keys(CATEGORY).find((category) => CATEGORY[category].label === label);
@@ -714,7 +715,7 @@ function Key(id: string, label: string, value: string, url: string) {
   return {id, label, value: typeof value === 'undefined' ? id : value, url};
 }
 
-function  CategoryKey(id: string, label: string, value: string, url: string, metaDescription?: string, pageTitle?: string, description?: string) {
+function CategoryKey(id: string, label: string, value: string, url: string, metaDescription?: string, pageTitle?: string, description?: string) {
   return {
     ...Key(id, label, value, url),
     description,
@@ -722,6 +723,14 @@ function  CategoryKey(id: string, label: string, value: string, url: string, met
     pageTitle,
   };
 }
+
+    export const formatJobUrl = ({jobTitle, company, uuid, categoryLabel}: {jobTitle?: string, company?:string, uuid:string, categoryLabel?: string}) => {
+    const processedJobTitle = processStringToUrlFormat(jobTitle);
+    const processedCompany = processStringToUrlFormat(company);
+    const urlSegment = `${processedJobTitle && processedJobTitle.concat('-')}${processedCompany &&
+        processedCompany.concat('-')}${uuid}`;
+    const category = getCategoryByLabel(categoryLabel);
+    return category ? `/job/${CATEGORY[category].url}/${urlSegment}` : `/job/${urlSegment}`; }
 
 export const CATEGORY_DESCRIPTION = {
   ACCOUNTING_AUDITING_TAXATION: `<h1>View Accounting and Finance Jobs Available in Singapore </h1><p>In a nutshell, accounting refers to the recording, sorting, retrieving and summarising of financial transactions in a business. By acquiring and creating reports on a business’ cash flows, financial stability and performance – the company can then make decisions on how to best manage the business and its processes. </p><p>Singapore’s status as a leading global financial centre plays a key role in boosting the financial growth of the country. There is an increase in job opportunities available in the accounting and finance industry as global investors take interest in Singapore. The potential for long term growth and a stable career is strong in the accounting sector in Singapore.</p><p>Using the <a href="https://content.mycareersfuture.sg/">Careers Toolkit</a> is an excellent way to leverage available resources to aid in your job applications.</p><h2>What is Accounting?</h2><p>Accounting itself is a broad category in the finance sector. That makes it difficult to narrow down the specifics of the different job responsibilities held by accountants in differing sectors like management or financial accounting. More often than not, accounting is a job that requires a degree of attention to detail and financial acumen. As accountants are also privy to confidential financial data, their ability to keep information private is just as important as their technical skills. Some of the daily duties carried out by accountants include, but are not limited to:</p><ul><li>Recording and sorting financial transactions</li><li>Performing internal audits</li><li>Analysing cash flows in the business</li><li>Producing quarterly financial reports</li><li>Managing internal cash flows</li></ul><ol><li><h3>What Type of Accounting Jobs are there? </h3><p>Accounting jobs comprise much more than just analysing and reviewing financial records. Some of the industries that hire accountants or need accounting services are:</p><ol type="A"><li>Public or Government Accounting </li><li>Auditing Services </li><li>Management Accounting </li></ol><p>Accounting Job Titles include: </p><ol type="A"><li>Certified Public Accountant</li><li>Accounting Clerk</li><li>Financial Analyst </li><li>Budget Analyst</li><li>Compliance Auditor </li></ol></li><li><h3>Certifications for Accounting and Finance Jobs in Singapore </h3><p>An accounting degree can get your foot through the door for most entry level accounting jobs in Singapore. However, if you intend to advance your career in the finance sector, attaining several certifications can give you competitive advantage in bagging more senior accountant job roles. Popular accounting certifications in Singapore include:</p><ol type="A"><li>Certified Public Accountant (CPA)</li><li>Certified Management Accountant (CMA)</li><li>Certified Internal Auditor (CIA)</li><li>Certified Financial Analyst (CFA) </li></ol></li></ol><p>Those who are new to the industry can look to the Accounting and Corporate Regulatory Authority (ACRA) to get insight into Singapore’s auditing services. </p><h2>Apply for Accounting and Finance Jobs in Singapore</h2><p>Be it full time or part time, there are a myriad of accounting firms in Singapore constantly on the lookout for accountants, auditors and analysts. </p><p>Moreover, putting these <a href="https://content.mycareersfuture.sg/want-to-grow-your-career-here-are-some-tips-to-stay-ahead-in-the-workforce/">pointers into practice</a> can aid jobseekers to remain relevant and employable in an increasingly competitive job market. Stay ahead and gain awareness of the changing trends in the workforce by equipping yourself with <a href="https://content.mycareersfuture.sg/future-work-4-essential-tips-singaporeans-stay-ahead-pack/">these tips</a>! </p>`,
@@ -1130,10 +1139,3 @@ export const CATEGORY = {
   OTHERS:  CategoryKey('others', 'Others', 'Others', 'others'),
 };
 
-    export const formatJobUrl = ({jobTitle, company, uuid, categoryLabel}: {jobTitle?: string, company?:string, uuid:string, categoryLabel?: string}) => {
-    const processedJobTitle = cleanWord(jobTitle);
-    const processedCompany = cleanWord(company);
-    const urlSegment = `${processedJobTitle && processedJobTitle.concat('-')}${processedCompany &&
-        processedCompany.concat('-')}${uuid}`;
-    const category = getCategoryByLabel(categoryLabel);
-    return category ? `/job/${CATEGORY[category].url}/${urlSegment}` : `/job/${urlSegment}`; }

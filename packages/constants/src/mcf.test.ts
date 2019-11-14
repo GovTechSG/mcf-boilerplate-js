@@ -15,7 +15,7 @@ import {
   removeExcessWhitespaces,
   removeRepeatedHyphens,
   joinWords,
-  cleanWord,
+  processStringToUrlFormat,
   isJobApplicationPath,
   formatJobUrl
 } from './mcf';
@@ -1761,23 +1761,23 @@ describe('mcf', () => {
       });
     });
 
-    describe('cleanWord', () => {
+    describe('processStringToUrlFormat', () => {
       it('returns empty string on empty, null or undefined string', () => {
-        expect(cleanWord()).to.equal('');
-        expect(cleanWord(undefined)).to.equal('');
+        expect(processStringToUrlFormat()).to.equal('');
+        expect(processStringToUrlFormat(undefined)).to.equal('');
       });
 
       it('removes standard phrases like "Pte", "Ltd", "Pte.", "Ltd." "Private (Limited)", "Private Limited"', () => {
         const expectedOutput = 'airya-crestar';
-        expect(cleanWord('AIRYA - CRESTAR PTE. LTD.')).to.equal(expectedOutput);
-        expect(cleanWord('AIRYA - CRESTAR Pte Ltd')).to.equal(expectedOutput);
-        expect(cleanWord('AIRYA - CRESTAR Private (Limited)')).to.equal(expectedOutput);
-        expect(cleanWord('AIRYA - CRESTAR Private Limited')).to.equal(expectedOutput);
+        expect(processStringToUrlFormat('AIRYA - CRESTAR PTE. LTD.')).to.equal(expectedOutput);
+        expect(processStringToUrlFormat('AIRYA - CRESTAR Pte Ltd')).to.equal(expectedOutput);
+        expect(processStringToUrlFormat('AIRYA - CRESTAR Private (Limited)')).to.equal(expectedOutput);
+        expect(processStringToUrlFormat('AIRYA - CRESTAR Private Limited')).to.equal(expectedOutput);
       });
 
       it('removes special characters', () => {
         const input = "Adi's Designs (International)";
-        expect(cleanWord(input)).to.equal('adis-designs');
+        expect(processStringToUrlFormat(input)).to.equal('adis-designs');
       });
     });
 
