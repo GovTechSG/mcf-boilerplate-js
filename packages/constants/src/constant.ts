@@ -1,9 +1,19 @@
-function Key(id: string, label: string, value: string, url: string) {
+interface IKey {
+    id: string;
+    label: string;
+    value: string;
+    url: string;
+}
+
+interface ICategory {
+    [category: string]: IKey;
+}
+
+function Key(id: string, label: string, value: string, url: string): IKey {
   return {id, label, value: typeof value === 'undefined' ? id : value, url};
 }
 
-
-export const CATEGORY = {
+export const CATEGORY: ICategory = {
   ACCOUNTING_AUDITING_TAXATION:  Key(
     'accounting_auditing_taxation',
     'Accounting / Auditing / Taxation',
