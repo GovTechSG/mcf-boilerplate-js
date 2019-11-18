@@ -1,5 +1,6 @@
 // data used by MCF PRODUCT, following the specific order required by UIs
 
+import {flow, remove} from 'lodash';
 import {
   COMPANY_REGISTRATION_TYPES as MSF_COMPANY_REGISTRATION_TYPES,
   COUNTRIES as MSF_COUNTRIES,
@@ -11,6 +12,8 @@ import {
   SALARY_TYPES as MSF_SALARY_TYPES,
 } from './msf';
 import {mapMcfToIcmsDistrict} from './mappings/districts';
+import {CATEGORY} from './constant';
+
 
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
   employmentType !== undefined && !!employmentType.id && !!employmentType.employmentType;
@@ -438,3 +441,283 @@ export const SSEC_EQA_LIST: ISsecEqa[] = [
   {code: 'N9', description: 'Other Statement of Attainment, modular certificate or equivalent n.e.c.'},
   {code: 'XX', description: 'Not reported'},
 ];
+
+// Additional stop words are words that are common across all job description/titles
+export const CUSTOM_WORD_LIST = [
+  'pte',
+  'ltd',
+  'pte.',
+  'ltd.',
+  'private',
+  'limited',
+  'llc',
+  'llp',
+  'inc',
+  'inc.',
+  'co',
+  'co.',
+];
+
+// Stop words are retrieved from https://www.ranks.nl/stopwords
+export const STOP_WORDS = [
+  ...CUSTOM_WORD_LIST,
+  'a',
+  'about',
+  'above',
+  'after',
+  'again',
+  'against',
+  'all',
+  'am',
+  'an',
+  'and',
+  'any',
+  'are',
+  "aren't",
+  'as',
+  'at',
+  'be',
+  'because',
+  'been',
+  'before',
+  'being',
+  'below',
+  'between',
+  'both',
+  'but',
+  'by',
+  "can't",
+  'cannot',
+  'could',
+  "couldn't",
+  'did',
+  "didn't",
+  'do',
+  'does',
+  "doesn't",
+  'doing',
+  "don't",
+  'down',
+  'during',
+  'each',
+  'few',
+  'for',
+  'from',
+  'further',
+  'had',
+  "hadn't",
+  'has',
+  "hasn't",
+  'have',
+  "haven't",
+  'having',
+  'he',
+  "he'd",
+  "he'll",
+  "he's",
+  'her',
+  'here',
+  "here's",
+  'hers',
+  'herself',
+  'him',
+  'himself',
+  'his',
+  'how',
+  "how's",
+  'i',
+  "i'd",
+  "i'll",
+  "i'm",
+  "i've",
+  'if',
+  'in',
+  'into',
+  'is',
+  "isn't",
+  'it',
+  "it's",
+  'its',
+  'itself',
+  "let's",
+  'me',
+  'more',
+  'most',
+  "mustn't",
+  'my',
+  'myself',
+  'no',
+  'nor',
+  'not',
+  'of',
+  'off',
+  'on',
+  'once',
+  'only',
+  'or',
+  'other',
+  'ought',
+  'our',
+  'ours',
+  'ourselves',
+  'out',
+  'over',
+  'own',
+  'same',
+  "shan't",
+  'she',
+  "she'd",
+  "she'll",
+  "she's",
+  'should',
+  "shouldn't",
+  'so',
+  'some',
+  'such',
+  'than',
+  'that',
+  "that's",
+  'the',
+  'their',
+  'theirs',
+  'them',
+  'themselves',
+  'then',
+  'there',
+  "there's",
+  'these',
+  'they',
+  "they'd",
+  "they'll",
+  "they're",
+  "they've",
+  'this',
+  'those',
+  'through',
+  'to',
+  'too',
+  'under',
+  'until',
+  'up',
+  'very',
+  'was',
+  "wasn't",
+  'we',
+  "we'd",
+  "we'll",
+  "we're",
+  "we've",
+  'were',
+  "weren't",
+  'what',
+  "what's",
+  'when',
+  "when's",
+  'where',
+  "where's",
+  'which',
+  'while',
+  'who',
+  "who's",
+  'whom',
+  'why',
+  "why's",
+  'with',
+  "won't",
+  'would',
+  "wouldn't",
+  'you',
+  "you'd",
+  "you'll",
+  "you're",
+  "you've",
+  'your',
+  'yours',
+  'yourself',
+  'yourselves',
+];
+
+export const removeStopWords = (str = '') => {
+  const strArr = str.split(' ');
+  const sanitisedArr = remove(strArr, (word) => {
+    return !STOP_WORDS.includes(word);
+  });
+  return sanitisedArr.join(' ');
+};
+
+export const removeWordsInBracket = (str = '') => {
+  const re = /\(.*?\)/gi;
+  return str.replace(re, '');
+};
+
+export const removePunctuations = (str = '') => {
+  // '-' is ignored in this case
+  const re = /[~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=]/g;
+  return str.replace(re, '');
+};
+
+export const removeExcessWhitespaces = (str = '') => {
+  const re = /\s+/g;
+  return str.replace(re, ' ');
+};
+
+export const removeRepeatedHyphens = (str = '') => {
+  const re = /\-+/g;
+  return str.replace(re, '-');
+};
+
+export const joinWords = (str = '') => {
+  const re = /\s/g;
+  return str.trim().replace(re, '-');
+};
+
+export const processStringToUrlFormat = (str = '') => {
+  const currentStr = `${str.toLowerCase()}`;
+  return flow(
+    removeWordsInBracket,
+    removeStopWords,
+    removePunctuations,
+    removeExcessWhitespaces,
+    joinWords,
+    removeRepeatedHyphens,
+    encodeURIComponent,
+  )(currentStr);
+};
+
+export const pathToJobId = (path) => {
+  // Sanitize path to remove last character if last character is `/`
+  const parsedPath = path.substr(-1) === '/' ? path.slice(0, -1) : path;
+  const regexExp = /job\/(?:.*-)?(.*)/i;
+  const groups = regexExp.exec(parsedPath);
+  // length - 1 is to find the uuid, since it will always be the last one is in the group
+  // split('/') will handle the case where the url end with `/apply` in the case of job application
+  const jobId = groups && groups[groups.length - 1] ? groups[groups.length - 1].split('/') : null;
+  // same apply here as well
+  return jobId && (jobId[jobId.length - 1] === 'apply' ? jobId[jobId.length - 2] : jobId[jobId.length - 1]);
+};
+
+export const isJobApplicationPath = (path) => {
+  const regexExp = /\/apply\/?$/;
+  const groups = regexExp.exec(path);
+  return groups ? true : false;
+};
+
+export const pathToJobAlertChecksum = (path) => {
+  const regexExp = /jobalert\/remove\/(?:.*-)?(.*$)/i;
+  const checksum = regexExp.exec(path);
+  return checksum && checksum[1] || null;
+
+};
+
+export const getCategoryByLabel = (label) => Object.keys(CATEGORY).find((category) => CATEGORY[category].label === label);
+
+    export const formatJobUrl = ({jobTitle, company, uuid, categoryLabel}: {jobTitle?: string, company?:string, uuid:string, categoryLabel?: string}) => {
+    const processedJobTitle = processStringToUrlFormat(jobTitle);
+    const processedCompany = processStringToUrlFormat(company);
+    const urlSegment = `${processedJobTitle && processedJobTitle.concat('-')}${processedCompany &&
+        processedCompany.concat('-')}${uuid}`;
+    const category = getCategoryByLabel(categoryLabel);
+    return category ? `/job/${CATEGORY[category].url}/${urlSegment}` : `/job/${urlSegment}`; }
+
+
+
