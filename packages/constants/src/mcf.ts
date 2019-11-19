@@ -1,6 +1,5 @@
 // data used by MCF PRODUCT, following the specific order required by UIs
 
-import {flow, remove} from 'lodash';
 import {
   COMPANY_REGISTRATION_TYPES as MSF_COMPANY_REGISTRATION_TYPES,
   COUNTRIES as MSF_COUNTRIES,
@@ -637,13 +636,7 @@ export const STOP_WORDS = [
   'yourselves',
 ];
 
-export const removeStopWords = (str = '') => {
-  const strArr = str.split(' ');
-  const sanitisedArr = remove(strArr, (word) => {
-    return !STOP_WORDS.includes(word);
-  });
-  return sanitisedArr.join(' ');
-};
+export const removeStopWords = (str = '') => str.split(' ').filter(word => !STOP_WORDS.includes(word)).join(' ');
 
 export const removeWordsInBracket = (str = '') => {
   const re = /\(.*?\)/gi;
@@ -673,7 +666,16 @@ export const joinWords = (str = '') => {
 
 export const processStringToUrlFormat = (str = '') => {
   const currentStr = `${str.toLowerCase()}`;
-  return flow(
+  // return flow(
+  //   removeWordsInBracket,
+  //   removeStopWords,
+  //   removePunctuations,
+  //   removeExcessWhitespaces,
+  //   joinWords,
+  //   removeRepeatedHyphens,
+  //   encodeURIComponent,
+  // )(currentStr);
+  return [
     removeWordsInBracket,
     removeStopWords,
     removePunctuations,
@@ -681,7 +683,7 @@ export const processStringToUrlFormat = (str = '') => {
     joinWords,
     removeRepeatedHyphens,
     encodeURIComponent,
-  )(currentStr);
+ ].reduce((currentState, currentItem) => currentItem(currentState), currentStr)
 };
 
 export const pathToJobId = (path) => {
