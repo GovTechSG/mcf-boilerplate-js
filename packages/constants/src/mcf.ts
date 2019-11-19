@@ -15,6 +15,7 @@ import {mapMcfToIcmsDistrict} from './mappings/districts';
 import {CATEGORY} from './category';
 
 
+
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
   employmentType !== undefined && !!employmentType.id && !!employmentType.employmentType;
 
