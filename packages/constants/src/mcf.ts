@@ -12,7 +12,7 @@ import {
   SALARY_TYPES as MSF_SALARY_TYPES,
 } from './msf';
 import {mapMcfToIcmsDistrict} from './mappings/districts';
-import {CATEGORY} from './constant';
+import {CATEGORY} from './category';
 
 
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
