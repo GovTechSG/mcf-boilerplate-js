@@ -1,5 +1,5 @@
 import * as icms from './icms';
-import {CATEGORY} as category from './category';
+import {CATEGORY} from './category';
 import * as mcf from './mcf';
 import * as msf from './msf';
 import * as mappings from './mappings';
