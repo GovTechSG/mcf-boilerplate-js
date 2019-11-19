@@ -667,15 +667,6 @@ export const joinWords = (str = '') => {
 
 export const processStringToUrlFormat = (str = '') => {
   const currentStr = `${str.toLowerCase()}`;
-  // return flow(
-  //   removeWordsInBracket,
-  //   removeStopWords,
-  //   removePunctuations,
-  //   removeExcessWhitespaces,
-  //   joinWords,
-  //   removeRepeatedHyphens,
-  //   encodeURIComponent,
-  // )(currentStr);
   return [
     removeWordsInBracket,
     removeStopWords,
