@@ -13,8 +13,6 @@ import {
 import {mapMcfToIcmsDistrict} from './mappings/districts';
 import {CATEGORY} from './category';
 
-
-
 const isEmploymentType = (employmentType?: IEmploymentType): employmentType is IEmploymentType =>
   employmentType !== undefined && !!employmentType.id && !!employmentType.employmentType;
 
@@ -637,7 +635,11 @@ export const STOP_WORDS = [
   'yourselves',
 ];
 
-export const removeStopWords = (str = '') => str.split(' ').filter(word => !STOP_WORDS.includes(word)).join(' ');
+export const removeStopWords = (str = '') =>
+  str
+    .split(' ')
+    .filter((word) => !STOP_WORDS.includes(word))
+    .join(' ');
 
 export const removeWordsInBracket = (str = '') => {
   const re = /\(.*?\)/gi;
@@ -666,6 +668,9 @@ export const joinWords = (str = '') => {
 };
 
 export const processStringToUrlFormat = (str = '') => {
+  if (!str) {
+    return '';
+  }
   const currentStr = `${str.toLowerCase()}`;
   return [
     removeWordsInBracket,
@@ -675,7 +680,7 @@ export const processStringToUrlFormat = (str = '') => {
     joinWords,
     removeRepeatedHyphens,
     encodeURIComponent,
- ].reduce((currentState, currentItem) => currentItem(currentState), currentStr)
+  ].reduce((currentState, currentItem) => currentItem(currentState), currentStr);
 };
 
 export const pathToJobId = (path) => {
@@ -699,19 +704,27 @@ export const isJobApplicationPath = (path) => {
 export const pathToJobAlertChecksum = (path) => {
   const regexExp = /jobalert\/remove\/(?:.*-)?(.*$)/i;
   const checksum = regexExp.exec(path);
-  return checksum && checksum[1] || null;
-
+  return (checksum && checksum[1]) || null;
 };
 
-export const getCategoryByLabel = (label) => Object.keys(CATEGORY).find((category) => CATEGORY[category].label === label);
+export const getCategoryByLabel = (label) =>
+  Object.keys(CATEGORY).find((category) => CATEGORY[category].label === label);
 
-    export const formatJobUrl = ({jobTitle, company, uuid, categoryLabel}: {jobTitle?: string, company?:string, uuid:string, categoryLabel?: string}) => {
-    const processedJobTitle = processStringToUrlFormat(jobTitle);
-    const processedCompany = processStringToUrlFormat(company);
-    const urlSegment = `${processedJobTitle && processedJobTitle.concat('-')}${processedCompany &&
-        processedCompany.concat('-')}${uuid}`;
-    const category = getCategoryByLabel(categoryLabel);
-    return category ? `/job/${CATEGORY[category].url}/${urlSegment}` : `/job/${urlSegment}`; }
-
-
-
+export const formatJobUrl = ({
+  jobTitle,
+  company,
+  uuid,
+  categoryLabel,
+}: {
+  jobTitle?: string;
+  company?: string;
+  uuid: string;
+  categoryLabel?: string;
+}) => {
+  const processedJobTitle = processStringToUrlFormat(jobTitle);
+  const processedCompany = processStringToUrlFormat(company);
+  const urlSegment = `${processedJobTitle && processedJobTitle.concat('-')}${processedCompany &&
+    processedCompany.concat('-')}${uuid}`;
+  const category = getCategoryByLabel(categoryLabel);
+  return category ? `/job/${CATEGORY[category].url}/${urlSegment}` : `/job/${urlSegment}`;
+};
