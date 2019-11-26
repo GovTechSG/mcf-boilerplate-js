@@ -666,6 +666,9 @@ export const joinWords = (str = '') => {
 };
 
 export const processStringToUrlFormat = (str = '') => {
+    if (!str) {
+        return '';
+    }
   const currentStr = `${str.toLowerCase()}`;
   return [
     removeWordsInBracket,
