@@ -665,7 +665,7 @@ export const joinWords = (str = '') => {
   return str.trim().replace(re, '-');
 };
 
-export const processStringToUrlFormat = (str) => {
+export const processStringToUrlFormat = (str = '') => {
     if (!str) {
       return '';
     }
