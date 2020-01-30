@@ -1,6 +1,6 @@
 {
   "name": "@mcf/tracer",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Creates and exposes a Zipkin tracer for consumption by an Express-based application.",
   "main": "dist/index.js",
   "scripts": {
