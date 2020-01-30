@@ -1,6 +1,6 @@
 {
   "name": "@mcf/tracer",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Creates and exposes a Zipkin tracer for consumption by an Express-based application.",
   "main": "dist/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@mcf/logger": "^0.4.15",
+    "@mcf/logger": "^0.4.16",
     "@types/cls-hooked": "4.2.1",
     "cls-bluebird": "2.1.0",
     "cls-hooked": "4.2.2",
