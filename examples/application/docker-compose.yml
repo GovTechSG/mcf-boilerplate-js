@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   app_a:
-    image: node:8.11.3-alpine
+    image: node:10.18.0-alpine
     working_dir: /app/examples/application
     entrypoint: ["npm", "start"]
     environment:
@@ -21,7 +21,7 @@ services:
       - fluentd
       - zipkin
   app_b:
-    image: node:8.11.3-alpine
+    image: node:10.18.0-alpine
     working_dir: /app/examples/application
     entrypoint: ["npm", "start"]
     environment:
@@ -41,7 +41,7 @@ services:
       - fluentd
       - zipkin
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
     volumes:
       - "./data/elasticsearch:/usr/share/elasticsearch/data"
     environment:
@@ -59,7 +59,7 @@ services:
     volumes:
       - "./data/fluentd.d/fluent.conf:/etc/fluent/fluent.conf"
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.3.1
+    image: docker.elastic.co/kibana/kibana:7.1.1
     ports:
       - "5601:5601"
     volumes:
@@ -67,7 +67,7 @@ services:
     depends_on:
       - "elasticsearch"
   prometheus:
-    image: prom/prometheus:v2.3.2
+    image: prom/prometheus:v2.15.2
     ports:
       - "9090:9090"
     user: "1000"
