@@ -30,7 +30,7 @@ const MCF_EMPLOYMENT_TYPES_ORDER = [
   'Flexi-work',
   'Temporary',
   'Freelance',
-  'Internship',
+  'Internship/Traineeship',
 ];
 
 export interface IEmploymentType {
@@ -48,6 +48,9 @@ const mapMsfToMcfEmploymentTypes = () => {
       // transform Contract Basis (MSF) to Contract (MCF)
       if (employmentType.ilpDescription === 'Contract Basis') {
         return {id: parseInt(employmentType.ilpId, 10), employmentType: 'Contract'};
+      }
+      if (employmentType.ilpDescription === 'Internship') {
+        return { id: parseInt(employmentType.ilpId, 10), employmentType: 'Internship/Traineeship' };
       }
       return {id: parseInt(employmentType.ilpId, 10), employmentType: employmentType.ilpDescription};
     },
