@@ -30,7 +30,7 @@ describe('mcf', () => {
       {id: 9, employmentType: 'Flexi-work'},
       {id: 2, employmentType: 'Temporary'},
       {id: 6, employmentType: 'Freelance'},
-      {id: 10, employmentType: 'Internship'},
+      {id: 10, employmentType: 'Internship/Traineeship'},
     ]);
   });
   it('should have correct position levels', () => {
