@@ -15,7 +15,7 @@
     "@mcf/request": "^1.0.1",
     "@mcf/server-boilerplate-middleware": "^0.8.4",
     "@mcf/tracer": "0.0.8",
-    "convict": "^4.3.2"
+    "convict": "^6.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",
