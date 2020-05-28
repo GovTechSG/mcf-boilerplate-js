@@ -105,7 +105,7 @@ describe('mapMsfToMcfScheme', () => {
       link: 'http://www.wsg.gov.sg/programmes-and-initiatives/career-trial-employers.html',
     });
   });
-  it('should map to Career Trial when id is 07', () => {
+  it('should map to SGUnited Traineeships when id is 07', () => {
     expect(mapMsfToMcfScheme('07')).to.deep.equal({
       id: SCHEME_ID.SG_UNITED_TRAINEESHIPS,
       scheme: 'SGUnited Traineeships',
