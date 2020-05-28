@@ -121,6 +121,13 @@ describe('mcf', () => {
         expiryDate: '2055-05-04',
         link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
       },
+      {
+        id: 5,
+        scheme: 'SGUnited Traineeships',
+        startDate: '2020-06-01',
+        expiryDate: '2047-06-01',
+        link: 'https://www.wsg.gov.sg/SGUnitedTraineeships-HostCompanies.html',
+      },
     ]);
   });
   it('should have correct districts', () => {

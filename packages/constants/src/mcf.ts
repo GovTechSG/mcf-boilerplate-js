@@ -130,6 +130,7 @@ export enum SCHEME_ID {
   PCP = 2,
   CAREER_TRIAL = 3,
   CAREER_SUPPORT = 4,
+  SG_UNITED_TRAINEESHIPS = 5,
 }
 
 export interface IScheme {
@@ -142,32 +143,39 @@ export interface IScheme {
 // no auto conversion from MSF for the moment
 export const SCHEMES: IScheme[] = [
   {
-    id: 1,
+    id: SCHEME_ID.P_MAX,
     scheme: 'P-Max',
     startDate: '1977-05-25',
     expiryDate: '2055-05-04',
     link: 'http://www.wsg.gov.sg/programmes-and-initiatives/p-max-employer.html',
   },
   {
-    id: 2,
+    id: SCHEME_ID.PCP,
     scheme: 'Professional Conversion Programme',
     startDate: '1977-05-25',
     expiryDate: '2055-05-04',
     link: 'http://www.wsg.gov.sg/programmes-and-initiatives/professional-conversion-programmes-employers.html',
   },
   {
-    id: 3,
+    id: SCHEME_ID.CAREER_TRIAL,
     scheme: 'Career Trial',
     startDate: '1977-05-25',
     expiryDate: '2055-05-04',
     link: 'http://www.wsg.gov.sg/programmes-and-initiatives/career-trial-employers.html',
   },
   {
-    id: 4,
+    id: SCHEME_ID.CAREER_SUPPORT,
     scheme: 'Career Support Programme',
     startDate: '1977-05-25',
     expiryDate: '2055-05-04',
     link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
+  },
+  {
+    id: SCHEME_ID.SG_UNITED_TRAINEESHIPS,
+    scheme: 'SGUnited Traineeships',
+    startDate: '2020-06-01',
+    expiryDate: '2047-06-01',
+    link: 'https://www.wsg.gov.sg/SGUnitedTraineeships-HostCompanies.html',
   },
 ];
 
