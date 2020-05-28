@@ -3,7 +3,7 @@ import {SCHEMES as MSF_SCHEMES} from '../msf';
 import {SCHEMES as ICMS_SCHEMES} from '../icms';
 
 // ICMS <-> MCF transformation
-const ICMS_MCF_MAPPING_TABLE: Array<[number, number]> = [[541001, 4], [541002, 2], [541003, 1], [541005, 3]];
+const ICMS_MCF_MAPPING_TABLE: Array<[number, number]> = [[541001, 4], [541002, 2], [541003, 1], [541005, 3], [541006, 5]];
 
 const map = <T extends {id: any}>(
   mappings: Array<[string | number, string | number]>,
@@ -21,7 +21,7 @@ export const mapMcfToIcmsScheme = (id: number) =>
   map(ICMS_MCF_MAPPING_TABLE, ICMS_SCHEMES, id, {sourceIndex: 1, targetIndex: 0});
 
 // MCF <-> MSF transformation
-const MCF_MSF_MAPPING_TABLE: Array<[number, string]> = [[1, '02'], [2, '05'], [3, '06'], [4, '01']];
+const MCF_MSF_MAPPING_TABLE: Array<[number, string]> = [[1, '02'], [2, '05'], [3, '06'], [4, '01'], [5, '07']];
 export const mapMcfToMsfScheme = (id: number) => map(MCF_MSF_MAPPING_TABLE, MSF_SCHEMES, id);
 
 export const mapMsfToMcfScheme = (id: string) =>

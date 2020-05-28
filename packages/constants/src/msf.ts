@@ -196,6 +196,7 @@ export const SCHEMES = [
   {id: '05', programme: 'PCP'},
   {id: '02', programme: 'P-Max'},
   {id: '06', programme: 'Career Trial'},
+  {id: '07', programme: 'SGUnited Traineeships'},
 ];
 
 export const JOB_STATUSES = [
