@@ -1,6 +1,6 @@
 {
   "name": "@mcf/request",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Exposes a context-aware request using Opentracing headers based on `node-fetch`.",
   "main": "dist/index.js",
   "scripts": {
