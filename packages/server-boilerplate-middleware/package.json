@@ -9,7 +9,9 @@
     "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
     "test:watch": "npm test -- --watch --watch-extensions ts",
     "prestart": "npm run build",
-    "start": "nodemon ./test/server.js"
+    "start": "nodemon ./test/server.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "publishConfig": {
     "access": "public"
@@ -41,9 +43,11 @@
     "express": "4.16.3",
     "express-prom-bundle": "^3.3.0",
     "helmet": "^3.21.1",
-    "morgan": "1.9.1",
+    "morgan": "1.10.0",
     "node-fetch": "2.3.0",
     "prom-client": "^11.0.0",
+    "snyk": "^1.348.0",
     "zipkin-instrumentation-express": "0.14.0"
-  }
+  },
+  "snyk": true
 }

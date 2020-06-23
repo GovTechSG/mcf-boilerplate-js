@@ -2,7 +2,7 @@
   "bootstrap": {
     "hoist": true
   },
-  "lerna": "3.10.7",
+  "lerna": "3.22.1",
   "packages": [
     "packages/*"
   ],
