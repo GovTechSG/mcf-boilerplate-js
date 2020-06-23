@@ -1,6 +1,6 @@
 {
   "name": "@mcf/logger",
-  "version": "0.4.17",
+  "version": "0.4.18",
   "description": "Exposes a logger based on Winston. It includes formats and plugins for integration with the Morgan request logging library, and Zipkin request distributed tracing library.",
   "main": "dist/index.js",
   "scripts": {
@@ -20,8 +20,8 @@
   "dependencies": {
     "cls-hooked": "4.2.2",
     "fluent-logger": "3.0.0",
-    "winston": "3.1.0",
-    "snyk": "^1.316.1"
+    "snyk": "^1.316.1",
+    "winston": "3.1.0"
   },
   "publishConfig": {
     "access": "public"
