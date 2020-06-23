@@ -1,7 +1,9 @@
 {
   "scripts": {
     "build": "lerna run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
     "@types/chai": "4.1.4",
@@ -23,7 +25,7 @@
     "chai": "4.1.2",
     "eslint": "4.19.1",
     "eslint-config-google": "0.9.1",
-    "lerna": "3.10.2",
+    "lerna": "3.22.1",
     "mocha": "5.2.0",
     "nodemon": "1.18.3",
     "prettier": "1.13.7",
@@ -43,8 +45,9 @@
     "cls-hooked": "4.2.2",
     "express": "4.16.3",
     "fluent-logger": "3.0.0",
-    "morgan": "^1.9.1",
+    "morgan": "1.10.0",
     "node-fetch": "2.3.0",
+    "snyk": "^1.348.0",
     "winston": "3.1.0",
     "zipkin": "0.13.0",
     "zipkin-context-cls": "0.13.0",
@@ -52,5 +55,6 @@
     "zipkin-instrumentation-fetch": "0.14.3",
     "zipkin-transport-http": "0.14.0"
   },
-  "name": "mcf-boilerplate-js"
+  "name": "mcf-boilerplate-js",
+  "snyk": true
 }
