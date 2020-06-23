@@ -9,7 +9,9 @@
     "pretest": "docker-compose -f ../../provisioning/zipkin.yml up -d",
     "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
     "test:watch": "npm test -- --watch --watch-extensions ts",
-    "posttest": "docker-compose -f ../../provisioning/zipkin.yml down"
+    "posttest": "docker-compose -f ../../provisioning/zipkin.yml down",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "publishConfig": {
     "access": "public"
@@ -27,6 +29,8 @@
     "@types/cls-hooked": "4.2.1",
     "cls-hooked": "4.2.2",
     "zipkin": "0.13.0",
-    "zipkin-transport-http": "0.14.0"
-  }
+    "zipkin-transport-http": "0.14.0",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
