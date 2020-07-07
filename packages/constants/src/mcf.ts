@@ -180,7 +180,7 @@ export const SCHEMES: IScheme[] = [
   },
   {
     id: SCHEME_ID.SG_UNITED_MID_CAREER_PATHWAYS,
-    scheme: 'SGUnited Mid-Career Pathways',
+    scheme: 'SGUnited Mid-Career Pathways Programme',
     startDate: '2020-07-01',
     expiryDate: '2047-07-01',
     link: 'https://www.wsg.gov.sg/SGUnitedMidCareerPathways-HostOrganisations.html',

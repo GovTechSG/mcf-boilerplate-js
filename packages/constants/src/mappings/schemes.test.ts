@@ -48,10 +48,10 @@ describe('mapIcmsToMcfScheme', () => {
       link: 'https://www.wsg.gov.sg/SGUnitedTraineeships-HostCompanies.html',
     });
   });
-  it('should map to SGUnited Mid-Career Pathways when id is 541007', () => {
+  it('should map to SGUnited Mid-Career Pathways Programme when id is 541007', () => {
     expect(mapIcmsToMcfScheme(541007)).to.deep.equal({
       id: SCHEME_ID.SG_UNITED_MID_CAREER_PATHWAYS,
-      scheme: 'SGUnited Mid-Career Pathways',
+      scheme: 'SGUnited Mid-Career Pathways Programme',
       startDate: '2020-07-01',
       expiryDate: '2047-07-01',
       link: 'https://www.wsg.gov.sg/SGUnitedMidCareerPathways-HostOrganisations.html',
@@ -78,10 +78,10 @@ describe('mapMcfToIcmsScheme', () => {
       scheme: 'SGUnited Traineeships',
     });
   });
-  it('should map to SGUnited Mid-Career Pathways when id is 6', () => {
+  it('should map to SGUnited Mid-Career Pathways Programme when id is 6', () => {
     expect(mapMcfToIcmsScheme(SCHEME_ID.SG_UNITED_MID_CAREER_PATHWAYS)).to.deep.equal({
       id: 541007,
-      scheme: 'SGUnited Mid-Career Pathways',
+      scheme: 'SGUnited Mid-Career Pathways Programme',
     });
   });
 });
@@ -132,10 +132,10 @@ describe('mapMsfToMcfScheme', () => {
       link: 'https://www.wsg.gov.sg/SGUnitedTraineeships-HostCompanies.html',
     });
   });
-  it('should map to SGUnited Mid-Career Pathways when id is 07', () => {
+  it('should map to SGUnited Mid-Career Pathways Programme when id is 07', () => {
     expect(mapMsfToMcfScheme('08')).to.deep.equal({
       id: SCHEME_ID.SG_UNITED_MID_CAREER_PATHWAYS,
-      scheme: 'SGUnited Mid-Career Pathways',
+      scheme: 'SGUnited Mid-Career Pathways Programme',
       startDate: '2020-07-01',
       expiryDate: '2047-07-01',
       link: 'https://www.wsg.gov.sg/SGUnitedMidCareerPathways-HostOrganisations.html',
@@ -162,10 +162,10 @@ describe('mapMcfToMsfScheme', () => {
       programme: 'SGUnited Traineeships',
     });
   });
-  it('should map to SGUnited Mid-Career Pathways when id is 6', () => {
+  it('should map to SGUnited Mid-Career Pathways Programme when id is 6', () => {
     expect(mapMcfToMsfScheme(SCHEME_ID.SG_UNITED_MID_CAREER_PATHWAYS)).to.deep.equal({
       id: '08',
-      programme: 'SGUnited Mid-Career Pathways',
+      programme: 'SGUnited Mid-Career Pathways Programme',
     });
   });
 });
