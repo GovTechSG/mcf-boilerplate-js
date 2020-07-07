@@ -17,7 +17,7 @@ import {
   joinWords,
   processStringToUrlFormat,
   isJobApplicationPath,
-  formatJobUrl
+  formatJobUrl,
 } from './mcf';
 
 describe('mcf', () => {
@@ -127,6 +127,13 @@ describe('mcf', () => {
         startDate: '2020-06-01',
         expiryDate: '2047-06-01',
         link: 'https://www.wsg.gov.sg/SGUnitedTraineeships-HostCompanies.html',
+      },
+      {
+        id: 6,
+        scheme: 'SGUnited Mid-Career Pathways',
+        startDate: '2020-07-01',
+        expiryDate: '2047-07-01',
+        link: 'https://www.wsg.gov.sg/SGUnitedMidCareerPathways-HostOrganisations.html',
       },
     ]);
   });
@@ -1821,7 +1828,7 @@ describe('mcf', () => {
             company: '谷歌©',
           }),
         ).to.equal(
-        '/job/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%F0%9F%A4%A1-%E8%B0%B7%E6%AD%8C%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
+          '/job/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%F0%9F%A4%A1-%E8%B0%B7%E6%AD%8C%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
         );
 
         expect(
@@ -1831,7 +1838,7 @@ describe('mcf', () => {
             company: 'वलपर–गूगल©',
           }),
         ).to.equal(
-        '/job/%F0%9F%A4%A1%E0%A4%B8%E0%A5%89%E0%A4%AB%E0%A5%8D%E0%A4%9F%E0%A4%B5%E0%A5%87%E0%A4%AF%E0%A4%B0-%E0%A4%B5%E0%A4%B2%E0%A4%AA%E0%A4%B0%E2%80%93%E0%A4%97%E0%A5%82%E0%A4%97%E0%A4%B2%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
+          '/job/%F0%9F%A4%A1%E0%A4%B8%E0%A5%89%E0%A4%AB%E0%A5%8D%E0%A4%9F%E0%A4%B5%E0%A5%87%E0%A4%AF%E0%A4%B0-%E0%A4%B5%E0%A4%B2%E0%A4%AA%E0%A4%B0%E2%80%93%E0%A4%97%E0%A5%82%E0%A4%97%E0%A4%B2%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
         );
 
         expect(
