@@ -50,7 +50,7 @@ const mapMsfToMcfEmploymentTypes = () => {
         return {id: parseInt(employmentType.ilpId, 10), employmentType: 'Contract'};
       }
       if (employmentType.ilpDescription === 'Internship') {
-        return { id: parseInt(employmentType.ilpId, 10), employmentType: 'Internship/Traineeship' };
+        return {id: parseInt(employmentType.ilpId, 10), employmentType: 'Internship/Traineeship'};
       }
       return {id: parseInt(employmentType.ilpId, 10), employmentType: employmentType.ilpDescription};
     },
@@ -131,6 +131,7 @@ export enum SCHEME_ID {
   CAREER_TRIAL = 3,
   CAREER_SUPPORT = 4,
   SG_UNITED_TRAINEESHIPS = 5,
+  SG_UNITED_MID_CAREER_PATHWAYS = 6,
 }
 
 export interface IScheme {
@@ -176,6 +177,13 @@ export const SCHEMES: IScheme[] = [
     startDate: '2020-06-01',
     expiryDate: '2047-06-01',
     link: 'https://www.wsg.gov.sg/SGUnitedTraineeships-HostCompanies.html',
+  },
+  {
+    id: SCHEME_ID.SG_UNITED_MID_CAREER_PATHWAYS,
+    scheme: 'SGUnited Mid-Career Pathways Programme',
+    startDate: '2020-07-01',
+    expiryDate: '2047-07-01',
+    link: 'https://www.wsg.gov.sg/SGUnitedMidCareerPathways-HostOrganisations.html',
   },
 ];
 
