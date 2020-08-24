@@ -91,11 +91,6 @@ const {server} = createServer({
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableServerLogging: true})` |
 
-#### `enableTracing` : `Boolean`
-| Type | Default | Example |
-| --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableTracing: true})` |
-
 
 #### `compressionOptions` : `Object`
 > This configuration is only relevant if the `enableCompression` parameter was not set to `false`
@@ -216,11 +211,6 @@ const loggingOptions = {
   hostnameType: 'os',
 }
 ```
-
-#### `tracingOptions` : `Object`
-> This configuration is only relevant if the `enableTracing` parameter was not set to `false`
-
-see `@mcf/tracer`
 
 ## Development
 
