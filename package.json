@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "cls-hooked": "4.2.2",
+    "dot-prop": "4.2.1",
     "express": "4.16.3",
     "fluent-logger": "3.0.0",
     "morgan": "^1.9.1",
