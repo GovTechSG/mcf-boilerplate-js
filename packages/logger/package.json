@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "cls-hooked": "4.2.2",
-    "dot-prop": "4.2.1",
     "fluent-logger": "3.0.0",
     "snyk": "^1.316.1",
     "winston": "3.1.0"
