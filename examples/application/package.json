@@ -13,7 +13,7 @@
     "@mcf/logger": "^0.4.5",
     "@mcf/provision-process": "^0.2.0",
     "@mcf/server-boilerplate-middleware": "^0.8.4",
-    "convict": "^4.3.2"
+    "convict": "^6.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",
