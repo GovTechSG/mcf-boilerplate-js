@@ -1,6 +1,6 @@
 {
   "name": "@mcf/logger",
-  "version": "0.4.19",
+  "version": "0.4.20",
   "description": "Exposes a logger based on Winston. It includes formats and plugins for integration with the Morgan request logging library, and Zipkin request distributed tracing library.",
   "main": "dist/index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "@mcf/constants",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "Exposes constants used across MCF products",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
