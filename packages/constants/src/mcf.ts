@@ -747,3 +747,9 @@ export const formatJobUrl = ({
   const category = getCategoryByLabel(categoryLabel);
   return category ? `/job/${CATEGORY[category].url}/${urlSegment}` : `/job/${urlSegment}`;
 };
+
+export const JOB_POST_SOURCE = {
+  CAREERS_GOV: 'Careers@Gov',
+  CAREER_CENTRE: 'Career Centre',
+  EMPLOYER_PORTAL: 'Employer Portal',
+};
