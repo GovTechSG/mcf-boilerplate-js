@@ -15,7 +15,7 @@ describe('createServer()', () => {
     let boilerplateServer: Express;
 
     beforeEach(() => {
-      boilerplateServer = createServer().server;
+      boilerplateServer = createServer();
     });
 
     it('is compatible with GET requests', () => {
@@ -108,7 +108,7 @@ describe('createServer()', () => {
       "child-src 'self'; connect-src 'self'; default-src http://mydomain.com 'self'; font-src 'none'; img-src data: 'self'; report-uri /my-csp-report-uri; script-src 'self'; style-src 'self'"; // eslint-disable-line max-len
 
     it('implements them correctly', () => {
-      const {server} = createServer({cspOptions});
+      const server = createServer({cspOptions});
       server.use((req, res) => {
         res.status(200).json(req.cookies);
       });
@@ -134,7 +134,7 @@ describe('createServer()', () => {
         (prev, curr) => `${prev};${curr}`,
         '',
       );
-      const {server} = createServer();
+      const server = createServer();
       server.use((req, res) => {
         res.status(200).json(req.cookies);
       });
@@ -153,7 +153,7 @@ describe('createServer()', () => {
         (prev, curr) => `${prev};${curr}`,
         '',
       );
-      const {server} = createServer({
+      const server = createServer({
         enableCookieParser: false,
       });
       server.use((req, res) => {
@@ -173,7 +173,7 @@ describe('createServer()', () => {
   describe('body parsing abilities', () => {
     it('includes json parsing', () => {
       const testData = require('../test/resources/test.json');
-      const {server} = createServer();
+      const server = createServer();
       server.use((req, res) => res.status(200).json(req.body));
       return supertest(server)
         .post('/')
@@ -189,7 +189,7 @@ describe('createServer()', () => {
 
     it('includes urlencoded parsing', () => {
       const testData = require('../test/resources/test.json');
-      const {server} = createServer();
+      const server = createServer();
       server.use((req, res) => res.status(200).json(req.body));
       return supertest(server)
         .post('/')
@@ -213,7 +213,7 @@ describe('createServer()', () => {
 
     it('can be disabled', () => {
       const testData = require('../test/resources/test.json');
-      const {server} = createServer({enableSerializer: false});
+      const server = createServer({enableSerializer: false});
       server.post('/', (req, res) => res.json(req.body));
       return supertest(server)
         .post('/')
@@ -230,7 +230,7 @@ describe('createServer()', () => {
       const getFileWithSize = (size) => fs.readFileSync(path.join(__dirname, `../test/resources/${size}.file`));
 
       beforeEach(() => {
-        boilerplateServer = createServer().server;
+        boilerplateServer = createServer();
         boilerplateServer.use((err, req, res, next) => {
           if (err.type === 'entity.too.large') {
             res.status(413).json('ok');
