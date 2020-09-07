@@ -24,7 +24,7 @@
     "eslint": "4.19.1",
     "eslint-config-google": "0.9.1",
     "lerna": "3.22.1",
-    "mocha": "8.1.2",
+    "mocha": "5.2.0",
     "nodemon": "1.18.3",
     "prettier": "1.13.7",
     "sinon": "6.1.4",
@@ -45,12 +45,7 @@
     "fluent-logger": "3.0.0",
     "morgan": "^1.9.1",
     "node-fetch": "2.3.0",
-    "winston": "3.1.0",
-    "zipkin": "0.13.0",
-    "zipkin-context-cls": "0.13.0",
-    "zipkin-instrumentation-express": "0.14.0",
-    "zipkin-instrumentation-fetch": "0.14.3",
-    "zipkin-transport-http": "0.14.0"
+    "winston": "3.1.0"
   },
   "name": "mcf-boilerplate-js"
 }
