@@ -24,7 +24,7 @@
     "eslint": "4.19.1",
     "eslint-config-google": "0.9.1",
     "lerna": "3.22.1",
-    "mocha": "^5.2.0",
+    "mocha": "5.2.0",
     "nodemon": "1.18.3",
     "prettier": "1.13.7",
     "sinon": "6.1.4",
