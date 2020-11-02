@@ -39,7 +39,7 @@ const serverInstance = server.listen(35349);
 
 server.keepAliveTimeout = (process.env.KEEP_ALIVE_TIMEOUT || 5) * 1000;
 // This should be bigger than `keepAliveTimeout + your server's expected response time`
-server.headersTimeout = (process.env.HEADERS_TIMEOUT || 10) * 1000;
+server.headersTimeout = (process.env.HEADERS_TIMEOUT || 60) * 1000;
 
 serverInstance.on('listening', () => {
   logger.info(`Listening on: http://localhost:${serverInstance.address().port}`);
