@@ -2,7 +2,6 @@ import convict from 'convict';
 import {createFluentTransport, createLogger, IApplicationLogger} from '../../packages/logger/dist';
 import {createServer} from '../../packages/server-boilerplate-middleware/dist';
 import {AddressInfo} from 'net';
-import {Request} from 'express';
 import winston from 'winston';
 import fetch from 'node-fetch';
 
@@ -31,14 +30,6 @@ const config = convict({
     default: '11111',
     env: 'PORT',
   },
-  zipkinHost: {
-    default: 'localhost',
-    env: 'ZIPKIN_HOST',
-  },
-  zipkinPort: {
-    default: '9411',
-    env: 'ZIPKIN_PORT',
-  },
 });
 
 const getTraceId = (info: any) => {
@@ -65,25 +56,24 @@ const logger: IApplicationLogger = createLogger({
   ],
 });
 
-export const {server, request} = createServer({
+const server = createServer({
   loggingOptions: {
     logger,
   },
-  tracingOptions: {
-    localServiceName: config.get('serviceName'),
-    sampleRate: 1,
-    serverHost: config.get('zipkinHost'),
-    serverPort: config.get('zipkinPort'),
-  },
+  enableXray: true
 });
-const requestOtherService = request ? request(config.get('otherServiceName')) : fetch;
 
-server.post('/csp-report', (req: Request, res) => {
+// const requestOtherService = request ? request(config.get('otherServiceName')) : fetch;
+
+
+const requestOtherService =  (url) => fetch(url || config.get('otherServiceName'));
+
+server.post('/csp-report', (req, res) => {
   logger.info(req.body);
   res.json('ok');
 });
 
-server.get('/other/:iteration', async (req: Request, res) => {
+server.get('/other/:iteration', async (req, res) => {
   // simulate that it's slow
   await new Promise((resolve) => setTimeout(resolve, 800));
   const iteration = parseInt(req.params.iteration, 10);
@@ -96,7 +86,7 @@ server.get('/other/:iteration', async (req: Request, res) => {
   logger.info(`response sent`);
 });
 
-server.get('/other', async (req: Request, res) => {
+server.get('/other', async (req, res) => {
   // simulate that it's slow
   await new Promise((resolve) => setTimeout(resolve, 400));
   logger.info(`sending request to ${config.get('otherServiceUrl')}`);
@@ -106,7 +96,7 @@ server.get('/other', async (req: Request, res) => {
   res.json(body);
 });
 
-server.get('/', async (req: Request, res) => {
+server.get('/', async (req, res) => {
   // simulate that it's slow
   await new Promise((resolve) => setTimeout(resolve, 1000));
   logger.info(`[x] returning from /, called with headers: ${JSON.stringify(req.headers)}`);

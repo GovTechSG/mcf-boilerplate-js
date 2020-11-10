@@ -9,17 +9,17 @@ services:
       - SVC_NAME=app_a
       - SVC_OTHER_NAME=app_b
       - SVC_OTHER_URL=http://app_b:8085
-      - ZIPKIN_HOST=zipkin
-      - ZIPKIN_PORT=9411
       - FLUENTD_HOST=fluentd
       - FLUENTD_PORT=24224
+      - AWS_XRAY_DEBUG_MODE=debug
+      - AWS_XRAY_TRACING_NAME=app_a
+      - AWS_XRAY_CONTEXT_MISSING=RUNTIME_ERROR
     ports:
       - "8084:8084"
     volumes:
       - "../../:/app:Z"
     depends_on:
       - fluentd
-      - zipkin
   app_b:
     image: node:10.18.0-alpine
     working_dir: /app/examples/application
@@ -29,17 +29,17 @@ services:
       - SVC_NAME=app_b
       - SVC_OTHER_NAME=app_a
       - SVC_OTHER_URL=http://app_a:8084
-      - ZIPKIN_HOST=zipkin
-      - ZIPKIN_PORT=9411
       - FLUENTD_HOST=fluentd
       - FLUENTD_PORT=24224
+      - AWS_XRAY_DEBUG_MODE=debug
+      - AWS_XRAY_TRACING_NAME=app_b
+      - AWS_XRAY_CONTEXT_MISSING=RUNTIME_ERROR
     ports:
       - "8085:8085"
     volumes:
       - "../../:/app:Z"
     depends_on:
       - fluentd
-      - zipkin
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
     volumes:
@@ -74,7 +74,12 @@ services:
     volumes:
       - "./data/prometheus:/prometheus:Z"
       - "./data/prometheus.d/prometheus.yml:/etc/prometheus/prometheus.yml:Z"
-  zipkin:
-    image: openzipkin/zipkin:2.10.2
+  xray:
+    image: amazon/aws-xray-daemon:3.x
+    volumes:
+      - "${HOME}/.aws/:/root/.aws/:ro"
     ports:
-      - "9411:9411"
+      - "2000:2000/udp"
+    env_file: 
+      - .env
+    command: "-o --log-level=debug"

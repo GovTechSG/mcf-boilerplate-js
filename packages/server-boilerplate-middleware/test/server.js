@@ -6,11 +6,7 @@ const server = boilerplate.createServer({
   serverLogging: {
     logger,
   },
-  tracing: {
-    localServiceName: process.env.SVC_ID,
-    serverHost: 'localhost',
-    serverPort: '9411',
-  },
+  enableXray: true
 });
 
 const proxyPath = `http://localhost:${process.env.PROXY_PORT}`;

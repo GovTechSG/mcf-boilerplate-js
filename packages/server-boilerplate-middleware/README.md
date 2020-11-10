@@ -34,7 +34,7 @@ yarn add @mcf/server-boilerplate-middleware
 
 ```js
 import {createServer} from '@mcf/server-boilerplate-middleware';
-const {server} = createServer();
+const server = createServer();
 // ...
 ```
 
@@ -90,6 +90,11 @@ const {server} = createServer({
 | Type | Default | Example |
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableServerLogging: true})` |
+
+#### `enableXray` : `Boolean`
+| Type | Default | Example |
+| --- | --- | --- |
+| `Boolean` | `true` | `serverBoilerplate({enableXray: true})` |
 
 
 #### `compressionOptions` : `Object`
@@ -218,7 +223,7 @@ const loggingOptions = {
 Run the following from the root of the repository to initialise the dependencies since Lerna manages the dependencies for us across the multiple packages:
 
 ```sh
-lerna bootstrap;
+npx lerna bootstrap
 ```
 
 ### Running Tests
@@ -249,12 +254,6 @@ npx lerna run --scope @mcf/server-boilerplate-middleware build
 
 Run the following to setup an example environment:
 
-```bash
-docker-compose -f test/docker-compose.yml up -d
-```
-
-This should spin up a Zipkin server on port 9411 - [VISIT IT](http://localhost:9411).
-
 Open a new terminal and run the following to **create server a on port 11111**:
 
 ```bash
@@ -275,6 +274,13 @@ curl "http://localhost:22222/proxy";
 
 ## ChangeLog
 ### 0.8.x
+#### 0.8.5
+- removed zipkin
+- added aws xray tracing
+
+#### 0.8.2-4
+- added keepalive and header timeout configuration
+
 #### 0.8.1
 - changed configuration signature for tracing
 
