@@ -95,11 +95,15 @@ export const createServer = ({
     );
   }
 
-  const server = http.createServer(app);
+  app.listen = (...args) => {
+    const server = http.createServer(app);
 
-  server.keepAliveTimeout = Number(process.env.KEEP_ALIVE_TIMEOUT || 5) * 1000;
-  // This should be bigger than `keepAliveTimeout + your server's expected response time`
-  server.headersTimeout = Number(process.env.HEADERS_TIMEOUT || 60) * 1000;
+    server.keepAliveTimeout = Number(process.env.KEEP_ALIVE_TIMEOUT || 5) * 1000;
+    // This should be bigger than `keepAliveTimeout + your server's expected response time`
+    server.headersTimeout = Number(process.env.HEADERS_TIMEOUT || 60) * 1000;
 
-  return server;
+    return server.listen(...args);
+  };
+
+  return app;
 };
