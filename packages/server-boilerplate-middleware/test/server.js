@@ -37,10 +37,6 @@ server.use('*', (req, res) => {
 });
 const serverInstance = server.listen(35349);
 
-serverInstance.keepAliveTimeout = (process.env.KEEP_ALIVE_TIMEOUT || 5) * 1000;
-// This should be bigger than `keepAliveTimeout + your server's expected response time`
-serverInstance.headersTimeout = (process.env.HEADERS_TIMEOUT || 60) * 1000;
-
 serverInstance.on('listening', () => {
   logger.info(`Listening on: http://localhost:${serverInstance.address().port}`);
   logger.info(`Proxying to : ${proxyPath}`);

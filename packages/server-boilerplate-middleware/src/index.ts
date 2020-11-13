@@ -8,6 +8,7 @@ import {
 } from './security';
 import {serializer} from './serializer';
 import express from 'express';
+import http from 'http';
 import {compressionMiddleware, ICompressionMiddlewareOptions} from './compression-middleware';
 import {DEFAULT_METRICS_ENDPOINT, IMetricsMiddlewareOptions, metricsMiddleware} from './metrics-middleware';
 import {ILoggingMiddlewareOptions, loggingMiddleware} from './logging-middleware';
@@ -50,42 +51,42 @@ export const createServer = ({
   loggingOptions = {},
 }: IMcfMiddlewareOptions = {}) => {
   const logger = buildLogger(loggingOptions.logger);
-  const server = express();
+  const app = express();
 
   if (enableCookieParser) {
     logger.silly('enable cookie parser');
-    server.use(cookieParser());
+    app.use(cookieParser());
   }
   if (enableSerializer) {
     logger.silly('enable serializer');
-    server.use(serializer());
+    app.use(serializer());
   }
   if (enableHttpHeadersSecurity) {
     logger.silly('enable http headers security');
-    server.use(httpHeadersMiddleware());
+    app.use(httpHeadersMiddleware());
   }
   if (enableCSP) {
     logger.silly('enable content security policy');
-    server.use(cspMiddleware(cspOptions));
+    app.use(cspMiddleware(cspOptions));
   }
   if (enableCompression) {
     logger.silly('enable compression');
-    server.use(compressionMiddleware(compressionOptions));
+    app.use(compressionMiddleware(compressionOptions));
   }
   if (enableCORS) {
     logger.silly('enable CORS');
-    server.use(corsMiddleware(corsOptions));
+    app.use(corsMiddleware(corsOptions));
   }
   if (enableMetrics) {
     logger.silly('enable metrics collection');
     const metricsEndpoint = metricsOptions.metricsEndpoint || DEFAULT_METRICS_ENDPOINT;
     const metrics = metricsMiddleware(metricsOptions);
-    server.use(metrics);
-    server.use(metricsEndpoint, metrics.metricsMiddleware);
+    app.use(metrics);
+    app.use(metricsEndpoint, metrics.metricsMiddleware);
   }
   if (enableServerLogging) {
     logger.silly('enable server logging');
-    server.use(
+    app.use(
       loggingMiddleware({
         additionalTokenizers: loggingOptions.additionalTokenizers,
         hostnameType: loggingOptions.hostnameType,
@@ -94,5 +95,15 @@ export const createServer = ({
     );
   }
 
-  return server;
+  app.listen = (...args) => {
+    const server = http.createServer(app);
+
+    server.keepAliveTimeout = Number(process.env.KEEP_ALIVE_TIMEOUT || 5) * 1000;
+    // This should be bigger than `keepAliveTimeout + your server's expected response time`
+    server.headersTimeout = Number(process.env.HEADERS_TIMEOUT || 60) * 1000;
+
+    return server.listen(...args);
+  };
+
+  return app;
 };
