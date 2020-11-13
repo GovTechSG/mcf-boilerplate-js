@@ -60,11 +60,12 @@ const server = createServer({
   loggingOptions: {
     logger,
   },
+  xrayOptions: {
+    // Default is set to EKS xray daemon local address
+    daemonAddress: 'tcp:xray:2000 udp:xray:2000'
+  },
   enableXray: true
 });
-
-// const requestOtherService = request ? request(config.get('otherServiceName')) : fetch;
-
 
 const requestOtherService =  (url) => fetch(url || config.get('otherServiceName'));
 
