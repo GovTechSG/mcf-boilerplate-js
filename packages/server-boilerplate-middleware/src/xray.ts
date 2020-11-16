@@ -1,7 +1,7 @@
 import AWSXRay from 'aws-xray-sdk';
 
 export interface IXrayMiddlewareOptions {
-  config?: any[];
+  config?: AWSXRay.plugins.Plugin[];
   daemonAddress?: string;
   tracingName?: string;
 }

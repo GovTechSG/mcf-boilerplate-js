@@ -58,7 +58,6 @@ export const createServer = ({
 }: IMcfMiddlewareOptions = {}) => {
   const logger = buildLogger(loggingOptions.logger);
   const app = express();
-  // let AWSXRay = require('aws-xray-sdk');
 
   if (enableCookieParser) {
     logger.silly('enable cookie parser');
