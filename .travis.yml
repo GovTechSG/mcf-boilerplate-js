@@ -4,9 +4,9 @@ install:
   - npm ci
   - lerna bootstrap
 node_js:
-  - "8"
-  - "10"
-  - "12"
+  - 10
+  - 12
+  - lts/*
 services:
   - docker
 if: tag IS blank AND branch = "master"
@@ -17,7 +17,7 @@ script:
 jobs:
   include:
     - stage: deploy
-      node_js: "8"
+      node_js: lts/*
       script:
         - if [ "${TRAVIS_BRANCH}" = "master" ] && ! [ `printf -- "${TRAVIS_COMMIT_MESSAGE}" | grep "Publish"` ]; then
             git checkout ${TRAVIS_BRANCH};
