@@ -1,9 +1,10 @@
+import AWSXRay from 'aws-xray-sdk';
+
 export interface IXrayMiddlewareOptions {
   config?: any[];
   daemonAddress?: string;
+  tracingName?: string;
 }
-
-const AWSXRay = require('aws-xray-sdk');
 
 export const DEFAULT_XRAY_CONFIG = [AWSXRay.plugins.EC2Plugin, AWSXRay.plugins.ECSPlugin];
 export const DEFAULT_XRAY_DAEMON_ADDRESS = 'tcp:xray-service.xray.svc.cluster.local:2000 udp:xray-service.xray.svc.cluster.local:2000'
