@@ -14,7 +14,12 @@ import {DEFAULT_METRICS_ENDPOINT, IMetricsMiddlewareOptions, metricsMiddleware} 
 import {ILoggingMiddlewareOptions, loggingMiddleware} from './logging-middleware';
 import {buildLogger} from './logger';
 import {createMorganStream, IApplicationLogger} from '@mcf/logger';
-import { DEFAULT_AWS_XRAY_TRACING_NAME, DEFAULT_XRAY_CONFIG, DEFAULT_XRAY_DAEMON_ADDRESS, IXrayMiddlewareOptions } from './xray';
+import {
+  DEFAULT_AWS_XRAY_TRACING_NAME,
+  DEFAULT_XRAY_CONFIG,
+  DEFAULT_XRAY_DAEMON_ADDRESS,
+  IXrayMiddlewareOptions,
+} from './xray';
 import AWSXRay from 'aws-xray-sdk';
 
 interface IMcfMiddlewareOptions {
@@ -102,13 +107,13 @@ export const createServer = ({
   }
   if (enableXray) {
     logger.silly('enable aws xray tracing');
-    
+
     // Gives you more information about the node and container
     AWSXRay.config(xrayOptions.config || DEFAULT_XRAY_CONFIG);
-    
+
     AWSXRay.setLogger(logger);
     AWSXRay.setDaemonAddress(xrayOptions.daemonAddress || DEFAULT_XRAY_DAEMON_ADDRESS);
-    
+
     // Capture all outgoing https and http requests
     AWSXRay.captureHTTPsGlobal(require('https'), true);
     AWSXRay.captureHTTPsGlobal(require('http'), true);
