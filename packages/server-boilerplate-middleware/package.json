@@ -1,6 +1,6 @@
 {
   "name": "@mcf/server-boilerplate-middleware",
-  "version": "0.8.28",
+  "version": "0.8.29",
   "description": "Boilerplate middleware for Node projects in MyCareersFuture.",
   "main": "dist/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@mcf/logger": "^0.4.22",
+    "@mcf/logger": "^0.4.24",
     "aws-xray-sdk": "^3.2.0",
     "body-parser": "^1.18.3",
     "case": "^1.5.5",
