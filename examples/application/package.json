@@ -12,7 +12,7 @@
   "dependencies": {
     "@mcf/logger": "^0.4.5",
     "@mcf/provision-process": "^0.2.0",
-    "@mcf/server-boilerplate-middleware": "^0.8.4",
+    "@mcf/server-boilerplate-middleware": "^0.8.28",
     "convict": "^6.0.0",
     "node-fetch": "2.6.1"
   },
