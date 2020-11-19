@@ -9,8 +9,8 @@ const mcfConsoleFormat = printf((info) => {
   let message = `[${magenta(info.label)}] ${info.timestamp} ${info.level}: ${
     typeof info.message === 'string' ? info.message : JSON.stringify(info.message)
   }`;
-  if (info.meta.error && info.meta.error && info.meta.error.stack) {
-    message += `\n${info.meta.error.stack}`;
+  if (info.meta && Object.keys(info.meta).length > 0) {
+    message += `\n${JSON.stringify(info.meta)}`;
   }
   return message;
 });
