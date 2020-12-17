@@ -65,6 +65,7 @@ export const JOB_CATEGORIES = [
   {id: 532034, category: 'Purchasing / Merchandising'},
   {id: 532024, category: 'Legal'},
   {id: 532014, category: 'Entertainment'},
+  {id: 532043, category: 'Wholesale Trade'},
 ];
 
 export const SCHEMES = [

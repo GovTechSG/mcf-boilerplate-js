@@ -189,6 +189,10 @@ export const JOB_CATEGORIES = [
     jobCategoryId: 41,
     jobCategoryName: 'Others',
   },
+  {
+    jobCategoryId: 42,
+    jobCategoryName: 'Wholesale Trade',
+  },
 ];
 
 export const SCHEMES = [
