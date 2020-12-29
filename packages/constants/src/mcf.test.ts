@@ -88,6 +88,7 @@ describe('mcf', () => {
       {id: 38, category: 'Social Services'},
       {id: 39, category: 'Telecommunications'},
       {id: 40, category: 'Travel / Tourism'},
+      {id: 42, category: 'Wholesale Trade'},
       {id: 41, category: 'Others'},
     ]);
   });
