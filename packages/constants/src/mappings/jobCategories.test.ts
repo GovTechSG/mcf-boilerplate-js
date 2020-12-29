@@ -250,6 +250,12 @@ describe('mapIcmsToMcfJobCategory', () => {
       id: 12,
     });
   });
+  it('should map to Wholesale Trade when id is 532043', () => {
+    expect(mapIcmsToMcfJobCategory(532043)).to.deep.equal({
+      category: 'Wholesale Trade',
+      id: 42,
+    });
+  });
 });
 
 describe('mapMcfToIcmsJobCategory', () => {
@@ -494,6 +500,12 @@ describe('mapMcfToIcmsJobCategory', () => {
     expect(mapMcfToIcmsJobCategory(12)).to.deep.equal({
       category: 'Entertainment',
       id: 532014,
+    });
+  });
+  it('should map to Wholesale Trade when id is 42', () => {
+    expect(mapMcfToIcmsJobCategory(42)).to.deep.equal({
+      category: 'Wholesale Trade',
+      id: 532043,
     });
   });
 });
@@ -742,6 +754,12 @@ describe('mapMsfToMcfJobCategory', () => {
       id: 12,
     });
   });
+  it('should map to Wholesale Trade when id is 42', () => {
+    expect(mapMsfToMcfJobCategory(42)).to.deep.equal({
+      category: 'Wholesale Trade',
+      id: 42,
+    });
+  });
 });
 
 describe('mapMcfToMsfJobCategory', () => {
@@ -986,6 +1004,12 @@ describe('mapMcfToMsfJobCategory', () => {
     expect(mapMcfToMsfJobCategory(12)).to.deep.equal({
       jobCategoryId: 12,
       jobCategoryName: 'Entertainment',
+    });
+  });
+  it('should map to Wholesale Trade when id is 42', () => {
+    expect(mapMcfToMsfJobCategory(42)).to.deep.equal({
+      jobCategoryId: 42,
+      jobCategoryName: 'Wholesale Trade',
     });
   });
 });
