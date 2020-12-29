@@ -57,4 +57,5 @@ export const CATEGORY: ICategory = {
   SOCIAL_SERVICES: Key('Social Services', 'social-services'),
   TELECOMMUNICATIONS: Key('Telecommunications', 'telecommunications'),
   TRAVEL_TOURISM: Key('Travel / Tourism', 'travel'),
+  WHOLESALE_TRADE: Key('Wholesale Trade', 'wholesale-trade'),
 };
