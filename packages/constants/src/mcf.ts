@@ -459,6 +459,32 @@ export const SSEC_EQA_LIST: ISsecEqa[] = [
   {code: 'XX', description: 'Not reported'},
 ];
 
+/*
+ * https://www.singstat.gov.sg/-/media/files/standards_and_classifications/educational_classification/ssec2015-report.pdf
+ * Not required if eduation level is GCE A levels and below (< 42)
+ */
+export const ssecFosRequired = (ssecEqaCode: ISsecEqa['code']): boolean =>
+  ![
+    '01',
+    '02',
+    '03',
+    '04',
+    '11',
+    '12',
+    '13',
+    '21',
+    '22',
+    '23',
+    '24',
+    '31',
+    '32',
+    '33',
+    '34',
+    '35',
+    '39',
+    '41',
+  ].includes(ssecEqaCode);
+
 // Additional stop words are words that are common across all job description/titles
 export const CUSTOM_WORD_LIST = [
   'pte',
