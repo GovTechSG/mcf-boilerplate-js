@@ -18,6 +18,7 @@ import {
   processStringToUrlFormat,
   isJobApplicationPath,
   formatJobUrl,
+  ssecFosRequired,
 } from './mcf';
 
 describe('mcf', () => {
@@ -1596,6 +1597,19 @@ describe('mcf', () => {
       {id: 3, registrationType: 'Other Unique Establishments (UENO)'},
       {id: 4, registrationType: 'Others - None of the Above'},
     ]);
+  });
+
+  describe('ssecFosRequired', () => {
+    it('should return false when ssecEqa does not require ssecFos', () => {
+      ['01', '12', '22', '34', '41'].forEach((ssecEqa) => {
+        expect(ssecFosRequired(ssecEqa)).to.equal(false, `expected ${ssecEqa} to have false but is true`);
+      });
+    });
+    it('should return true when ssecEqa does require ssecFos', () => {
+      ['42', '61', '83', 'N3', 'N9'].forEach((ssecEqa) => {
+        expect(ssecFosRequired(ssecEqa)).to.equal(true, `expected ${ssecEqa} to have true but is false`);
+      });
+    });
   });
 
   describe('formatJobUrl', () => {
