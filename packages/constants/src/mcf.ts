@@ -298,3 +298,12 @@ export const COMPANY_ADDRESS_PURPOSES: ICompanyAddressPurpose[] = [
   {id: COMPANY_ADDRESS_PURPOSE.OPERATING, purpose: 'operating'},
   {id: COMPANY_ADDRESS_PURPOSE.CORRESPONDENCE, purpose: 'correspondence'},
 ];
+
+/*************************************
+ * Job Screening Question Response
+ *************************************/
+
+ export enum SCREEN_QNS_RESPONSE {
+  YES = 'yes',
+  NO = 'no',
+}
