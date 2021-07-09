@@ -8,7 +8,8 @@ import {
   POSITION_LEVELS,
   SALARY_TYPES,
   SCHEMES,
-  SCREENING_QUESTION_RESPONSES,
+  SCREEN_QUESTION_RESPONSE,
+  getScreeningQuestionResponse,
 } from './mcf';
 
 describe('mcf', () => {
@@ -1574,9 +1575,7 @@ describe('mcf', () => {
     ]);
   });
   it('should have correct screening question responses', () => {
-    expect(SCREENING_QUESTION_RESPONSES).to.deep.equal([
-      {label: 'Yes', value: 'yes'},
-      {label: 'No', value: 'no'},
-    ]);
+    expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.YES)).to.deep.equal({label: 'Yes', value: 'yes'});
+    expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.NO)).to.deep.equal({label: 'No', value: 'no'});
   })
 });
