@@ -303,7 +303,12 @@ export const COMPANY_ADDRESS_PURPOSES: ICompanyAddressPurpose[] = [
  * Job Screening Question Response
  *************************************/
 
- export enum SCREEN_QNS_RESPONSE {
-  YES = 'yes',
-  NO = 'no',
+export interface IScreeningQuestionResponse {
+  label: string;
+  value: string;
 }
+
+export const SCREENING_QUESTION_RESPONSES: IScreeningQuestionResponse[] = [
+  {label: 'Yes' , value: 'yes'},
+  {label: 'No', value: 'no'},
+];

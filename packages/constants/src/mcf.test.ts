@@ -8,6 +8,7 @@ import {
   POSITION_LEVELS,
   SALARY_TYPES,
   SCHEMES,
+  SCREENING_QUESTION_RESPONSES,
 } from './mcf';
 
 describe('mcf', () => {
@@ -1572,4 +1573,10 @@ describe('mcf', () => {
       {id: 4, registrationType: 'Others - None of the Above'},
     ]);
   });
+  it('should have correct screening question responses', () => {
+    expect(SCREENING_QUESTION_RESPONSES).to.deep.equal([
+      {label: 'Yes', value: 'yes'},
+      {label: 'No', value: 'no'},
+    ]);
+  })
 });
