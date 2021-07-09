@@ -1,0 +1,9 @@
+  xray:
+    image: amazon/aws-xray-daemon:3.x
+    volumes:
+      - "${HOME}/.aws/:/root/.aws/:ro"
+    ports:
+      - "2000:2000/udp"
+    env_file: 
+      - .env
+    command: "-o --log-level=debug"

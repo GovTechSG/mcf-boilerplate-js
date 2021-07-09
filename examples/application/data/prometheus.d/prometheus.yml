@@ -16,8 +16,3 @@ scrape_configs:
   static_configs:
   - targets:
     - grafana:3000
-- job_name: Distributed Tracing
-  metrics_path: /prometheus
-  static_configs:
-  - targets:
-    - zipkin:9411

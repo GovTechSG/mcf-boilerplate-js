@@ -45,6 +45,7 @@ const ICMS_MCF_JOB_CATEGORIES_MAPPING_TABLE: Array<[number, number]> = [
   [532034, 31],
   [532024, 23],
   [532014, 12],
+  [532043, 42],
 ];
 
 const map = <T extends {id: any}>(

@@ -29,7 +29,7 @@ describe('mapIcmsToMcfEmploymentType', () => {
     expect(mapIcmsToMcfEmploymentType(440008)).to.deep.equal({id: 9, employmentType: 'Flexi-work'});
   });
   it('should map to Internship when id is 440009', () => {
-    expect(mapIcmsToMcfEmploymentType(440009)).to.deep.equal({id: 10, employmentType: 'Internship'});
+    expect(mapIcmsToMcfEmploymentType(440009)).to.deep.equal({id: 10, employmentType: 'Internship/Traineeship'});
   });
 });
 
@@ -83,7 +83,7 @@ describe('mapMsfToMcfEmploymentType', () => {
     expect(mapMsfToMcfEmploymentType('09')).to.deep.equal({id: 9, employmentType: 'Flexi-work'});
   });
   it('should map to Internship when id is 10', () => {
-    expect(mapMsfToMcfEmploymentType('10')).to.deep.equal({id: 10, employmentType: 'Internship'});
+    expect(mapMsfToMcfEmploymentType('10')).to.deep.equal({id: 10, employmentType: 'Internship/Traineeship'});
   });
 });
 

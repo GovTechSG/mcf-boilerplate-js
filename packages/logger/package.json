@@ -1,24 +1,25 @@
 {
   "name": "@mcf/logger",
-  "version": "0.4.15",
-  "description": "Exposes a logger based on Winston. It includes formats and plugins for integration with the Morgan request logging library, and Zipkin request distributed tracing library.",
+  "version": "0.4.25",
+  "description": "Exposes a logger based on Winston. It includes formats and plugins for integration with the Morgan request logging library, and xray request distributed tracing library.",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
     "demo-print": "ts-node ./examples/print.ts",
-    "demo-server": "ts-node ./examples/zipkin-server.ts",
     "demo-usage": "ts-node ./examples/usage/index.ts",
     "lint": "tslint --project ./tsconfig.json -t stylish",
     "svc:fluent": "docker-compose -f ./examples/usage/docker-compose.yml up -d; docker logs $(docker ps | grep fluent_mcf_logger_collator | cut -f 1 -d ' ') -f",
     "svc:fluent:stop": "docker-compose -f ./examples/usage/docker-compose.yml down",
     "test:watch": "npm test -- --watch --watch-extensions ts",
     "test": "mocha --require ts-node/register \"src/*.test.ts\" \"src/**/*.test.ts\"",
-    "prestart": "npm run build"
+    "prestart": "npm run build",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "cls-hooked": "4.2.2",
     "fluent-logger": "3.0.0",
-    "winston": "3.1.0"
+    "winston": "3.3.3"
   },
   "publishConfig": {
     "access": "public"
@@ -30,5 +31,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "snyk": true,
+  "devDependencies": {
+    "snyk": "^1.419.0"
+  }
 }

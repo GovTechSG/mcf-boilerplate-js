@@ -10,6 +10,17 @@ import {
   SCHEMES,
   SCREEN_QUESTION_RESPONSE,
   getScreeningQuestionResponse,
+  pathToJobId,
+  removeStopWords,
+  removeWordsInBracket,
+  removePunctuations,
+  removeExcessWhitespaces,
+  removeRepeatedHyphens,
+  joinWords,
+  processStringToUrlFormat,
+  isJobApplicationPath,
+  formatJobUrl,
+  ssecFosRequired,
 } from './mcf';
 
 describe('mcf', () => {
@@ -22,7 +33,7 @@ describe('mcf', () => {
       {id: 9, employmentType: 'Flexi-work'},
       {id: 2, employmentType: 'Temporary'},
       {id: 6, employmentType: 'Freelance'},
-      {id: 10, employmentType: 'Internship'},
+      {id: 10, employmentType: 'Internship/Traineeship'},
     ]);
   });
   it('should have correct position levels', () => {
@@ -80,6 +91,7 @@ describe('mcf', () => {
       {id: 38, category: 'Social Services'},
       {id: 39, category: 'Telecommunications'},
       {id: 40, category: 'Travel / Tourism'},
+      {id: 42, category: 'Wholesale Trade'},
       {id: 41, category: 'Others'},
     ]);
   });
@@ -112,6 +124,20 @@ describe('mcf', () => {
         startDate: '1977-05-25',
         expiryDate: '2055-05-04',
         link: 'http://www.wsg.gov.sg/programmes-and-initiatives/wsg-career-support-programme-employers.html',
+      },
+      {
+        id: 5,
+        scheme: 'SGUnited Traineeships',
+        startDate: '2020-06-01',
+        expiryDate: '2047-06-01',
+        link: 'https://www.wsg.gov.sg/SGUnitedTraineeships-HostCompanies.html',
+      },
+      {
+        id: 6,
+        scheme: 'SGUnited Mid-Career Pathways Programme',
+        startDate: '2020-07-01',
+        expiryDate: '2047-07-01',
+        link: 'https://www.wsg.gov.sg/SGUnitedMidCareerPathways-HostOrganisations.html',
       },
     ]);
   });
@@ -1574,8 +1600,277 @@ describe('mcf', () => {
       {id: 4, registrationType: 'Others - None of the Above'},
     ]);
   });
+
   it('should have correct screening question responses', () => {
     expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.YES)).to.deep.equal({label: 'Yes', value: 'yes'});
     expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.NO)).to.deep.equal({label: 'No', value: 'no'});
-  })
+  });
+
+  describe('ssecFosRequired', () => {
+    it('should return false when ssecEqa does not require ssecFos', () => {
+      ['01', '12', '22', '34', '41'].forEach((ssecEqa) => {
+        expect(ssecFosRequired(ssecEqa)).to.equal(false, `expected ${ssecEqa} to have false but is true`);
+      });
+    });
+    it('should return true when ssecEqa does require ssecFos', () => {
+      ['42', '61', '83', 'N3', 'N9'].forEach((ssecEqa) => {
+        expect(ssecFosRequired(ssecEqa)).to.equal(true, `expected ${ssecEqa} to have true but is false`);
+      });
+    });
+  });
+
+  describe('formatJobUrl', () => {
+    describe('pathToJobId', () => {
+      it('should works for just jobId', () => {
+        const path = '/job/1580bcedd5fafbcf04ee47e918cf25d2';
+        const jobId = pathToJobId(path);
+        expect(jobId).to.equal('1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('should works for sample job title', () => {
+        const path = '/job/java-software-developer-1580bcedd5fafbcf04ee47e918cf25d2';
+        const jobId = pathToJobId(path);
+        expect(jobId).to.equal('1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('should works for trailing path', () => {
+        const path = '/job/java-software-developer-1580bcedd5fafbcf04ee47e918cf25d2/apply';
+        const jobId = pathToJobId(path);
+        expect(jobId).to.equal('1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('should works for path with special characters', () => {
+        const path = '/job/-?!@#$%^,as;ld,asjnakjsndkankjnskjdnk-akjsndkjan-&*()_-----1580bcedd5fafbcf04ee47e918cf25d2';
+        const jobId = pathToJobId(path);
+        expect(jobId).to.equal('1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('should works for all official language and weird characters', () => {
+        expect(pathToJobId('/job/🤡软件开发人员–谷歌©-1580bcedd5fafbcf04ee47e918cf25d2')).to.equal(
+          '1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+        expect(pathToJobId('/job/🤡सॉफ्टवेयर डेवलपर–गूगल©-1580bcedd5fafbcf04ee47e918cf25d2')).to.equal(
+          '1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+        expect(pathToJobId('/job/🤡pemaju-perisian–google©-1580bcedd5fafbcf04ee47e918cf25d2')).to.equal(
+          '1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+      });
+    });
+
+    describe('isJobApplicationPath', () => {
+      it('should return true for job path with /apply', () => {
+        const path = '/job/1580bcedd5fafbcf04ee47e918cf25d2/apply';
+        expect(isJobApplicationPath(path)).to.equal(true);
+      });
+
+      it('should return false for job path without /apply', () => {
+        const path = '/job/1580bcedd5fafbcf04ee47e918cf25d2';
+        expect(isJobApplicationPath(path)).to.equal(false);
+      });
+
+      it('should return true for descriptive job path with /apply', () => {
+        const path = '/job/java-software-developer-1580bcedd5fafbcf04ee47e918cf25d2/apply';
+        expect(isJobApplicationPath(path)).to.equal(true);
+      });
+
+      it('should return false for descriptive job path without /apply', () => {
+        const path = '/job/java-software-developer-1580bcedd5fafbcf04ee47e918cf25d2';
+        expect(isJobApplicationPath(path)).to.equal(false);
+      });
+    });
+
+    describe('removeStopWords', () => {
+      it('returns empty string on empty, null or undefined string', () => {
+        expect(removeStopWords()).to.equal('');
+        expect(removeStopWords(undefined)).to.equal('');
+      });
+
+      it('does nothing if there is no stop words', () => {
+        const input = 'software developer needed';
+        expect(removeStopWords(input)).to.equal('software developer needed');
+      });
+
+      it('removes word from the list', () => {
+        const input = 'software developer needed to make coffee';
+        expect(removeStopWords(input)).to.equal('software developer needed make coffee');
+      });
+
+      it('removes multiple words from the list', () => {
+        const input = 'software developer needed to make coffee for directors';
+        expect(removeStopWords(input)).to.equal('software developer needed make coffee directors');
+      });
+    });
+
+    describe('removeWordsInBracket', () => {
+      it('returns empty string on empty, null or undefined string', () => {
+        expect(removeWordsInBracket()).to.equal('');
+        expect(removeWordsInBracket(undefined)).to.equal('');
+      });
+
+      it('does nothing if there is no words in bracket', () => {
+        const input = 'software developer needed';
+        expect(removeWordsInBracket(input)).to.equal('software developer needed');
+      });
+
+      it('removes empty bracket', () => {
+        const input = 'software developer needed to make () coffee';
+        expect(removeWordsInBracket(input)).to.equal('software developer needed to make  coffee');
+      });
+
+      it('removes word in bracket', () => {
+        const input = '(software) developer needed to make coffee';
+        expect(removeWordsInBracket(input)).to.equal(' developer needed to make coffee');
+      });
+
+      it('removes multiple words in bracket', () => {
+        const input = '(software) developer needed (to make coffee)';
+        expect(removeWordsInBracket(input)).to.equal(' developer needed ');
+      });
+    });
+
+    describe('removePunctuations', () => {
+      it('returns empty string on empty, null or undefined string', () => {
+        expect(removePunctuations()).to.equal('');
+        expect(removePunctuations(undefined)).to.equal('');
+      });
+
+      it('does nothing if there is no punctuations', () => {
+        const input = 'software developer needed';
+        expect(removePunctuations(input)).to.equal('software developer needed');
+      });
+
+      it('removes multiple punctuations in different places', () => {
+        const input = 'soft!w@are deve$lop^er n&eeded to make coffee';
+        expect(removePunctuations(input)).to.equal('software developer needed to make coffee');
+      });
+    });
+
+    describe('removeExcessWhitespaces', () => {
+      it('returns empty string on empty, null or undefined string', () => {
+        expect(removeExcessWhitespaces()).to.equal('');
+        expect(removeExcessWhitespaces(undefined)).to.equal('');
+      });
+
+      it('removes excess whitespace between words', () => {
+        const input = 'software   developer            needed';
+        expect(removeExcessWhitespaces(input)).to.equal('software developer needed');
+      });
+
+      it('removes excess whitespace before and after sentence, except one', () => {
+        const input = '   test   ';
+        expect(removeExcessWhitespaces(input)).to.equal(' test ');
+      });
+    });
+
+    describe('removeRepeatedHyphens', () => {
+      it('returns empty string on empty, null or undefined string', () => {
+        expect(removeRepeatedHyphens()).to.equal('');
+        expect(removeRepeatedHyphens(undefined)).to.equal('');
+      });
+
+      it('removes excess whitespace between words', () => {
+        const input = 'software---developer--------needed';
+        expect(removeRepeatedHyphens(input)).to.equal('software-developer-needed');
+      });
+
+      it('does not remove single hyphens', () => {
+        const input = 'software-developer-needed';
+        expect(removeRepeatedHyphens(input)).to.equal('software-developer-needed');
+      });
+    });
+
+    describe('joinWords', () => {
+      it('returns empty string on empty, null or undefined string', () => {
+        expect(joinWords()).to.equal('');
+        expect(joinWords(undefined)).to.equal('');
+      });
+
+      it('joins words with hypehen', () => {
+        const input = 'software developer needed';
+        expect(joinWords(input)).to.equal('software-developer-needed');
+      });
+
+      it('trims whitespace before joining', () => {
+        const input = '   test engineer  ';
+        expect(joinWords(input)).to.equal('test-engineer');
+      });
+    });
+
+    describe('processStringToUrlFormat', () => {
+      it('returns empty string on empty, null or undefined string', () => {
+        expect(processStringToUrlFormat()).to.equal('');
+        expect(processStringToUrlFormat(undefined)).to.equal('');
+      });
+
+      it('removes standard phrases like "Pte", "Ltd", "Pte.", "Ltd." "Private (Limited)", "Private Limited"', () => {
+        const expectedOutput = 'airya-crestar';
+        expect(processStringToUrlFormat('AIRYA - CRESTAR PTE. LTD.')).to.equal(expectedOutput);
+        expect(processStringToUrlFormat('AIRYA - CRESTAR Pte Ltd')).to.equal(expectedOutput);
+        expect(processStringToUrlFormat('AIRYA - CRESTAR Private (Limited)')).to.equal(expectedOutput);
+        expect(processStringToUrlFormat('AIRYA - CRESTAR Private Limited')).to.equal(expectedOutput);
+      });
+
+      it('removes special characters', () => {
+        const input = "Adi's Designs (International)";
+        expect(processStringToUrlFormat(input)).to.equal('adis-designs');
+      });
+    });
+
+    describe('formatJobUrl', () => {
+      it('works for just uuid', () => {
+        const job = {uuid: '1580bcedd5fafbcf04ee47e918cf25d2'};
+        expect(formatJobUrl(job)).to.equal('/job/1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('works for uuid and job title', () => {
+        const job = {
+          uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+          jobTitle: 'DIRECTOR OF OPERATIONS',
+        };
+        expect(formatJobUrl(job)).to.equal('/job/director-operations-1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+
+      it('works for uuid, job title and company name', () => {
+        const job = {
+          uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+          jobTitle: 'DIRECTOR OF OPERATIONS',
+          company: 'AIRYA CRESTAR INTERNATIONAL PTE. LTD.',
+        };
+        expect(formatJobUrl(job)).to.equal(
+          '/job/director-operations-airya-crestar-international-1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+      });
+
+      it('works for all official language and weird characters', () => {
+        expect(
+          formatJobUrl({
+            uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+            jobTitle: '软件开发人员🤡',
+            company: '谷歌©',
+          }),
+        ).to.equal(
+          '/job/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%F0%9F%A4%A1-%E8%B0%B7%E6%AD%8C%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+
+        expect(
+          formatJobUrl({
+            uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+            jobTitle: '🤡सॉफ्टवेयर',
+            company: 'वलपर–गूगल©',
+          }),
+        ).to.equal(
+          '/job/%F0%9F%A4%A1%E0%A4%B8%E0%A5%89%E0%A4%AB%E0%A5%8D%E0%A4%9F%E0%A4%B5%E0%A5%87%E0%A4%AF%E0%A4%B0-%E0%A4%B5%E0%A4%B2%E0%A4%AA%E0%A4%B0%E2%80%93%E0%A4%97%E0%A5%82%E0%A4%97%E0%A4%B2%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2',
+        );
+
+        expect(
+          formatJobUrl({
+            uuid: '1580bcedd5fafbcf04ee47e918cf25d2',
+            jobTitle: 'pemaju-perisian🤡',
+            company: 'google©',
+          }),
+        ).to.equal('/job/pemaju-perisian%F0%9F%A4%A1-google%C2%A9-1580bcedd5fafbcf04ee47e918cf25d2');
+      });
+    });
+  });
 });

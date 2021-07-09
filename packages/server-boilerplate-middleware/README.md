@@ -34,7 +34,7 @@ yarn add @mcf/server-boilerplate-middleware
 
 ```js
 import {createServer} from '@mcf/server-boilerplate-middleware';
-const {server} = createServer();
+const server = createServer();
 // ...
 ```
 
@@ -91,10 +91,10 @@ const {server} = createServer({
 | --- | --- | --- |
 | `Boolean` | `true` | `serverBoilerplate({enableServerLogging: true})` |
 
-#### `enableTracing` : `Boolean`
+#### `enableXray` : `Boolean`
 | Type | Default | Example |
 | --- | --- | --- |
-| `Boolean` | `true` | `serverBoilerplate({enableTracing: true})` |
+| `Boolean` | `true` | `serverBoilerplate({enableXray: true})` |
 
 
 #### `compressionOptions` : `Object`
@@ -155,7 +155,7 @@ The above configuration produces the following CSP:
 | Key | Type | Notes | Defaults To |
 | --- | --- | --- | --- |
 | `allowedHeaders` | `Array<String>` | provides the Access-Control-Allow-Headers header value | `[]` |
-| `allowedMethods` | `Array<String>` | provides the Access-Control-Allow-Methods header value | `['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']` |
+| `allowedMethods` | `Array<String>` | provides the Access-Control-Allow-Methods header value | `['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']` |
 | `allowedOrigins` | `Array<String>` | provides the Access-Control-Allow-Origins header value | `[]` |
 | `credentials` | `Boolean` | provides the Access-Control-Allow-Credentials header value | `true` |
 | `preflightContinue` | `Boolean` | decides whether to pass the request on or respond with 204 | `false` |
@@ -164,7 +164,7 @@ Defaults to:
 ```js
 const corsOptions = {
   allowedHeaders: [],
-  allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedMethods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedOrigins: [],
   credentials: true,
   preflightContinue: false,
@@ -217,53 +217,42 @@ const loggingOptions = {
 }
 ```
 
-#### `tracingOptions` : `Object`
-> This configuration is only relevant if the `enableTracing` parameter was not set to `false`
-
-see `@mcf/tracer`
-
 ## Development
 
 ### Installing Dependencies
 Run the following from the root of the repository to initialise the dependencies since Lerna manages the dependencies for us across the multiple packages:
 
 ```sh
-lerna bootstrap;
+npx lerna bootstrap
 ```
 
 ### Running Tests
-To run the tests during development, use:
+To run the tests during development, use at the root directory:
 
 ```sh
-npm run test:watch;
+npx lerna run --scope @mcf/server-boilerplate-middleware test:watch
 ```
 
 To run the tests on the built package, use:
 
 ```sh
-npm run test;
+npx lerna run --scope @mcf/server-boilerplate-middleware test
 ```
 
 To run a test server using the boilerplate server, use:
 
 ```sh
-npm start
+npx lerna run --scope @mcf/server-boilerplate-middleware start
 ```
 
 ### Building
 ```sh
-npm run build;
+npx lerna run --scope @mcf/server-boilerplate-middleware build
 ```
 
 ### Integration Example
 
 Run the following to setup an example environment:
-
-```bash
-docker-compose -f test/docker-compose.yml up -d
-```
-
-This should spin up a Zipkin server on port 9411 - [VISIT IT](http://localhost:9411).
 
 Open a new terminal and run the following to **create server a on port 11111**:
 
@@ -285,6 +274,13 @@ curl "http://localhost:22222/proxy";
 
 ## ChangeLog
 ### 0.8.x
+#### 0.8.5
+- removed zipkin
+- added aws xray tracing
+
+#### 0.8.2-4
+- added keepalive and header timeout configuration
+
 #### 0.8.1
 - changed configuration signature for tracing
 

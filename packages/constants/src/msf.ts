@@ -189,6 +189,10 @@ export const JOB_CATEGORIES = [
     jobCategoryId: 41,
     jobCategoryName: 'Others',
   },
+  {
+    jobCategoryId: 42,
+    jobCategoryName: 'Wholesale Trade',
+  },
 ];
 
 export const SCHEMES = [
@@ -196,6 +200,8 @@ export const SCHEMES = [
   {id: '05', programme: 'PCP'},
   {id: '02', programme: 'P-Max'},
   {id: '06', programme: 'Career Trial'},
+  {id: '07', programme: 'SGUnited Traineeships'},
+  {id: '08', programme: 'SGUnited Mid-Career Pathways Programme'},
 ];
 
 export const JOB_STATUSES = [

@@ -65,6 +65,7 @@ export const JOB_CATEGORIES = [
   {id: 532034, category: 'Purchasing / Merchandising'},
   {id: 532024, category: 'Legal'},
   {id: 532014, category: 'Entertainment'},
+  {id: 532043, category: 'Wholesale Trade'},
 ];
 
 export const SCHEMES = [
@@ -72,6 +73,8 @@ export const SCHEMES = [
   {id: 541002, scheme: 'PCP'},
   {id: 541003, scheme: 'P-Max'},
   {id: 541005, scheme: 'Career Trial'},
+  {id: 541006, scheme: 'SGUnited Traineeships'},
+  {id: 541007, scheme: 'SGUnited Mid-Career Pathways Programme'},
 ];
 
 export const JOB_STATUSES = [

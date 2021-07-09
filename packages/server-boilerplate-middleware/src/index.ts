@@ -6,17 +6,21 @@ import {
   ICorsMiddlewareOptions,
   ICspMiddlewareOptions,
 } from './security';
-import {expressMiddleware as traceMiddleware} from 'zipkin-instrumentation-express';
 import {serializer} from './serializer';
 import express from 'express';
-import fetch from 'node-fetch';
+import http from 'http';
 import {compressionMiddleware, ICompressionMiddlewareOptions} from './compression-middleware';
 import {DEFAULT_METRICS_ENDPOINT, IMetricsMiddlewareOptions, metricsMiddleware} from './metrics-middleware';
 import {ILoggingMiddlewareOptions, loggingMiddleware} from './logging-middleware';
 import {buildLogger} from './logger';
 import {createMorganStream, IApplicationLogger} from '@mcf/logger';
-import {createTracer, ITracerOptions} from '@mcf/tracer';
-import {createRequest} from '@mcf/request';
+import {
+  DEFAULT_AWS_XRAY_TRACING_NAME,
+  DEFAULT_XRAY_CONFIG,
+  DEFAULT_XRAY_DAEMON_ADDRESS,
+  IXrayMiddlewareOptions,
+} from './xray';
+import AWSXRay from 'aws-xray-sdk';
 
 interface IMcfMiddlewareOptions {
   enableCORS?: boolean;
@@ -27,13 +31,13 @@ interface IMcfMiddlewareOptions {
   enableMetrics?: boolean;
   enableSerializer?: boolean;
   enableServerLogging?: boolean;
-  enableTracing?: boolean;
+  enableXray?: boolean;
   cspOptions?: ICspMiddlewareOptions;
   compressionOptions?: ICompressionMiddlewareOptions;
   corsOptions?: ICorsMiddlewareOptions;
   metricsOptions?: Partial<IMetricsMiddlewareOptions>;
   loggingOptions?: ILoggingMiddlewareOptions & {logger?: IApplicationLogger};
-  tracingOptions?: ITracerOptions;
+  xrayOptions?: IXrayMiddlewareOptions;
 }
 /**
  * Returns an Express compatible server
@@ -49,56 +53,51 @@ export const createServer = ({
   enableMetrics = true,
   enableSerializer = true,
   enableServerLogging = true,
-  enableTracing = true,
+  enableXray = true,
   cspOptions = {},
   compressionOptions = {},
   corsOptions = {},
   metricsOptions = {},
   loggingOptions = {},
-  tracingOptions = {},
+  xrayOptions = {},
 }: IMcfMiddlewareOptions = {}) => {
   const logger = buildLogger(loggingOptions.logger);
-  const server = express();
-  let request: ((x: string) => typeof fetch) | undefined;
-  if (enableTracing) {
-    const tracer = createTracer(tracingOptions);
-    request = createRequest(tracer);
-    server.use(traceMiddleware({tracer}));
-  }
+  const app = express();
+
   if (enableCookieParser) {
     logger.silly('enable cookie parser');
-    server.use(cookieParser());
+    app.use(cookieParser());
   }
   if (enableSerializer) {
     logger.silly('enable serializer');
-    server.use(serializer());
+    app.use(serializer());
   }
   if (enableHttpHeadersSecurity) {
     logger.silly('enable http headers security');
-    server.use(httpHeadersMiddleware());
+    app.use(httpHeadersMiddleware());
   }
   if (enableCSP) {
     logger.silly('enable content security policy');
-    server.use(cspMiddleware(cspOptions));
+    app.use(cspMiddleware(cspOptions));
   }
   if (enableCompression) {
     logger.silly('enable compression');
-    server.use(compressionMiddleware(compressionOptions));
+    app.use(compressionMiddleware(compressionOptions));
   }
   if (enableCORS) {
     logger.silly('enable CORS');
-    server.use(corsMiddleware(corsOptions));
+    app.use(corsMiddleware(corsOptions));
   }
   if (enableMetrics) {
     logger.silly('enable metrics collection');
     const metricsEndpoint = metricsOptions.metricsEndpoint || DEFAULT_METRICS_ENDPOINT;
     const metrics = metricsMiddleware(metricsOptions);
-    server.use(metrics);
-    server.use(metricsEndpoint, metrics.metricsMiddleware);
+    app.use(metrics);
+    app.use(metricsEndpoint, metrics.metricsMiddleware);
   }
   if (enableServerLogging) {
     logger.silly('enable server logging');
-    server.use(
+    app.use(
       loggingMiddleware({
         additionalTokenizers: loggingOptions.additionalTokenizers,
         hostnameType: loggingOptions.hostnameType,
@@ -106,9 +105,33 @@ export const createServer = ({
       }),
     );
   }
+  if (enableXray) {
+    logger.silly('enable aws xray tracing');
 
-  return {
-    request,
-    server,
+    // Gives you more information about the node and container
+    AWSXRay.config(xrayOptions.config || DEFAULT_XRAY_CONFIG);
+
+    AWSXRay.setLogger(logger);
+    AWSXRay.setDaemonAddress(xrayOptions.daemonAddress || DEFAULT_XRAY_DAEMON_ADDRESS);
+
+    // Capture all outgoing https and http requests
+    AWSXRay.captureHTTPsGlobal(require('https'), true);
+    AWSXRay.captureHTTPsGlobal(require('http'), true);
+
+    // You can override the default service name that you define in code with the AWS_XRAY_TRACING_NAME environment variable.
+    app.use(AWSXRay.express.openSegment(xrayOptions.tracingName || DEFAULT_AWS_XRAY_TRACING_NAME));
+    app.use(AWSXRay.express.closeSegment());
+  }
+
+  app.listen = (...args) => {
+    const server = http.createServer(app);
+
+    server.keepAliveTimeout = Number(process.env.KEEP_ALIVE_TIMEOUT || 5) * 1000;
+    // This should be bigger than `keepAliveTimeout + your server's expected response time`
+    server.headersTimeout = Number(process.env.HEADERS_TIMEOUT || 60) * 1000;
+
+    return server.listen(...args);
   };
+
+  return app;
 };
