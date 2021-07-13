@@ -8,6 +8,8 @@ import {
   POSITION_LEVELS,
   SALARY_TYPES,
   SCHEMES,
+  SCREEN_QUESTION_RESPONSE,
+  getScreeningQuestionResponse,
   pathToJobId,
   removeStopWords,
   removeWordsInBracket,
@@ -1597,6 +1599,11 @@ describe('mcf', () => {
       {id: 3, registrationType: 'Other Unique Establishments (UENO)'},
       {id: 4, registrationType: 'Others - None of the Above'},
     ]);
+  });
+
+  it('should have correct screening question responses', () => {
+    expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.YES)).to.deep.equal({label: 'Yes', value: 'yes'});
+    expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.NO)).to.deep.equal({label: 'No', value: 'no'});
   });
 
   describe('ssecFosRequired', () => {
