@@ -1604,6 +1604,7 @@ describe('mcf', () => {
   it('should have correct screening question responses', () => {
     expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.YES)).to.deep.equal({label: 'Yes', value: 'yes'});
     expect(getScreeningQuestionResponse(SCREEN_QUESTION_RESPONSE.NO)).to.deep.equal({label: 'No', value: 'no'});
+    expect(getScreeningQuestionResponse('any other response')).to.deep.equal({label: 'any other response', value: 'any other response'});
   });
 
   describe('ssecFosRequired', () => {

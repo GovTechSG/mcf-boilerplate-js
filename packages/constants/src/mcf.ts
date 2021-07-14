@@ -324,19 +324,21 @@ export const COMPANY_ADDRESS_PURPOSES: ICompanyAddressPurpose[] = [
  *************************************/
 
 export enum SCREEN_QUESTION_RESPONSE {
-  YES,
-  NO
+  YES = 'yes',
+  NO = 'no'
 }
 export interface IScreeningQuestionResponse {
   label: string;
   value: string;
 }
-export const getScreeningQuestionResponse = (response: SCREEN_QUESTION_RESPONSE): IScreeningQuestionResponse => {
+export const getScreeningQuestionResponse = (response: string): IScreeningQuestionResponse => {
   switch (response) {
     case SCREEN_QUESTION_RESPONSE.YES:
-        return {label: 'Yes' , value: 'yes'};
+      return {label: 'Yes' , value: SCREEN_QUESTION_RESPONSE.YES};
     case SCREEN_QUESTION_RESPONSE.NO:
-        return {label: 'No', value: 'no'};
+      return {label: 'No', value: SCREEN_QUESTION_RESPONSE.NO};
+    default:
+      return {label: response, value: response};
   }
 };
 
